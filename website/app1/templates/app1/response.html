@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>App1-Template</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+
+  </head>
+
+	<body>
+	<div class="container">
+      <div class="py-5 text-center">
+      {% load static %}
+        <img class="d-block mx-auto mb-4" src="{% static "app1/img/header.png" %}" alt="" width="1000" height="342">
+        <h1>Aplication 1</h1>
+        <p class="lead">Subtitle</p>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+       <div class="text-left">
+        <h2>Response</h2>        
+     </div>
+
+      <div class="py-2">
+        <p> Input 1: {{input1}} </p>
+      </div>
+
+      <div class="py-2">
+        <p> Input 2: {{input2}} </p>
+      </div>
+
+  	<div class="container">
+        <div class="py-1 text-center">	      
+          <p class="lead"> </p>
+        </div>
+  	</div>
+
+  </div>
+
+      <div class="container">
+       <div class="text-left">
+        <h5>REST Response</h5>        
+     </div>
+
+      <div class="py-5">
+        <p> {{rest_response}}</p>
+      </div>
+    </div>
+
+
+
+
+    <div class="container">
+
+      <div class="py-1 text-center">        
+        <p class="lead"> </p>
+      </div>
+
+      <div>
+        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app1:index' %}'" >Go Back</button>
+      </div>
+
+    </div>
+	
+
+ 
+
+  
+
+	</body>
+</html>
