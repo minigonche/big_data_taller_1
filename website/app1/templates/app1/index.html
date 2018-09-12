@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>App1-Template</title>
+    <title>Taller 1</title>
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
 
@@ -18,8 +18,8 @@
       <div class="py-5 text-center">
       {% load static %}
         <img class="d-block mx-auto mb-4" src="{% static "app1/img/header.png" %}" alt="" width="1000" height="342">
-        <h1>Aplication 1</h1>
-        <p class="lead">Subtitle</p>
+        <h1>Taller 1</h1>
+        <p class="lead">Interfaz Taller 1</p>
       </div>
     </div>
 
@@ -31,68 +31,327 @@
      </div>
 
       <div class="py-5">
-        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+        <p> La siguiente interfaz tiene como proposito mostrar los resultados del Taller 1 para el curso: MINE4102 – Análisis de Información sobre Big Data.</p>
       </div>
     </div>
 
 
 
-	<form action="{% url 'app1:process_form' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'> 
+    <div class="container">
+       <div class="text-left">
+        <h3>Requerimientos Funcionales</h3>        
+     </div>
+
+         <div class="py-1"><p></p></div>
+
+    <!-- RF 1-->
+    <form action="{% url 'app1:RF_1' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'> 
 	{% csrf_token %}
 
+	  <div class="container">
+       <div class="text-left">
+        <h4>Requerimiento Funcional 1</h4>        
+     </div>
+
+      <div class="py-2">
+        <p> Encuentre cuál es el sitio de la ciudad hacia el cual se dirigen la mayor cantidad de vehículos en una cierta franja de horas del día, para cada día de la semana.</p>
+      </div>
+    </div>
 
 
 	<div class="form-group">
 
-		<div class="container">
-	       <div class="text-left">
-	        	<h3>General Form</h3>        
-	       </div>
-     	</div>
-
-     	<div class="container">
-	      <div class="py-1 text-center">	      
-	        <p class="lead"> </p>
-	      </div>
-    	</div>
-
-		<div class="container">
-
-			<div class = "row">
-				<div class="col-2"></div>
-				<div class="col-8">
-					<label for="input1">Input1</label>
-				 	<div class="form-group">    				
-    					<input type="text" class="form-control" id="input1" name="input1" placeholder="Insert the Input 1" required="True">    				
-  					</div>
-  				</div>
-  				<div class="col-2"></div>
+		<div class = "container">
+			<div class="form-group">
+				<div class = "row">
+					<div class="col-4"></div>
+					<div class="col-4"><h6> Franja Horaria</h6></div>
+					<div class="col-4"></div>
+					</div>
+					<div class = "row">
+						<div class="col-2"></div>
+					    <label class="col-2 control-label text-lg-center">Hora Inicio</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF1_horas_inicio" id="RF1_horas_inicio" required></div>
+					    <label class="col- control-label text-lg-center">:</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF1_minutos_inicio" id="RF1_minutos_inicio" required> </div>
+					    <div class="col-4"></div>
+					</div>
+					<div class = "row">
+						<div class="col-2"></div>
+					    <label class="col-2 control-label text-lg-center">Hora Fin</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF1_horas_fin" id="RF1_horas_fin" required></div>
+					    <label class="col- control-label text-lg-center">:</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF1_minutos_fin" id="RF1_minutos_fin" required> </div>
+					    <div class="col-4"></div>
+					</div>
+	            </div>
 			</div>
-			<div class = "row">
-				<div class="col-2"></div>
-				<div class="col-8">
-					<label for="input2">Input2</label>
-				 	<div class="form-group">    				
-    					<input type="text" class="form-control" id="input2" name="input2" placeholder="Insert the Input 2" required="True">    				
-  					</div>
-  				</div>
-  				<div class="col-2"></div>
-			</div>
-		</div>
 
-			<div class="container">
-		      <div class="py-2 text-center">	      
-		        <p class="lead"> </p>
-		      </div>
-	    	</div>
+	<div class="py-1"><p></p></div>
 
-
-			<div class="container">
+		<div class="container">
 				<div class="row">
 					<div class="col-5"></div>
 	            	<div class="col-2">
 	            		<div class="form-group">	            		
-							<input type="submit"  id='send_form' class="btn btn-success" value="Send Form">
+							<input type="submit"  id='send_form' class="btn btn-success" value="Buscar">
+						</div>
+					</div>
+					<div class="col-5"></div>
+				</div>
+			</div>	
+
+	</div>
+
+	</form>
+
+    <!-- RF 2-->
+    <form action="{% url 'app1:RF_2' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'> 
+	{% csrf_token %}
+
+	  <div class="container">
+       <div class="text-left">
+        <h4>Requerimiento Funcional 2</h4>        
+     </div>
+
+      <div class="py-2">
+        <p> Encuentre cuál es el valor promedio de un viaje, para los viajes realizados en día domingo, en un mes dado.</p>
+      </div>
+    </div>
+
+
+	<div class="form-group">
+
+		<div class = "container">
+				<div class="row">
+					<div class="col-4"></div>
+		            <div class="col-4">
+		                <label for="RF2_mes">Seleccione el Mes</label>
+		                <select class="form-control" name="RF2_mes" id="RF_2_mes">
+		                  <option value = 1 >Enero</option>		          
+		                  <option value = 2 >Febrero</option>
+		                  <option value = 3 >Marzo</option>
+		                  <option value = 4 >Abril</option>
+		                  <option value = 5 >Mayo</option>
+		                  <option value = 6 >Junio</option>
+		                  <option value = 7 >Julio</option>
+		                  <option value = 8 >Agosto</option>
+		                  <option value = 9 >Septiembre</option>
+		                  <option value = 10 >Octubre</option>
+		                  <option value = 11 >Noviembre</option>
+		                  <option value = 12 >Diciembre</option>
+		                </select>
+		            </div>
+
+		            <div class="col-4"></div>
+	            </div>
+			</div>
+
+	<div class="py-1">
+        <p></p>
+      </div>
+    </div>
+
+		<div class="container">
+				<div class="row">
+					<div class="col-5"></div>
+	            	<div class="col-2">
+	            		<div class="form-group">	            		
+							<input type="submit"  id='send_form' class="btn btn-success" value="Buscar">
+						</div>
+					</div>
+					<div class="col-5"></div>
+				</div>
+			</div>	
+
+	</div>
+
+	</form>
+
+
+
+	<!-- RF 3-->
+    <form action="{% url 'app1:RF_3' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'> 
+	{% csrf_token %}
+
+	  <div class="container">
+       <div class="text-left">
+        <h4>Requerimiento Funcional 3</h4>        
+     </div>
+
+      <div class="py-2">
+        <p> Encuentre los destinos de los viajeros que salen de cada uno de los aeropuertos en una franja horaria y día de la semana, para un aeropuerto dado.</p>
+      </div>
+    </div>
+
+
+	<div class="form-group">
+
+		<div class = "container">
+				<div class="row">
+					<div class="col-4"></div>
+		            <div class="col-4">
+		                <label for="RF3_dia_semana">Dia de la Semana</label>
+		                <select class="form-control" name="RF3_dia_semana" id="RF3_dia_semana">
+		                  <option value = 1 >Lunes</option>		          
+		                  <option value = 2 >Martes</option>
+		                  <option value = 3 >Miercoles</option>
+		                  <option value = 4 >Jueves</option>
+		                  <option value = 5 >Viernes</option>
+		                  <option value = 6 >Sabado</option>
+		                  <option value = 7 >Domingo</option>
+		                </select>
+		            </div>
+
+		            <div class="col-4"></div>
+	            </div>
+			</div>
+
+				<div class="py-1"><p></p></div>			
+
+		<div class = "container">
+			<div class="form-group">
+					<div class = "row">
+					<div class="col-4"></div>
+					<div class="col-4"><h6> Franja Horaria</h6></div>
+					<div class="col-4"></div>
+					</div>
+					<div class = "row">
+						<div class="col-2"></div>
+					    <label class="col-2 control-label text-lg-center">Hora Inicio</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF3_horas_inicio" id="RF3_horas_inicio" required></div>
+					    <label class="col- control-label text-lg-center">:</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF3_minutos_inicio" id="RF3_minutos_inicio" required> </div>
+					    <div class="col-4"></div>
+					</div>
+					<div class = "row">
+						<div class="col-2"></div>
+					    <label class="col-2 control-label text-lg-center">Hora Fin</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF3_horas_fin" id="RF3_horas_fin" required></div>
+					    <label class="col- control-label text-lg-center">:</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF3_minutos_fin" id="RF3_minutos_fin" required> </div>
+					    <div class="col-4"></div>
+					</div>
+	            </div>
+			</div>
+
+				<div class="py-1"><p></p></div>
+				
+
+				<div class = "container">
+				<div class="row">
+					<div class="col-4"></div>
+		            <div class="col-4">
+		                <label for="RF3_aeropuerto">Aeropuerto</label>
+		                <select class="form-control" name="RF3_aeropuerto" id="RF3_aeropuerto">
+		                  <option value = 1 >Aeropuerto 1 </option>	          
+		                  <option value = 2 >Aeropuerto 2 </option>	
+		                  <option value = 3 >Aeropuerto 3 </option>	
+		                </select>
+		            </div>
+
+		            <div class="col-4"></div>
+	            </div>
+			</div>
+
+	<div class="py-1">
+        <p></p>
+      </div>
+
+
+		<div class="container">
+				<div class="row">
+					<div class="col-5"></div>
+	            	<div class="col-2">
+	            		<div class="form-group">	            		
+							<input type="submit"  id='send_form' class="btn btn-success" value="Buscar">
+						</div>
+					</div>
+					<div class="col-5"></div>
+				</div>
+			</div>	
+
+	</div>
+
+	</form>
+
+
+
+
+
+	<!-- RF 4-->
+    <form action="{% url 'app1:RF_4' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'> 
+	{% csrf_token %}
+
+	  <div class="container">
+       <div class="text-left">
+        <h4>Requerimiento Funcional 4</h4>        
+     </div>
+
+      <div class="py-2">
+        <p> Encuentre los sitios donde hay mayor demanda de viajes en cierta franja horaria y día de la semana. Muestre esos datos discriminados para cada uno de los meses que se encuentran en el dataset.</p>
+      </div>
+    </div>
+
+
+	<div class="form-group">
+
+		<div class = "container">
+				<div class="row">
+					<div class="col-4"></div>
+		            <div class="col-4">
+		                <label for="RF4_dia_semana">Dia de la Semana</label>
+		                <select class="form-control" name="RF4_dia_semana" id="RF4_dia_semana">
+		                  <option value = 1 >Lunes</option>		          
+		                  <option value = 2 >Martes</option>
+		                  <option value = 3 >Miercoles</option>
+		                  <option value = 4 >Jueves</option>
+		                  <option value = 5 >Viernes</option>
+		                  <option value = 6 >Sabado</option>
+		                  <option value = 7 >Domingo</option>
+		                </select>
+		            </div>
+
+		            <div class="col-4"></div>
+	            </div>
+			</div>
+
+				<div class="py-1"><p></p></div>			
+
+		<div class = "container">
+			<div class="form-group">
+					<div class = "row">
+					<div class="col-4"></div>
+					<div class="col-4"><h6> Franja Horaria</h6></div>
+					<div class="col-4"></div>
+					</div>
+					<div class = "row">
+						<div class="col-2"></div>
+					    <label class="col-2 control-label text-lg-center">Hora Inicio</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF4_horas_inicio" id="RF4_horas_inicio" required></div>
+					    <label class="col- control-label text-lg-center">:</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF4_minutos_inicio" id="RF4_minutos_inicio" required> </div>
+					    <div class="col-4"></div>
+					</div>
+					<div class = "row">
+						<div class="col-2"></div>
+					    <label class="col-2 control-label text-lg-center">Hora Fin</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF4_horas_fin" id="RF4_horas_fin" required></div>
+					    <label class="col- control-label text-lg-center">:</label>
+					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF4_minutos_fin" id="RF4_minutos_fin" required> </div>
+					    <div class="col-4"></div>
+					</div>
+	            </div>
+			</div>
+
+				<div class="py-1"><p></p></div>
+				
+		<div class="container">
+				<div class="row">
+					<div class="col-5"></div>
+	            	<div class="col-2">
+	            		<div class="form-group">	            		
+							<input type="submit"  id='send_form' class="btn btn-success" value="Buscar">
 						</div>
 					</div>
 					<div class="col-5"></div>

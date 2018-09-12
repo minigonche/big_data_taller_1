@@ -1,0 +1,1 @@
+cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv| python MapReduceScripts/RF2/RF2_mapper.py | python MapReduceScripts/RF2/RF2_reducer.py
