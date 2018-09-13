@@ -39,8 +39,6 @@ def sort_headers():
 print_errors = True
 
 
-
-
 #Extractor Method
 def get_value(key, values):
     """ Gets the value of a given key
@@ -79,40 +77,66 @@ def get_value(key, values):
         return(None)
 
     # Start Date
-    elif(key.upper() == 'START_DATE'):                
-        date_string = values[1]
-        date = datetime.strptime(date_string,date_format)
-        return(date)
+    elif(key.upper() == 'START_DATE'):
+
+        try:                
+            date_string = values[1]
+
+            if(date_string == ''):
+                return(None)
+
+            date = datetime.strptime(date_string,date_format)
+            return(date)
+        except ValueError:
+             if(print_errors):
+                print('Date not in format: : ' + date_string)
+                return(None)
 
     # End Date
     elif(key.upper() == 'END_DATE'):
-        if(length_of_line == 3): # Header does not have an end date
-            return(None)
-        else:
-            date_string = values[2]
-            date = datetime.strptime(date_string,date_format)
-            return(date)
+        try:
+            if(length_of_line == 3): # Header does not have an end date
+                return(None)
+            else:
+                date_string = values[2]
+
+                if(date_string == ''):
+                    return(None)
+
+                date = datetime.strptime(date_string,date_format)
+                return(date)
+        except ValueError:
+             if(print_errors):
+                print('Date not in format: : ' + date_string)
+                return(None)
 
     # Start Location
     elif(key.upper() == 'START_LOC'):
 
         #Only certain lengths have start location:
         if(length_of_line in [3,5,17,19]):
+
+            start_loc = None
             if(length_of_line == 3):
-                return(values[2])
+                start_loc = values[2]
 
             if(length_of_line == 5):
-                return(values[3])
+                start_loc = values[3]
 
             if(length_of_line == 17):
-                return(values[7])
+                start_loc = values[7]
 
             if(length_of_line == 19): # More than one type of header has this length                
                 #Checks that is not a coordinate (lattitude or longitud)
                 if('.' in values[5] or values[5] == 0):
                     return(None)
                 else:
-                    return(values[5])
+                    start_loc = values[5]
+
+            if(start_loc == ''):
+                return(None)
+
+            return(start_loc)
 
         else:
             return(None)
@@ -124,18 +148,24 @@ def get_value(key, values):
         #Only certain lengths have end location:
         if(length_of_line in [5,17,19]):
             
+            end_loc = None
             if(length_of_line == 5):
-                return(values[4])
+                end_loc = values[4]
 
-            if(length_of_line == 17):
-                return(values[8])
+            elif(length_of_line == 17):
+                end_loc = values[8]
 
-            if(length_of_line == 19): # More than one type of header has this length                
+            elif(length_of_line == 19): # More than one type of header has this length                
                 #Checks that is not a coordinate (lattitude or longitud)
                 if('.' in values[6] or values[6] == 0):
                     return(None)
                 else:
-                    return(values[6])
+                    end_loc = values[6]
+
+            if(end_loc == ''):
+                return(None)
+
+            return(end_loc)
 
         else:
             return(None)
@@ -192,3 +222,7 @@ def get_value(key, values):
         if(print_errors):
             print('Key: ' + values[ind])
         return(None)
+
+
+
+

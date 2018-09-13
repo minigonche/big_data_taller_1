@@ -17,7 +17,7 @@ print('Done')
 print('')
 
 number_of_files = 10
-number_of_lines = 1000
+number_of_lines = 5000
 
 print('Starting Process')
 print('Number of Files: ' + str(number_of_files))
