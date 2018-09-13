@@ -3,4 +3,12 @@ cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Da
 cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/RF3/RF3_mapper.py | python MapReduceScripts/RF3/RF3_reducer.py
 
 
-cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/Header\ Constructor/header_mapper.py | python MapReduceScripts/Header\ Constructor/header_reducer.py
+cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/Header\ Constructor/header_mapper.py | python MapReduceScripts/Header\ Constructor/header_reducer.
+
+
+
+
+hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
+-file header_mapper.py    -mapper header_mapper.py \
+-file header_reducer.py   -reducer header_reducer.py \
+-input /datos/taxis/* -output /user/bigdata07/headers

@@ -1,22 +1,43 @@
-#!/usr/bin/env python
-# coding=utf-8
-"""RF2_mapper.py"""
-import sys
-import re
-from datetime import datetime
-# Mapper para el Requerimiento Funcional 2 del Taller 1
+# Method for diccionary retrival
 
-# Displays the average cost amount of all trips that took place on a sunday
-# on a given month
 
-# The output format is:
-# number_of_month tab sum_of_total_costs tab number_of_trips
+#def get_location(key, line_length):
 
-# Assumptions
-# If trip starts on a saturday and ends on a sunday, will be recorded
 
-# If displays errors and warnings
+import numpy as np 
+
+
+#Sorts headers and adds legnth
+def sort_headers():
+	f = open('headers.txt', 'r')
+	f_out = open('headers_sorted.txt','w')
+	f_out.write('%s\t%s\t%s\n' % ('length','header','num_occurence'))
+	lines = f.readlines()
+
+	out_strings = []
+	lens = []
+
+	for line in lines:
+		line = line.strip()
+		head, occurence = line.split('\t')
+
+		lens.append(len(head.split(',')))
+		out_strings.append('%s\t%s\t%s\n' % (len(head.split(',')),head,occurence))
+
+
+	for i in np.argsort(lens):
+
+		f_out.write(out_strings[i])
+
+	f.close()
+	f_out.close()
+
+
+
+
+
 print_errors = True
+
 
 
 
@@ -171,60 +192,3 @@ def get_value(key, values):
         if(print_errors):
             print('Key: ' + values[ind])
         return(None)
-
-
-
-
-
-# input comes from STDIN (standard input)
-# Input enters in a CSV scheme
-# Each line is a record
-for line in sys.stdin:
-
-    line = line.strip() # The method get values fails!
-    values = line.split(',')
-
-    start_month = None # Start Month of the year
-    start_week_day = None # Start Weekday of the year
-
-    end_month = None # End Month of the year
-    end_week_day = None # End Weekday of the year
-
-    total_cost = None # Total cost of the trip
-
-
-
-    start_date = get_value('START_DATE', values)
-    if(start_date is not None):
-        start_month = start_date.month
-        start_week_day = start_date.isoweekday()
-
-
-    end_date = get_value('END_DATE', values)
-    if(end_date is not None):
-        end_month = end_date.month
-        end_week_day = end_date.isoweekday()
-
-    total_cost = get_value('COST', values)
-
-        
-    #Process and prints
-
-    # Sunday is 7
-    # Only prints if all values are not None
-    if(start_month is not None and
-       start_week_day is not None and
-       end_month is not None and
-       end_week_day is not None and
-       total_cost is not None):
-
-
-
-        # Start Date
-        if(start_week_day == 7):
-            print('%s\t%s\t%s' % (start_month, total_cost,1))
-        # End Date
-        elif(end_week_day == 7):
-            print('%s\t%s\t%s' % (end_month, total_cost,1))
-
-
