@@ -12,6 +12,9 @@ from datetime import datetime
 # The output format is:
 # number_of_month tab sum_of_total_costs tab number_of_trips
 
+# Assumptions
+# If trip starts on a saturday and ends on a sunday, will be recorded
+
 # If displays errors and warnings
 print_errors = False
 
@@ -114,11 +117,13 @@ for line in sys.stdin:
        end_week_day is not None and
        total_cost is not None):
 
+
+
         # Start Date
         if(start_week_day == 7):
             print('%s\t%s\t%s' % (start_month, total_cost,1))
         # End Date
-        if(end_week_day == 7):
+        elif(end_week_day == 7):
             print('%s\t%s\t%s' % (end_month, total_cost,1))
 
 
