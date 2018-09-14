@@ -23,10 +23,11 @@ for line in sys.stdin:
         current_count += count
     else:
         if current_destination:
+            current_count += count
             # write result to STDOUT
             print('%s\t%s' % (current_destination, current_count))
-        current_count = 0
-        current_destination = destination
+            current_count = 0
+    current_destination = destination
 
 # do not forget to output the last destination if needed!
 if current_destination == destination:
