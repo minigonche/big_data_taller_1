@@ -8,12 +8,7 @@ franja de horas del día, para cada día de la semana
 import os
 import sys
 from datetime import datetime
-
-
 import numpy as np
-
-#Run mapper method within a time range mapper(a, b)
-mapper(10, 11)
 
 def location_by_ID(value):
     #Absolute path, script is in
@@ -273,3 +268,7 @@ def inTimeRange(start, end, time):
     if time and (int(start) <= int(time)) and (int(time) <= int(end)):
         return True
     else: return False
+    
+
+#Run mapper method within a time range mapper(a, b)
+mapper(10, 11)    
