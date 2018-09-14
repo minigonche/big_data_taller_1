@@ -12,12 +12,12 @@ current_destination = None
 current_count = 0
 destination = None
 
-
 for line in sys.stdin:
 
     # remove leading and trailing whitespace
     line = line.strip()
     destination, count = line.split('\t', 1)
+    count = int(count)
 
     if current_destination == destination:
         current_count += count
@@ -25,7 +25,7 @@ for line in sys.stdin:
         if current_destination:
             # write result to STDOUT
             print('%s\t%s' % (current_destination, current_count))
-        current_count = count
+        current_count = 0
         current_destination = destination
 
 # do not forget to output the last destination if needed!
