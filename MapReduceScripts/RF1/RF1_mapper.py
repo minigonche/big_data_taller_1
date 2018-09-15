@@ -10,10 +10,12 @@ import sys
 from datetime import datetime
 
 
-'''
-This method generates a dictionary from the file taxi_zone_lookup.csv
-'''
+
 def location_by_ID():
+    '''
+    This method generates a dictionary from the file taxi_zone_lookup.csv
+    '''
+
     # Absolute path, script is in
     script_dir = os.path.dirname(__file__)
     # relative path
@@ -45,15 +47,16 @@ def location_by_ID():
 
     return location_by_ID
 
+#Create the location dictionary
 location_dictionary = location_by_ID()
 
 
-'''
-This method uses the dictionary created by the location_by_ID method 
-to return the Borough (e.g. Queens, Bronx...) of an specific value. 
-'''
-def location_by_ID_lookup(location_dictionary, value):
 
+def location_by_ID_lookup(location_dictionary, value):
+    '''
+    This method uses the dictionary created by the location_by_ID method
+    to return the Borough (e.g. Queens, Bronx...) of an specific value.
+    '''
     keys = list(location_dictionary.keys())
 
     for key in keys:
