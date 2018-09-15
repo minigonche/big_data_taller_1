@@ -2,6 +2,8 @@ cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Da
 
 cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/RF3/RF3_mapper.py | python MapReduceScripts/RF3/RF3_reducer.py
 
+cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/RF1/RF1_mapper.py | python MapReduceScripts/RF1/RF1_reducer.py
+
 
 cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/Header\ Constructor/header_mapper.py | python MapReduceScripts/Header\ Constructor/header_reducer.
 
