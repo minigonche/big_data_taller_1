@@ -4,18 +4,19 @@
 '''
 Reto 1: Encuentre cuál es el sitio de la ciudad hacia el cual se dirigen la mayor cantidad de vehículos en una cierta
 franja de horas del día, para cada día de la semana.
-
-TEST
 '''
 import os
 import sys
 from datetime import datetime
-import numpy as np
 
-def location_by_ID(value):
-    #Absolute path, script is in
+
+'''
+This method generates a dictionary from the file taxi_zone_lookup.csv
+'''
+def location_by_ID():
+    # Absolute path, script is in
     script_dir = os.path.dirname(__file__)
-    #relative path
+    # relative path
     rel_path = 'LocationByID/taxi_zone_lookup.csv'
     abs_file_path = os.path.join(script_dir, rel_path)
 
@@ -26,11 +27,10 @@ def location_by_ID(value):
 
     zones = []
     location_by_ID = {}
-    locations = []
 
     for line in data:
         line = line.strip()
-        #print(line)
+        # print(line)
         location, zone, trash = line.split(',', 2)
 
         if zone not in zones:
@@ -43,10 +43,21 @@ def location_by_ID(value):
         if (location not in location_by_ID[zone]):
             location_by_ID[zone].append(location)
 
-    keys = list(location_by_ID.keys())
+    return location_by_ID
+
+location_dictionary = location_by_ID()
+
+
+'''
+This method uses the dictionary created by the location_by_ID method 
+to return the Borough (e.g. Queens, Bronx...) of an specific value. 
+'''
+def location_by_ID_lookup(location_dictionary, value):
+
+    keys = list(location_dictionary.keys())
 
     for key in keys:
-        if str(value) in location_by_ID[key]:
+        if str(value) in location_dictionary[key]:
             return(key)
 
 
@@ -57,7 +68,7 @@ def get_value(key, values):
     headers and not all values can be found in all files. This method was constructed based on
     the file: 'headers_sorted.txt', where all possible headers are sorted by length and have their
     occurence rate.
-    #Note: The method also checks for empy values and if is a header. In both cases returns
+    #Note: The method also checks for empty values and if is a header. In both cases returns
         None for any given key
     # Important: Don't forget to strip line before splitting!
 
@@ -241,7 +252,7 @@ def mapper(start, end):
         data = line.split(',')
 
         destinationID = get_value('END_LOC', data)
-        destination = location_by_ID(destinationID)
+        destination = location_by_ID_lookup(location_dictionary, destinationID)
 
         pickupTime = get_value('START_DATE', data)
         pickupTime = datetimeToInt(pickupTime)
