@@ -239,12 +239,12 @@ def inTimeRange(start, end, time):
 # Input enters in a CSV scheme
 # Each line is a record
 for line in sys.stdin:
+
     line = line.strip()
     data = line.split(',')
 
     destinationID = get_value('END_LOC', data)
     destination = location_by_ID_lookup(location_dictionary, destinationID)
-
     pickupTime = get_value('START_DATE', data)
     pickupTime = datetimeToInt(pickupTime)
     if destination:

@@ -29,7 +29,6 @@ for line in sys.stdin:
             if pickupTimeStr[0].isdigit():
                 pickupTime = pickupTimeStr
     else:
-        #print('discarding' + str(data_lenght))
         continue
 
     if (data_lenght in [5, 17, 19]):
