@@ -16,7 +16,13 @@ for line in sys.stdin:
 
     # remove leading and trailing whitespace
     line = line.strip()
-    destination, count = line.split('\t', 1)
+    line_length = line.split('\t')
+
+    if len(line_length) == 2:
+        destination, count = line.split('\t', 1)
+    else:
+        continue
+
     count = int(count)
 
     if current_destination == destination:

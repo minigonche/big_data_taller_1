@@ -14,3 +14,9 @@ hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
 -file header_mapper.py    -mapper header_mapper.py \
 -file header_reducer.py   -reducer header_reducer.py \
 -input /datos/taxis/* -output /user/bigdata07/headers
+
+hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
+-file RF1_mapper.py    -mapper RF1_mapper.py \
+-file RF1_reducer_sort.py   -reducer RF1_reducer_sort.py \
+-input /datos/taxis/* -output /user/bigdata07/RF1 \
+-file taxi_zone_lookup.csv
