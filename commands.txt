@@ -1,4 +1,10 @@
-cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/RF2/RF2_mapper.py | python MapReduceScripts/RF2/RF2_reducer.py
+cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv Toy\ Data/sample_10.csv| python MapReduceScripts/RF2/RF2_mapper.py | python MapReduceScripts/RF2/RF2_reducer.py
+
+
+cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv Toy\ Data/sample_10.csv| python MapReduceScripts/RF3/RF3_mapper.py | python MapReduceScripts/RF3/RF3_reducer.py
+
+cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/RA2/RA2_mapper.py | python MapReduceScripts/RA2/RA2_reducer.py
+
 
 cat Toy\ Data/sample_1.csv Toy\ Data/sample_2.csv Toy\ Data/sample_3.csv Toy\ Data/sample_4.csv Toy\ Data/sample_5.csv Toy\ Data/sample_6.csv Toy\ Data/sample_7.csv Toy\ Data/sample_8.csv Toy\ Data/sample_9.csv | python MapReduceScripts/RF3/RF3_mapper.py | python MapReduceScripts/RF3/RF3_reducer.py
 
@@ -15,8 +21,17 @@ hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
 -file header_reducer.py   -reducer header_reducer.py \
 -input /datos/taxis/* -output /user/bigdata07/headers
 
+
+
 hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
 -file RF1_mapper.py    -mapper RF1_mapper.py \
 -file RF1_reducer_sort.py   -reducer RF1_reducer_sort.py \
 -input /datos/taxis/* -output /user/bigdata07/RF1 \
 -file taxi_zone_lookup.csv
+
+
+hadoop fs -rm -r /user/bigdata07/splitter_tester
+hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar \
+-file splitter_mapper.py    -mapper splitter_mapper.py \
+-file splitter_reducer.py   -reducer splitter_reducer.py \
+-input /user/bigdata07/taxis_medium/* -output /user/bigdata07/splitter_tester

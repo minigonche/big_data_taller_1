@@ -1,17 +1,44 @@
 #RF1
 # Requerimiento funcional 1
 from django.http import HttpResponse
+from django.shortcuts import render
 import requests
+import numpy as np
+import pickle
 
 def hacer_requerimiento(request):
-	
-	#TODO
 
-	#Franja Horaria
-	hora_inicio = request.POST.get('RF3_horas_inicio')
-	minutos_inicio = request.POST.get('RF3_minutos_fin')
-	hora_fin = request.POST.get('RF3_horas_fin')
-	minutos_fin = request.POST.get('RF3_minutos_fin')
+	data = {}
+	
+	dias = {'1':'Lunes','2':'Martes','3':'Miercoles', '4':'Jueves','5':'Viernes','6':'Sabado','7':'Domingo'}
+	airports = { '1': 'Newark', '132': 'JFK', '138':'LaGuardia'}
+
+	#Loads the zone dictionary
+	zones = get_zones()
+
+	# Franja Horaria
+	hora_inicio = request.POST.get('RF3_hora_inicio')
+	merid_inicio = request.POST.get('RF3_am_pm_inicio')
+	hora_fin = request.POST.get('RF3_hora_fin')
+	merid_fin = request.POST.get('RF3_am_pm_fin')
+
+	hora_final_inicio = int(hora_inicio)
+	if(merid_inicio == 'PM'):
+		hora_final_inicio = hora_final_inicio + 12
+
+	hora_final_fin = int(hora_fin)
+	if(merid_fin == 'PM'):
+		hora_final_fin = hora_final_fin + 12
+
+	#time strings
+	hora_inicio_string = hora_inicio + ':00' + merid_inicio.lower()
+	hora_fin_string = hora_fin + ':00' + merid_fin.lower()
+
+	
+	#REVISA SI LA FRANJA HORARIA ES CORRECTA
+	if(hora_final_inicio >= hora_final_fin):
+		data['error'] = 'Favor inserte una franja horaria valida. Franja recibida: ' + hora_inicio_string + ' a ' + hora_fin_string + '.'
+		return render(request, 'app1/error.html', data)
 
 	# Mes
 	dia_semana = request.POST.get('RF3_dia_semana')
@@ -20,11 +47,121 @@ def hacer_requerimiento(request):
 	aeropuerto = request.POST.get('RF3_aeropuerto')
 
 
-	html = "Hora Inicio: " + str(hora_inicio) + ':' + str(minutos_inicio) + ' '
-	html = html + "Hora Fin: " + str(hora_fin) + ':' + str(minutos_fin) + ' '
-	html = html + ' Dia Semana: ' +  str(dia_semana)
-	html = html + ' Aeropuerto: ' +  str(aeropuerto)
-	html = html +  ' (POR IMPLEMENTAR)'
+	data['time_start'] = hora_inicio_string
+	data['time_end'] = hora_fin_string
+	data['airport'] = airports[aeropuerto]
+	data['weekday'] = dias[dia_semana]
+
+	values =  process_data()
+
+	trips = []
+
+	final_dict = {}
+	if( dia_semana in values):
+		if(aeropuerto in values[dia_semana]):
+			current_dic = values[dia_semana][aeropuerto]
+			to_merged_dic = {}
+
+			for h in current_dic.keys():
+				hour = int(h)
+				if(hora_final_inicio <= hour and hour < hora_final_fin):
+					to_merged_dic[h] = dict(current_dic[h])
+
+			final_dict = merge_dicts(to_merged_dic)
+
+	#sorts the dictionary
+	i = 0;
+	for dest in sorted(final_dict.items(), key=lambda kv: -1*kv[1]):
+		i = i + 1
+		zone = zones[dest[0]]
+		trips.append({'pos':i, 'dest_name': zone['zone'], 'dest_neighborhood': zone['location'], 'count':dest[1]})
+
+	data['trips'] = trips
 
 
-	return HttpResponse(html)
+	return render(request, 'app1/response_RF3.html', data)
+
+def merge_dicts(large_dict):
+	"""
+	Merges the dictionaries
+	"""
+
+	response = {}
+	for hour in large_dict.keys():
+		current_dic = large_dict[hour]
+		for dest in current_dic:
+			if(dest in response):
+				response[dest] = response[dest] + current_dic[dest]
+			else:
+				response[dest] = current_dic[dest]
+
+	return(response)
+
+
+def process_data():
+	""" 
+	Process the received data for the view to manipulate
+	"""
+	lines = get_data()
+	response = {}
+	for line in lines:
+		line = line.strip()
+		weekday, hour, airport, trips = line.split('\t')
+
+		if(weekday not in response.keys()):
+			response[weekday] = {}
+
+		if(airport not in response[weekday].keys()):
+			response[weekday][airport] = {}
+
+		if(hour not in response[weekday][airport].keys()):
+			response[weekday][airport][hour] = {}
+
+		current_dic = response[weekday][airport][hour]
+		for trip in trips.split(';'):
+			if(trip):
+				source, amount = trip.split(':')
+				current_dic[source] = int(amount)
+
+
+	return(response)
+
+
+def get_data():
+	""" 
+	Gets the data. Method designed to switch between local and remote dataset.
+
+	Returns: array of lines
+	"""
+	#return(get_remote_data())
+	return(get_local_data())
+
+
+def get_local_data():
+	""" 
+	Loads the data from local. Ment for testing
+
+	Returns: array of strings
+		Each string corresponds to a line
+	"""
+
+	with open('app1/RF/received_data_sample/RF3_result_sample.txt') as f:
+		return(f.readlines())
+
+
+
+
+def get_remote_data():
+	""" 
+	Loads the data from local. Ment for testing
+
+	Returns: array of strings
+		Each string corresponds to a line
+	"""
+	raise Error('Not Implemented yet')
+
+
+def get_zones():
+	with open( 'app1/static/app1/zones/zonas_dict.pkl', 'rb') as f:
+		return pickle.load(f)
+	

@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 # coding=utf-8
-"""RF2_mapper.py"""
+"""RA2_mapper.py"""
 import sys
 import re
 from datetime import datetime
-# Mapper para el Requerimiento Funcional 3 del Taller 1
+# Mapper para el Requerimiento Analitico 2 del Taller 1
 
-# Displays the location and amount of trips per minute out of every airport
+# Displays the trips between zones, per hour of day of week 
 
 # Asumptions
-# Will only record start date of trips
+# Only checks for start time of trip
 
 # The output format is:
-# day_of_week tab hour_of_day tab airport_code tab destination:number_of_trips
+# day_of_week tab hour_of_day tab source:destinarion:num_of_trips
 
 # If displays errors and warnings
 print_errors = True
@@ -207,17 +207,6 @@ def get_value(key, values):
 
 
 
-
-
-
-# 1 Newwark
-# 132 JFK
-# 138 La Guardia
-airports = ['1','132','138']
-#airports = ['1','132','138', '181', '229', '171', '7', '89', '24']
-
-lens = {}
-
 # input comes from STDIN (standard input)
 # Input enters in a CSV scheme
 # Each line is a record
@@ -239,17 +228,14 @@ for line in sys.stdin:
        start_date is not None):
         
 
-        #Only prints if from location is airport
-        if(from_location in airports):
+        day_of_week = start_date.isoweekday()
+        hour_of_day = start_date.hour
+        source = from_location
+        destination = to_location
+        number_of_trips = 1
 
-            day_of_week = start_date.isoweekday()
-            hour_of_day = start_date.hour
-            airport_code = from_location
-            destination = to_location
-            number_of_trips = 1
-
-            #day_of_week tab hour_of_day tab airport_code tab destination:number_of_trips
-            print('%s\t%s\t%s\t%s:%s' % (day_of_week, hour_of_day,airport_code,destination,number_of_trips))
+        #day_of_week tab minute_of_day tab airport_code tab destination:number_of_trips
+        print('%s\t%s\t%s:%s:%s' % (day_of_week, hour_of_day, source, destination,number_of_trips))
 
 
 
