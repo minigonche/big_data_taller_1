@@ -71,18 +71,56 @@
 					<div class = "row">
 						<div class="col-2"></div>
 					    <label class="col-2 control-label text-lg-center">Hora Inicio</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF1_horas_inicio" id="RF1_horas_inicio" required></div>
-					    <label class="col- control-label text-lg-center">:</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF1_minutos_inicio" id="RF1_minutos_inicio" required> </div>
-					    <div class="col-4"></div>
+					    <div class="col-2">
+					    <select class="form-control" name="RF1_hora_inicio" id="RF1_hora_inicio">
+		                  <option value = 0 >0:00</option>		          
+		                  <option value = 1 >1:00</option>
+		                  <option value = 2 >2:00</option>
+		                  <option value = 3 >3:00</option>
+		                  <option value = 4 >4:00</option>
+		                  <option value = 5 >5:00</option>
+		                  <option value = 6 >6:00</option>
+		                  <option value = 7 >7:00</option>
+		                  <option value = 8 >8:00</option>
+		                  <option value = 9 >9:00</option>
+		                  <option value = 10 >10:00</option>
+		                  <option value = 11 >11:00</option>		                  
+		                  <option value = 12 >12:00</option>
+		                </select></div>					    
+					    <div class="col-2">
+					    <select class="form-control" name="RF1_am_pm_inicio" id="RF1_am_pm_inicio">
+		                  <option value = 'AM' >am</option>		          
+		                  <option value = 'PM' >pm</option>
+		                </select></div>
+					    </div>
+					    <div class="col-2"></div>
 					</div>
 					<div class = "row">
 						<div class="col-2"></div>
 					    <label class="col-2 control-label text-lg-center">Hora Fin</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF1_horas_fin" id="RF1_horas_fin" required></div>
-					    <label class="col- control-label text-lg-center">:</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF1_minutos_fin" id="RF1_minutos_fin" required> </div>
-					    <div class="col-4"></div>
+					    <div class="col-2">
+					    <select class="form-control" name="RF1_hora_fin" id="RF1_hora_fin">
+		                  <option value = 0 >0:00</option>		          
+		                  <option value = 1 selected>1:00</option>
+		                  <option value = 2 >2:00</option>
+		                  <option value = 3 >3:00</option>
+		                  <option value = 4 >4:00</option>
+		                  <option value = 5 >5:00</option>
+		                  <option value = 6 >6:00</option>
+		                  <option value = 7 >7:00</option>
+		                  <option value = 8 >8:00</option>
+		                  <option value = 9 >9:00</option>
+		                  <option value = 10 >10:00</option>
+		                  <option value = 11 >11:00</option>		                  
+		                  <option value = 12 >12:00</option>
+		                </select></div>					    
+					    <div class="col-2">
+					    <select class="form-control" name="RF1_am_pm_fin" id="RF1_am_pm_fin">
+		                  <option value = 'AM' >am</option>		          
+		                  <option value = 'PM' >pm</option>
+		                </select></div>
+					    </div>
+					    <div class="col-2"></div>
 					</div>
 	            </div>
 			</div>
@@ -211,7 +249,7 @@
 
 		<div class = "container">
 			<div class="form-group">
-					<div class = "row">
+				<div class = "row">
 					<div class="col-4"></div>
 					<div class="col-4"><h6> Franja Horaria</h6></div>
 					<div class="col-4"></div>
@@ -219,18 +257,56 @@
 					<div class = "row">
 						<div class="col-2"></div>
 					    <label class="col-2 control-label text-lg-center">Hora Inicio</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF3_horas_inicio" id="RF3_horas_inicio" required></div>
-					    <label class="col- control-label text-lg-center">:</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF3_minutos_inicio" id="RF3_minutos_inicio" required> </div>
-					    <div class="col-4"></div>
+					    <div class="col-2">
+					    <select class="form-control" name="RF3_hora_inicio" id="RF3_hora_inicio">
+		                  <option value = 0 >0:00</option>		          
+		                  <option value = 1 >1:00</option>
+		                  <option value = 2 >2:00</option>
+		                  <option value = 3 >3:00</option>
+		                  <option value = 4 >4:00</option>
+		                  <option value = 5 >5:00</option>
+		                  <option value = 6 >6:00</option>
+		                  <option value = 7 >7:00</option>
+		                  <option value = 8 >8:00</option>
+		                  <option value = 9 >9:00</option>
+		                  <option value = 10 >10:00</option>
+		                  <option value = 11 >11:00</option>		                  
+		                  <option value = 12 >12:00</option>
+		                </select></div>					    
+					    <div class="col-2">
+					    <select class="form-control" name="RF3_am_pm_inicio" id="RF3_am_pm_inicio">
+		                  <option value = 'AM' >am</option>		          
+		                  <option value = 'PM' >pm</option>
+		                </select></div>
+					    </div>
+					    <div class="col-2"></div>
 					</div>
 					<div class = "row">
 						<div class="col-2"></div>
 					    <label class="col-2 control-label text-lg-center">Hora Fin</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF3_horas_fin" id="RF3_horas_fin" required></div>
-					    <label class="col- control-label text-lg-center">:</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF3_minutos_fin" id="RF3_minutos_fin" required> </div>
-					    <div class="col-4"></div>
+					    <div class="col-2">
+					    <select class="form-control" name="RF3_hora_fin" id="RF3_hora_fin">
+		                  <option value = 0 >0:00</option>		          
+		                  <option value = 1 selected>1:00</option>
+		                  <option value = 2 >2:00</option>
+		                  <option value = 3 >3:00</option>
+		                  <option value = 4 >4:00</option>
+		                  <option value = 5 >5:00</option>
+		                  <option value = 6 >6:00</option>
+		                  <option value = 7 >7:00</option>
+		                  <option value = 8 >8:00</option>
+		                  <option value = 9 >9:00</option>
+		                  <option value = 10 >10:00</option>
+		                  <option value = 11 >11:00</option>		                  
+		                  <option value = 12 >12:00</option>
+		                </select></div>					    
+					    <div class="col-2">
+					    <select class="form-control" name="RF3_am_pm_fin" id="RF3_am_pm_fin">
+		                  <option value = 'AM' >am</option>		          
+		                  <option value = 'PM' >pm</option>
+		                </select></div>
+					    </div>
+					    <div class="col-2"></div>
 					</div>
 	            </div>
 			</div>
@@ -318,9 +394,9 @@
 
 				<div class="py-1"><p></p></div>			
 
-		<div class = "container">
+				<div class = "container">
 			<div class="form-group">
-					<div class = "row">
+				<div class = "row">
 					<div class="col-4"></div>
 					<div class="col-4"><h6> Franja Horaria</h6></div>
 					<div class="col-4"></div>
@@ -328,18 +404,56 @@
 					<div class = "row">
 						<div class="col-2"></div>
 					    <label class="col-2 control-label text-lg-center">Hora Inicio</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF4_horas_inicio" id="RF4_horas_inicio" required></div>
-					    <label class="col- control-label text-lg-center">:</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF4_minutos_inicio" id="RF4_minutos_inicio" required> </div>
-					    <div class="col-4"></div>
+					    <div class="col-2">
+					    <select class="form-control" name="RF4_hora_inicio" id="RF4_hora_inicio">
+		                  <option value = 0 >0:00</option>		          
+		                  <option value = 1 >1:00</option>
+		                  <option value = 2 >2:00</option>
+		                  <option value = 3 >3:00</option>
+		                  <option value = 4 >4:00</option>
+		                  <option value = 5 >5:00</option>
+		                  <option value = 6 >6:00</option>
+		                  <option value = 7 >7:00</option>
+		                  <option value = 8 >8:00</option>
+		                  <option value = 9 >9:00</option>
+		                  <option value = 10 >10:00</option>
+		                  <option value = 11 >11:00</option>		                  
+		                  <option value = 12 >12:00</option>
+		                </select></div>					    
+					    <div class="col-2">
+					    <select class="form-control" name="RF4_am_pm_inicio" id="RF4_am_pm_inicio">
+		                  <option value = 'AM' >am</option>		          
+		                  <option value = 'PM' >pm</option>
+		                </select></div>
+					    </div>
+					    <div class="col-2"></div>
 					</div>
 					<div class = "row">
 						<div class="col-2"></div>
 					    <label class="col-2 control-label text-lg-center">Hora Fin</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "23"  placeholder="hh" name="RF4_horas_fin" id="RF4_horas_fin" required></div>
-					    <label class="col- control-label text-lg-center">:</label>
-					    <div class="col-sm"><input class="form-control" type="number" min = "0" max = "59"  placeholder="mm" name="RF4_minutos_fin" id="RF4_minutos_fin" required> </div>
-					    <div class="col-4"></div>
+					    <div class="col-2">
+					    <select class="form-control" name="RF4_hora_fin" id="RF4_hora_fin">
+		                  <option value = 0 >0:00</option>		          
+		                  <option value = 1 selected>1:00</option>
+		                  <option value = 2 >2:00</option>
+		                  <option value = 3 >3:00</option>
+		                  <option value = 4 >4:00</option>
+		                  <option value = 5 >5:00</option>
+		                  <option value = 6 >6:00</option>
+		                  <option value = 7 >7:00</option>
+		                  <option value = 8 >8:00</option>
+		                  <option value = 9 >9:00</option>
+		                  <option value = 10 >10:00</option>
+		                  <option value = 11 >11:00</option>		                  
+		                  <option value = 12 >12:00</option>
+		                </select></div>					    
+					    <div class="col-2">
+					    <select class="form-control" name="RF4_am_pm_fin" id="RF4_am_pm_fin">
+		                  <option value = 'AM' >am</option>		          
+		                  <option value = 'PM' >pm</option>
+		                </select></div>
+					    </div>
+					    <div class="col-2"></div>
 					</div>
 	            </div>
 			</div>
