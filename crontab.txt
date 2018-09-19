@@ -1,0 +1,25 @@
+#Script para programar trabajos hadoop empezando a las 4am.
+# 1. Ingresar al cluster deseado
+# 2. Acceder a crontab usando el comando:   crontab -e
+# 3. Copiar este script
+#
+# Nota: La ejecucion de este script queda documentada en    /var/spool/mail/bigdata07
+#
+#┌───────────── minute (0 - 59)
+# │ ┌───────────── hour (0 - 23)
+# │ │ ┌───────────── day of month (1 - 31)
+# │ │ │ ┌───────────── month (1 - 12)
+# │ │ │ │ ┌───────────── day of week (0 - 6) (Sunday to Saturday;
+# │ │ │ │ │                                       7 is also Sunday on some systems)
+# │ │ │ │ │
+# │ │ │ │ │
+# * * * * *  command_to_execute
+
+1 4 * * * hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar -file RF1/RF1_mapper_raw.py  -mapper RF1/RF1_mapper_raw.py -file RF1/RF1_reducer.py   -reducer RF1/RF1_reducer.py  -input /datos/taxis/* -output /user/bigdata07/RF1 
+1 4 * * * hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar -file RF2/RF2_mapper.py  -mapper RF2/RF2_mapper.py -file RF2/RF2_reducer.py   -reducer RF2/RF2_reducer.py  -input /datos/taxis/* -output /user/bigdata07/RF2
+
+# Dos trabajos para emepzar a las 4:10AM
+10 4 * * * hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar -file RF3/RF3_mapper.py  -mapper RF3/RF3_mapper.py -file RF3/RF3_reducer.py   -reducer RF3/RF3_reducer.py  -input /datos/taxis/* -output /user/bigdata07/RF3 
+10 4 * * * hadoop jar /usr/hdp/3.0.0.0-1634/hadoop-mapreduce/hadoop-streaming.jar -file RF4/RF4_mapper.py  -mapper RF4/RF4_mapper.py -file RF4/RF4_reducer.py   -reducer RF4/RF4_reducer.py  -input /datos/taxis/* -output /user/bigdata07/RF4
+                                                                                                                                                                                                          
+                                                                 
