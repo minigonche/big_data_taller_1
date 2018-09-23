@@ -29,22 +29,22 @@ for line in sys.stdin:
     if(hour_of_day not in saved[moment]):
         saved[moment][hour_of_day] = {}
 
+    if(moment == "MON"):
+        current_dic = saved[moment][hour_of_day]
 
-    current_dic = saved[moment][hour_of_day]
+        for trip in trips.split(';'):
 
-    for trip in trips.split(';'):
-
-        if(trip):
-            source, dest, num_trips = trip.split(':')
-            #Updates Structures
-            if(source in current_dic):
-                if(dest in current_dic[source]):
-                    current_dic[source][dest] = current_dic[source][dest] +  int(num_trips)
+            if(trip):
+                source, dest, num_trips = trip.split(':')
+                #Updates Structures
+                if(source in current_dic):
+                    if(dest in current_dic[source]):
+                        current_dic[source][dest] = current_dic[source][dest] +  int(num_trips)
+                    else:
+                        current_dic[source][dest] = int(num_trips)
                 else:
+                    current_dic[source] = {}
                     current_dic[source][dest] = int(num_trips)
-            else:
-                current_dic[source] = {}
-                current_dic[source][dest] = int(num_trips)
 
 
 

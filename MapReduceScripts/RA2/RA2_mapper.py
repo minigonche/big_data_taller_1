@@ -237,8 +237,10 @@ for line in sys.stdin:
         destination = to_location
         number_of_trips = 1
 
-        #day_of_week (in text) tab minute_of_day tab airport_code tab destination:number_of_trips
-        print('%s\t%s\t%s:%s:%s' % (weekdays[day_of_week], hour_of_day, source, destination,number_of_trips))
+        if(day_of_week == 0):
+
+            #day_of_week (in text) tab minute_of_day tab airport_code tab destination:number_of_trips
+            print('%s\t%s\t%s:%s:%s' % (weekdays[day_of_week], hour_of_day, source, destination,number_of_trips))
 
         #day_of_month tab minute_of_day tab airport_code tab destination:number_of_trips
-        print('%s\t%s\t%s:%s:%s' % (day_of_month, hour_of_day, source, destination,number_of_trips))
+        #print('%s\t%s\t%s:%s:%s' % (day_of_month, hour_of_day, source, destination,number_of_trips))
