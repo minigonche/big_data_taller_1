@@ -476,11 +476,8 @@
 
 	</form>
 
-
+	<!-- RA2 -->
 		 <div class="py-1"><p></p></div>
-
-
-
 	    <div class="container">
        <div class="text-left">
         <h3>Requerimientos Analiticos</h3>        
@@ -515,16 +512,42 @@
 					</div>
 					<div class="col-3"></div>
 				</div>
-			</div>	
-
+			</div>
 	</div>
-
 	</form>
+			<!-- RA3 -->
+         <div class="py-1"><p></p></div>
 
 
+             <form action="{% url 'app1:RA_3' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+	{% csrf_token %}
+
+	  <div class="container">
+       <div class="text-left">
+        <h4>Requerimiento Analitico 3</h4>
+     </div>
+
+      <div class="py-2">
+        <p> Analisis de oferta-demanda.</p>
+      </div>
+    </div>
 
 
+	<div class="form-group">
 
+		<div class="container">
+				<div class="row">
+					<div class="col-3"></div>
+	            	<div class="col-6">
+	            		<div class="form-group text-center">
+							<input type="submit"  id='send_form' class="btn btn-primary" value="Ir al Requerimiento">
+						</div>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+	</div>
+	</form>
 
 	</body>
 </html>
