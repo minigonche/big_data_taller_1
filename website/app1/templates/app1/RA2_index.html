@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RA2 Origen-Destino</title>
+
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+  <style>
+      .map path {
+          fill: #eee;
+          stroke: #fff;
+          stroke-width: 2;
+      }
+
+      .links line {
+          stroke: #679;
+          stroke-opacity: 0.15;
+      }
+
+      .nodes circle {
+          fill: #679;
+          stroke: #235;
+          stroke-width: 2;
+      }
+
+
+      .tick line {
+        shape-rendering: crispEdges;
+        stroke: #000;
+      }
+
+      line.minor  {
+        stroke: #777;
+        stroke-dasharray: 1,1;
+      }
+
+      path.domain {
+        fill: none;
+        stroke: black;
+      }
+
+      g text {
+        font-size: 12;
+      }
+  </style>
+
+  </head>
+
+	<body>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+
+
+    function show_week_days(element) {
+        if(element.checked)
+          {
+            document.getElementById("div_select_dia_mes").style.display = "none";
+            document.getElementById("div_select_dia_semana").style.display ="block";
+          }
+      };
+
+      function show_month_days(element) {
+            if(element.checked)
+              {
+                document.getElementById("div_select_dia_mes").style.display = "block";
+                document.getElementById("div_select_dia_semana").style.display ="none";
+              }
+          };
+  </script>
+
+
+	<div class="container">
+      <div class="py-5 text-center">
+      {% load static %}
+        <img class="d-block mx-auto mb-4" src="{% static "app1/img/header.png" %}" alt="" width="1000" height="342">
+        <h1>Requerimiento Analitico 2</h1>
+        <p class="lead">Análisis Viajes Origen Destino</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class = "row">
+          <div class = "col-2"></div>
+          <div class = "col-8 text-center">
+            <h5> Tipo Dia <h5>
+          </div>
+          <div class = "col-2"></div>
+     </div>
+      <div class = "row">
+      <div class = "col-2"></div>
+      <div class = "col-8 text-center">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="radio_dia" id="inlineRadio1" value="semana" onchange="show_week_days(this)" checked="checked">
+          <label class="form-check-label" for="inlineRadio1"> Por Dia Semana </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="radio_dia" id="inlineRadio2" value="mes" onchange="show_month_days(this)">
+          <label class="form-check-label" for="inlineRadio2">Por Dia Mes</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="radio_dia" id="inlineRadio3" value="fiesta" disabled>
+          <label class="form-check-label" for="inlineRadio3">Por Fiesta (por implementar)</label>
+        </div>
+      </div>
+      <div class = "col-2"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="py-1 text-center">
+      <p class="lead"> </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class = "row">
+    <div class = "col-5"></div>
+    <div class = "col-2 text-center">
+      <div class="form-group" id="div_select_dia_semana">
+        <label for="select_dia_semana">Dia de la Semana</label>
+        <select class="form-control" id="select_dia_semana" onchange="update_json_weekday(this.value);">
+          <option value = 0 >Lunes</option>
+          <option value = 1 >Martes</option>
+          <option value = 2 >Miercoles</option>
+          <option value = 3 >Jueves</option>
+          <option value = 4 >Viernes</option>
+          <option value = 5 >Sabado</option>
+          <option value = 6 >Domingo</option>
+      </select>
+    </div>
+    <div class="form-group" id="div_select_dia_mes" style="display: none;">
+	  		<div class="form-group">
+          <label for="select_dia_semana">Dia del Mes</label>
+	   			<input class="form-control" type="number" placeholder = "Dia del Mes" min = "1" max = "31" name="select_dia_semana" id="select_dia_mes" onchange="update_json_month_day(this.value);">
+			</div>
+  </div>
+    </div>
+    <div class = "col-5"></div>
+  </div>
+</div>
+
+
+
+
+    <div class="container">
+      <div class="py-1 text-center">
+        <p class="lead"> </p>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <div class = "row">
+          <div class = "col-4"></div>
+          <div class = "col-4 text-center">
+              <h5> Franja Horaria Actual <h5>
+          </div>
+          <div class = "col-4"></div>
+    </div>
+      <div class = "row">
+          <div class = "col-3"></div>
+          <div class = "col-1 text-center">
+            <button type="button" class="btn btn-success" onclick="previous_timeframe();"> < </button>
+          </div>
+          <div class = "col-4 text-center">
+              <p class="lead" id = "label_franja_horaria"> - </p>
+          </div>
+          <div class = "col-1 text-center">
+            <button type="button" class="btn btn-success" onclick="next_timeframe();"> > </button>
+          </div>
+          <div class = "col-3"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="py-1 text-center">
+      <p class="lead"> </p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class = "row">
+        <div class = "col-2"></div>
+        <div class = "col-8 text-center">
+          <h5> Tipo Visualizacion <h5>
+        </div>
+        <div class = "col-2"></div>
+   </div>
+    <div class = "row">
+    <div class = "col-2"></div>
+    <div class = "col-8 text-center">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="radio_vis" id="visRadio1" value="semana" onchange="show_map()" checked="checked">
+        <label class="form-check-label" for="visRadio1"> Mapa </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="radio_vis" id="visRadio2" value="mes" onchange="show_graph()">
+        <label class="form-check-label" for="visRadio2">Grafo</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="radio_vis" id="visRadio3" value="fiesta" onchange="show_matrix()">
+        <label class="form-check-label" for="visRadio3"> Matriz</label>
+      </div>
+    </div>
+    <div class = "col-2"></div>
+  </div>
+</div>
+
+
+    <div class="container">
+      <div class="py-1 text-center">
+        <p class="lead"> </p>
+      </div>
+    </div>
+
+    <div class="container" id="map_global_container">
+      <div class= "row">
+        <div class= "col-1"></div>
+        <div id="map_contaier" class= "col-10">
+          <!-- Map goes here by javascript-->
+        </div>
+        <div class= "col-1"></div>
+      </div>
+    </div>
+
+    <div class="container" id="matrix_global_container" style="display: none;">
+      <div class= "row">
+        <div class= "col-1"></div>
+        <div  class= "col-10">
+          <svg id="vizcontainer" style="width:800px;height:800px;" />
+        </div>
+        <div class= "col-1"></div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="py-1 text-center">
+        <p class="lead"> </p>
+      </div>
+    </div>
+
+    <div class="container" id="info_nodo" style="display: none;">
+      <div class = "row">
+          <div class = "col-4"></div>
+          <div class = "col-4 text-center">
+              <h5> Informacion Nodo </h5>
+          </div>
+          <div class = "col-4"></div>
+    </div>
+      <div class= "row">
+        <div class= "col-2"></div>
+        <div class= "col-8">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Atributo</th>
+                <th scope="col">Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" class="lead">Borough</th>
+                <td id="info_borough">barrio 1</td>
+              </tr>
+              <tr>
+                <th scope="row" class="lead">Barrio</th>
+                <td id="info_barrio">barrio 1</td>
+              </tr>
+              <tr>
+                <th scope="row" class="lead">Viajes</th>
+                <td id="info_viajes">20</td>
+              </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class= "col-2"></div>
+      </div>
+    </div>
+
+
+
+
+
+    <div class="container">
+
+      <div class="py-1 text-center">
+        <p class="lead"> </p>
+      </div>
+
+      <div>
+        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app1:index' %}'" >Volver</button>
+      </div>
+
+    </div>
+
+
+    <script>
+
+            // Java Script for D3 Graph
+            // Initial Variables
+
+            var positioning = 'map'
+            var width = 800
+            var height = 800
+            var current_links = null
+            var pos = 12
+            var week_day = 0
+            var month_day = 1
+            var scheme = "WEEK"
+            var graph_nodes = null
+            var graph_links = null
+            var features = null
+            var sizes = null
+            var current_sizes = null
+            var node_info = null
+            var svg = null
+            var svg2 = null
+            var map = null
+            var links = null
+            var nodes = null
+            var num_trips = null
+            var div_constant = 8
+            var max_arch_value = 2
+            var current_node_id = null
+            var current_num_trips = null
+
+            //Weekdays
+            weekdays = ["MON","TUE","WED","THU","FRI","SAT","SUN"]
+            //Time interval
+            franjas = ['0:00am - 1:00am',
+                       '1:00am - 2:00am',
+                       '2:00am - 3:00am',
+                       '3:00am - 4:00am',
+                       '4:00am - 5:00am',
+                       '5:00am - 6:00am',
+                       '6:00am - 7:00am',
+                       '7:00am - 8:00am',
+                       '8:00am - 9:00am',
+                       '9:00am - 10:00am',
+                       '10:00am - 11:00am',
+                       '11:00am - 12:00am',
+                       '12:00pm - 1:00pm',
+                       '1:00pm - 2:00pm',
+                       '2:00pm - 3:00pm',
+                       '3:00pm - 4:00pm',
+                       '4:00pm - 5:00pm',
+                       '5:00pm - 6:00pm',
+                       '6:00pm - 7:00pm',
+                       '7:00pm - 8:00pm',
+                       '8:00pm - 9:00pm',
+                       '9:00pm - 10:00pm',
+                       '10:00pm - 11:00pm',
+                       '11:00pm - 12:00am']
+
+            var projection = d3.geoMercator()
+              .center([-73.96667, 40.78333])
+              .scale(80000)
+              .translate([390, 240]);
+
+
+            var path = d3.geoPath().projection(projection)
+
+
+            var linkForce = d3.forceLink()
+                .id(function (d) { return d.id })
+                .distance(40)
+
+            var simulation = d3.forceSimulation()
+                .force('link', linkForce)
+                .force('charge', d3.forceManyBody().strength(-1))
+                .force('center', d3.forceCenter(width/2, height/2))
+                .stop()
+
+            var drag = d3.drag()
+                .on('start', dragStarted)
+                .on('drag', dragged)
+                .on('end', dragEnded)
+
+            d3.queue()
+                .defer(d3.json, "{% static "app1/local_jsons/RA2/nodes.json" %}")
+                .defer(d3.json, "{% static "app1/local_jsons/RA2/links.json" %}")
+                .defer(d3.json, "{% static "app1/local_jsons/RA2/sizes.json" %}")
+                .defer(d3.json, "{% static "app1/local_jsons/RA2/node_info.json" %}")
+                .defer(d3.json, "{% static "app1/local_jsons/RA2/num_trips.json" %}")
+                .defer(d3.json, "{% static "app1/local_jsons/RA2/taxi_zones.json" %}")                
+                .awaitAll(initialize)
+
+            function initialize(error, results) {
+
+
+
+                if (error) { throw error }
+
+                graph_nodes = results[0]
+                graph_links = results[1]
+                sizes = results[2]
+                node_info = results[3]
+                num_trips = results[4]
+                features = results[5].features
+
+
+                current_links = graph_links[weekdays[week_day]]
+                current_sizes = sizes[weekdays[week_day]]
+                current_num_trips = num_trips[weekdays[week_day]]
+
+                document.getElementById("label_franja_horaria").innerHTML = franjas[pos];
+
+                simulation.nodes(graph_nodes)
+                    .on('tick', ticked)
+
+                simulation.force('link').links(current_links[pos])
+
+                svg = d3.select('#map_contaier')
+                    .append('svg')
+                    .attr('width', width)
+                    .attr('height', height)
+
+                map = svg.append('g')
+                    .attr('class', 'map')
+                    .selectAll('path')
+                    .data(features)
+                    .enter().append('path')
+                    .attr('d', path)
+
+                links = svg.append('g')
+                    .attr('class', 'links')
+                    .selectAll('line')
+                    .data(current_links[pos])
+                    .enter().append('line')
+                    .attr('stroke-width', function (d) { return Math.min(d.count/div_constant, max_arch_value) })
+
+                nodes = svg.append('g')
+                    .attr('class', 'nodes')
+                    .selectAll('circle')
+                    .data(graph_nodes)
+                    .enter().append('circle')
+                    .attr('r', function (d) {
+                      return current_sizes[pos][d.id] })
+                    .on('click', show_node_info)
+                    .call(drag)
+
+                nodes.append('title')
+                    .text(function (d) { return d.faa })
+
+                fixed(true)
+
+                svg2 = d3.select("#vizcontainer")
+                createAdjacencyMatrix(graph_nodes, current_links[pos], current_num_trips[pos])
+
+            }
+
+
+            function show_node_info(d)
+            {
+
+              if(d.id == current_node_id)
+              {
+                  current_node_id = null
+                  document.getElementById("info_nodo").style.display = "none";
+              }
+              else {
+                  current_node_id = d.id
+                  document.getElementById("info_nodo").style.display = "block";
+                  document.getElementById("info_borough").innerHTML = node_info[current_node_id]["borough"];
+                  document.getElementById("info_barrio").innerHTML = node_info[current_node_id]["barrio"];
+                  console.log(current_num_trips[pos])
+                  document.getElementById("info_viajes").innerHTML = current_num_trips[pos][current_node_id];
+                  
+
+              }
+
+
+
+            }
+
+
+            function  update_view(new_pos)
+            {
+              pos = new_pos
+
+              document.getElementById("label_franja_horaria").innerHTML = franjas[pos];
+
+              if(positioning == 'sim' || positioning == 'map')
+              {
+                  update_map(pos)
+              }
+
+              
+              if(positioning == 'matrix')
+              {
+                updateAjacencyMatrix(pos)  
+              }
+
+            }
+
+            function update_map(new_pos)
+            {
+              
+              if(positioning == 'sim' || positioning == 'map')
+              {
+
+
+
+                  svg.selectAll(".links").remove()
+
+                  links = svg.append('g')
+                      .attr('class', 'links')
+                      .selectAll('line')
+                      .data(current_links[pos])
+                      .enter().append('line')
+                      .attr('stroke-width', function (d) { return Math.min(d.count/div_constant, max_arch_value) })
+
+                  simulation.force('link').links(current_links[pos])
+
+                  svg.selectAll(".nodes").remove()
+
+                  nodes = svg.append('g')
+                      .attr('class', 'nodes')
+                      .selectAll('circle')
+                      .data(graph_nodes)
+                      .enter().append('circle')
+                      .attr('r', function (d) {
+                        return current_sizes[pos][d.id] })
+                      .on('click', show_node_info)
+                      .call(drag)
+
+                  simulation.nodes(graph_nodes)
+                          .on('tick', ticked)
+
+                  simulation.alpha(1).restart();
+                  if (positioning === 'map') {
+                      fixed(true)
+                      simulation.stop()
+                  }
+            }
+
+ 
+  
+            }
+
+            function next_timeframe()
+            {
+              pos = pos + 1
+              if(pos == 24)
+              {
+                if(scheme == "MONTH")
+                {
+
+                  month_day = parseInt(month_day) + 1
+                  if(month_day == 32)
+                  {
+                    month_day = 1
+                  }
+                  current_links = graph_links[month_day]
+                  current_sizes = sizes[month_day]
+                  current_num_trips = current_num_trips[month_day]
+                  document.getElementById('select_dia_mes').value=month_day;
+                }
+                if(scheme == "WEEK")
+                {
+
+                  week_day = week_day + 1
+                  if(week_day == 7)
+                  {
+                    week_day = 0
+                  }
+                  current_links = graph_links[weekdays[week_day]]
+                  current_sizes = sizes[weekdays[week_day]]
+                  current_num_trips = current_num_trips[weekdays[week_day]]
+
+                  document.getElementById("select_dia_semana").selectedIndex = week_day
+
+                }
+                pos = 0
+              }
+              update_view(pos)
+
+            }
+
+            function previous_timeframe()
+            {
+              pos = pos - 1
+              if(pos == -1)
+              {
+                if(scheme == "MONTH")
+                {
+
+                  month_day = parseInt(month_day) - 1
+                  if(month_day == 0)
+                  {
+                    month_day = 31
+                  }
+                  current_links = graph_links[month_day]
+                  current_sizes = sizes[month_day]
+                  current_num_trips = current_num_trips[month_day]
+                  document.getElementById('select_dia_mes').value=month_day;
+                }
+                if(scheme == "WEEK")
+                {
+
+                  week_day = week_day - 1
+                  if(week_day == -1)
+                  {
+                    week_day = 6
+                  }
+                  current_links = graph_links[weekdays[week_day]]
+                  current_sizes = sizes[weekdays[week_day]]
+                  current_num_trips = current_num_trips[weekdays[week_day]]
+                  document.getElementById("select_dia_semana").selectedIndex = week_day
+
+                }
+                pos = 23
+              }
+
+              update_view(pos)
+
+            }
+
+            function update_json_weekday(week_day_var)
+            {
+              week_day = parseInt(week_day_var)
+              scheme = "WEEK"
+
+              current_links = graph_links[weekdays[week_day]]
+              current_sizes = sizes[weekdays[week_day]]
+              current_num_trips = current_num_trips[weekdays[week_day]]
+
+              update_view(pos)
+
+            }
+
+            function update_json_month_day(month_day_var)
+            {
+              if(month_day_var != "" && month_day_var <= 31 && month_day_var >= 1)
+              {
+                month_day = month_day_var
+                scheme = "MONTH"
+
+                current_links = graph_links[month_day]
+                current_sizes = sizes[month_day]
+                current_num_trips = current_num_trips[month_day]
+                update_view(pos)
+              }
+
+
+            }
+
+
+            function fixed(immediate) {
+                graph_nodes.forEach(function (d) {
+                    var pos = projection([d.lon, d.lat])
+                    d.x = pos[0]
+                    d.y = pos[1]
+                })
+
+                var t = d3.transition()
+                    .duration(immediate ? 0 : 600)
+                    .ease(d3.easeElastic.period(0.5))
+
+                update(links.transition(t), nodes.transition(t))
+            }
+
+            function ticked() {
+                update(links, nodes)
+            }
+
+            function update(links, nodes) {
+                links
+                    .attr('x1', function (d) { return d.source.x })
+                    .attr('y1', function (d) { return d.source.y })
+                    .attr('x2', function (d) { return d.target.x })
+                    .attr('y2', function (d) { return d.target.y })
+
+                nodes
+                    .attr('cx', function (d) { return d.x })
+                    .attr('cy', function (d) { return d.y })
+            }
+
+            function toggle() {
+                if (positioning === 'map') {
+                    positioning = 'sim'
+                    map.attr('opacity', 0.25)
+                    simulation.alpha(1).restart()
+                } else {
+                    positioning = 'map'
+                    map.attr('opacity', 1)
+                    simulation.stop()
+                    fixed()
+                }
+            }
+
+            function show_map()
+            {
+              document.getElementById("map_global_container").style.display = "block";
+              document.getElementById("matrix_global_container").style.display ="none";              
+              positioning = 'map'
+              update_view(pos)
+              map.attr('opacity', 1)
+              simulation.stop()
+              fixed()
+            }
+
+
+            function show_graph()
+            {
+              document.getElementById("map_global_container").style.display = "block";
+              document.getElementById("matrix_global_container").style.display ="none";
+              positioning = 'sim'
+              update_view(pos)
+              map.attr('opacity', 0.25)
+              simulation.alpha(1).restart()
+            }
+
+
+            function show_matrix()
+            {
+              positioning = 'matrix'
+              document.getElementById("map_global_container").style.display = "none";
+              document.getElementById("matrix_global_container").style.display ="block";
+              update_view(pos)              
+
+            }
+
+            function dragStarted(d) {
+                if (positioning === 'map') { return }
+                simulation.alphaTarget(0.3).restart()
+                d.fx = d.x
+                d.fy = d.y
+            }
+
+            function dragged(d) {
+                if (positioning === 'map') { return }
+                d.fx = d3.event.x
+                d.fy = d3.event.y
+            }
+
+            function dragEnded(d) {
+                if (positioning === 'map') { return }
+                simulation.alphaTarget(0)
+                d.fx = null
+                d.fy = null
+            }
+
+
+            function get_node_set(trips, amount) {
+
+              // Create items array
+              trips_array = Object.keys(trips).map(function(key) {
+                return [key, trips[key]];
+              });
+
+              // Sort the array based on the second element
+              trips_array.sort(function(first, second) {
+                return second[1] - first[1];
+              });
+
+
+
+              node_set = new Set();
+
+              for(i = 0; i < Math.min(trips_array.length,amount); i++)
+              {
+                node_set.add(parseInt(trips_array[i][0]))
+              }
+              return(node_set)
+
+            }
+
+
+            function createAdjacencyMatrix( nodes, current_edges, current_num_trips_local) {
+
+
+              cell_size = 13
+              max_visible = 42
+
+              var edgeHash = {};
+
+              node_set = get_node_set(current_num_trips_local, 50)
+
+
+
+              if (typeof current_edges[0].source === "number")
+              {
+
+                  for(i = 0; i < current_edges.length; i++) {
+
+                    if(node_set.has(current_edges[i].source) && node_set.has(current_edges[i].target))
+                    {
+                      var id = current_edges[i].source + "-" +current_edges[i].target;
+                      edgeHash[id] = current_edges[i].count;
+                    }
+                  }
+            }
+            else
+            {
+
+
+
+               for(i = 0; i < current_edges.length; i++) {
+
+                if(node_set.has(current_edges[i].source.id) && node_set.has(current_edges[i].target.id))
+                {
+                  var id = current_edges[i].source.id + "-" +current_edges[i].target.id;
+                  edgeHash[id] = current_edges[i].count;
+                }
+              }
+
+            }
+
+              matrix = [];
+              current_nodes = Array.from(node_set);
+              //create all possible edges
+              for(a = 0; a < current_nodes.length; a++) {
+                for(b = 0; b < current_nodes.length; b++) {
+                  i = current_nodes[a] - 1
+                  j = current_nodes[b] - 1
+                  var grid = {id: nodes[i].id + "-" + nodes[j].id, x: b, y: a, weight: 0};
+                  if (edgeHash[grid.id]) {
+                    grid.weight = edgeHash[grid.id];
+                  }
+                  matrix.push(grid);
+                }
+              }
+
+              var weightScale = d3.scaleLinear()
+                .domain(d3.extent(function(d){ return d.weight }))
+                .range([0,1])
+
+
+              svg2.append("g")
+              .attr("transform", "translate(150,150)")
+              .attr("id", "adjacencyG")
+              .selectAll("rect")
+              .data(matrix)
+              .enter()
+              .append("rect")
+              .attr("width", cell_size)
+              .attr("height", cell_size)
+              .attr("x", function (d) {return d.x * cell_size})
+              .attr("y", function (d) {return d.y * cell_size})
+              .style("stroke", "black")
+              .style("stroke-width", "1px")
+              .style("fill", "steelblue")
+              .style("fill-opacity", function (d) {return d.weight*0.04; })
+              .on("mouseover", gridOver)
+              .on("mouseout", gridOut)
+            .append("svg:title")
+              .text(function(d, i) { return d.weight + " trips"; });
+
+              var scaleSize = current_nodes.length * cell_size;
+              
+              var nameScale = d3.scaleOrdinal().domain(current_nodes.map(function (el) {return nodes[el - 1].zone})).range(  d3.range(0 + cell_size/2,scaleSize,cell_size));
+
+
+
+
+              xAxis = d3.axisTop().scale(nameScale).tickSize(4);
+              yAxis = d3.axisLeft().scale(nameScale).tickSize(4);
+
+              d3.select("#adjacencyG").append("g")
+                .call(xAxis)
+              .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("transform", "translate(-10,-10) rotate(90)");
+
+              d3.select("#adjacencyG").append("g")
+                .call(yAxis);
+
+              function gridOver(d,i) {
+                d3.selectAll("rect")
+                  .style("stroke-width", function (p) {return p.x == d.x || p.y == d.y ? "2px" : "1px"})
+                  .style("stroke", function (p) {return p.x == d.x || p.y == d.y ? "steelblue" : "black"})
+
+              }
+
+              function gridOut(d,i) {
+                d3.selectAll("rect")
+                  .style("stroke-width", "1px")
+                  .style("stroke", "black")
+              }
+
+            }
+
+
+            function updateAjacencyMatrix( new_pos) {
+
+              pos = new_pos
+              svg2.selectAll("#adjacencyG").remove()
+              createAdjacencyMatrix(graph_nodes, current_links[pos], current_num_trips[pos])
+            }
+
+
+    </script>
+
+	</body>
+</html>

@@ -6,25 +6,26 @@ import re
 from datetime import datetime
 # Mapper para el Requerimiento Analitico 2 del Taller 1
 
-# Displays the trips between zones, per hour of day of week 
+# Displays the trips between zones, per hour of day of week
 
 # Asumptions
 # Only checks for start time of trip
 
 # The output format is:
-# day_of_week tab hour_of_day tab source:destinarion:num_of_trips
+# day_of_week (in text) tab hour_of_day tab source:destinarion:num_of_trips
+# day_of_month tab hour_of_day tab source:destinarion:num_of_trips
 
 # If displays errors and warnings
 print_errors = True
 
-
+weekdays = ['MON','TUE','WED','THU','FRI','SAT','SUN']
 
 
 #Extractor Method
 def get_value(key, values):
     """ Gets the value of a given key
     This method was created to overcome the fact that files have different
-    headers and not all values can be found in all files. This method was constructed based on 
+    headers and not all values can be found in all files. This method was constructed based on
     the file: 'headers_sorted.txt', where all possible headers are sorted by length and have their
     occurence rate.
 
@@ -32,7 +33,7 @@ def get_value(key, values):
         None for any given key
 
     # Important: Don't forget to strip line before splitting!
-    
+
     Parameters:
         key : String
             Should be one of the following:
@@ -45,7 +46,7 @@ def get_value(key, values):
 
         values : list
             Corresponds to the splitted input line (splitted by comma)
-    
+
     Returns:
         The corresponding value of the key (already in its type:)
     """
@@ -60,7 +61,7 @@ def get_value(key, values):
     # Start Date
     elif(key.upper() == 'START_DATE'):
 
-        try:                
+        try:
             date_string = values[1]
 
             if(date_string == ''):
@@ -107,7 +108,7 @@ def get_value(key, values):
             if(length_of_line == 17):
                 start_loc = values[7]
 
-            if(length_of_line == 19): # More than one type of header has this length                
+            if(length_of_line == 19): # More than one type of header has this length
                 #Checks that is not a coordinate (lattitude or longitud)
                 if('.' in values[5] or values[5] == 0):
                     return(None)
@@ -128,7 +129,7 @@ def get_value(key, values):
 
         #Only certain lengths have end location:
         if(length_of_line in [5,17,19]):
-            
+
             end_loc = None
             if(length_of_line == 5):
                 end_loc = values[4]
@@ -136,7 +137,7 @@ def get_value(key, values):
             elif(length_of_line == 17):
                 end_loc = values[8]
 
-            elif(length_of_line == 19): # More than one type of header has this length                
+            elif(length_of_line == 19): # More than one type of header has this length
                 #Checks that is not a coordinate (lattitude or longitud)
                 if('.' in values[6] or values[6] == 0):
                     return(None)
@@ -157,7 +158,7 @@ def get_value(key, values):
 
         #Only certain lengths have end location:
         if(length_of_line in [17,18, 19, 20, 21]):
-            
+
             if(length_of_line in [17,18]):
 
                 try:
@@ -190,7 +191,7 @@ def get_value(key, values):
 
                 try:
                     return(float(values[ind]))
-                    
+
                 except ValueError:
                     if(print_errors):
                         print('Cost not in float format: ' + values[ind])
@@ -226,16 +227,20 @@ for line in sys.stdin:
     if(from_location is not None and
        to_location is not None and
        start_date is not None):
-        
 
-        day_of_week = start_date.isoweekday()
+
+        day_of_week = start_date.weekday()
+        day_of_month = start_date.day
+
         hour_of_day = start_date.hour
         source = from_location
         destination = to_location
         number_of_trips = 1
 
-        #day_of_week tab minute_of_day tab airport_code tab destination:number_of_trips
-        print('%s\t%s\t%s:%s:%s' % (day_of_week, hour_of_day, source, destination,number_of_trips))
+        if(day_of_week == 0):
 
+            #day_of_week (in text) tab minute_of_day tab airport_code tab destination:number_of_trips
+            print('%s\t%s\t%s:%s:%s' % (weekdays[day_of_week], hour_of_day, source, destination,number_of_trips))
 
-
+        #day_of_month tab minute_of_day tab airport_code tab destination:number_of_trips
+        #print('%s\t%s\t%s:%s:%s' % (day_of_month, hour_of_day, source, destination,number_of_trips))
