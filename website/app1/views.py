@@ -8,6 +8,7 @@ from app1.RF import RF2 as rf2
 from app1.RF import RF3 as rf3
 from app1.RF import RF4 as rf4
 from app1.RA import RA2 as ra2
+from app1.RA import RA3 as ra3
 
 
 
@@ -34,5 +35,6 @@ def RF_4(request):
 def RA_2(request):
 	return ra2.hacer_requerimiento(request)
 
-
+def RA_3(request):
+	return ra3.hacer_requerimiento(request)
 
