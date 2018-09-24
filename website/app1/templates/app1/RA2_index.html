@@ -309,7 +309,7 @@
             var height = 800
             var current_links = null
             var pos = 12
-            var week_day = 0
+            var week_day = 3
             var month_day = 1
             var scheme = "WEEK"
             var graph_nodes = null
@@ -324,7 +324,7 @@
             var links = null
             var nodes = null
             var num_trips = null
-            var div_constant = 8
+            var div_constant = 0.1
             var max_arch_value = 2
             var current_node_id = null
             var current_num_trips = null
@@ -440,7 +440,7 @@
                     .data(graph_nodes)
                     .enter().append('circle')
                     .attr('r', function (d) {
-                      return current_sizes[pos][d.id] })
+                      return Math.min( 500*current_sizes[pos][d.id],10)})
                     .on('click', show_node_info)
                     .call(drag)
 
@@ -467,8 +467,7 @@
                   current_node_id = d.id
                   document.getElementById("info_nodo").style.display = "block";
                   document.getElementById("info_borough").innerHTML = node_info[current_node_id]["borough"];
-                  document.getElementById("info_barrio").innerHTML = node_info[current_node_id]["barrio"];
-                  console.log(current_num_trips[pos])
+                  document.getElementById("info_barrio").innerHTML = node_info[current_node_id]["barrio"];                  
                   document.getElementById("info_viajes").innerHTML = current_num_trips[pos][current_node_id];
                   
 
@@ -525,7 +524,7 @@
                       .data(graph_nodes)
                       .enter().append('circle')
                       .attr('r', function (d) {
-                        return current_sizes[pos][d.id] })
+                        return Math.min(500*current_sizes[pos][d.id],10)})
                       .on('click', show_node_info)
                       .call(drag)
 
@@ -546,8 +545,10 @@
             function next_timeframe()
             {
               pos = pos + 1
+
               if(pos == 24)
               {
+                pos = 0
                 if(scheme == "MONTH")
                 {
 
@@ -558,7 +559,7 @@
                   }
                   current_links = graph_links[month_day]
                   current_sizes = sizes[month_day]
-                  current_num_trips = current_num_trips[month_day]
+                  current_num_trips = num_trips[month_day]
                   document.getElementById('select_dia_mes').value=month_day;
                 }
                 if(scheme == "WEEK")
@@ -571,12 +572,12 @@
                   }
                   current_links = graph_links[weekdays[week_day]]
                   current_sizes = sizes[weekdays[week_day]]
-                  current_num_trips = current_num_trips[weekdays[week_day]]
+                  current_num_trips = num_trips[weekdays[week_day]]
 
                   document.getElementById("select_dia_semana").selectedIndex = week_day
 
                 }
-                pos = 0
+                
               }
               update_view(pos)
 
@@ -587,6 +588,7 @@
               pos = pos - 1
               if(pos == -1)
               {
+                 pos = 23
                 if(scheme == "MONTH")
                 {
 
@@ -597,7 +599,7 @@
                   }
                   current_links = graph_links[month_day]
                   current_sizes = sizes[month_day]
-                  current_num_trips = current_num_trips[month_day]
+                  current_num_trips = num_trips[month_day]
                   document.getElementById('select_dia_mes').value=month_day;
                 }
                 if(scheme == "WEEK")
@@ -610,11 +612,11 @@
                   }
                   current_links = graph_links[weekdays[week_day]]
                   current_sizes = sizes[weekdays[week_day]]
-                  current_num_trips = current_num_trips[weekdays[week_day]]
+                  current_num_trips = num_trips[weekdays[week_day]]
                   document.getElementById("select_dia_semana").selectedIndex = week_day
 
                 }
-                pos = 23
+               
               }
 
               update_view(pos)
@@ -628,7 +630,7 @@
 
               current_links = graph_links[weekdays[week_day]]
               current_sizes = sizes[weekdays[week_day]]
-              current_num_trips = current_num_trips[weekdays[week_day]]
+              current_num_trips = num_trips[weekdays[week_day]]
 
               update_view(pos)
 
@@ -643,7 +645,7 @@
 
                 current_links = graph_links[month_day]
                 current_sizes = sizes[month_day]
-                current_num_trips = current_num_trips[month_day]
+                current_num_trips = num_trips[month_day]
                 update_view(pos)
               }
 
@@ -846,7 +848,7 @@
               .style("stroke", "black")
               .style("stroke-width", "1px")
               .style("fill", "steelblue")
-              .style("fill-opacity", function (d) {return d.weight*0.04; })
+              .style("fill-opacity", function (d) {return d.weight; })
               .on("mouseover", gridOver)
               .on("mouseout", gridOut)
             .append("svg:title")

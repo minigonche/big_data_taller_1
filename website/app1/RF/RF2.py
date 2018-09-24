@@ -39,8 +39,9 @@ def process_data():
 	response = {}
 	for line in lines:
 		line = line.strip()
-		month, value, total = line.split('\t')
-		response[month] = [float(value), float(total)]
+		if(line):			
+			month, value, total = line.split('\t')
+			response[month] = [float(value), float(total)]
 
 	return(response)
 
@@ -95,4 +96,4 @@ def get_remote_data():
     scp.close()
 
     with open('app1/RF/received_data/RF2/part-00000') as f:
-        return f.readline()
+        return f.readlines()

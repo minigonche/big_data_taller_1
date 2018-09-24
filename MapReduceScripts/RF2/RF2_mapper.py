@@ -16,7 +16,7 @@ from datetime import datetime
 # If trip starts on a saturday and ends on a sunday, will be recorded
 
 # If displays errors and warnings
-print_errors = True
+print_errors = False
 
 
 
@@ -198,6 +198,8 @@ def get_value(key, values):
                             print('Cost not in float format: ' + values[ind])
                         return(None)
         except:
+            if(print_errors):
+                print('Unkwon error')
             return None                        
 
         else:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """RF2_reducer.py"""
-
+from __future__ import division
 from operator import itemgetter
 import sys
 #Reducer para el Requerimiento Analitico 2 del Taller 1
@@ -15,7 +15,7 @@ import sys
 saved = {}
 
 #number of years
-num_years = 9
+num_years = 1
 
 
 for line in sys.stdin:
@@ -32,23 +32,22 @@ for line in sys.stdin:
 
     if(hour_of_day not in saved[moment]):
         saved[moment][hour_of_day] = {}
+    
+    current_dic = saved[moment][hour_of_day]
 
-    if(moment == "MON"):
-        current_dic = saved[moment][hour_of_day]
+    for trip in trips.split(';'):
 
-        for trip in trips.split(';'):
-
-            if(trip):
-                source, dest, num_trips = trip.split(':')
-                #Updates Structures
-                if(source in current_dic):
-                    if(dest in current_dic[source]):
-                        current_dic[source][dest] = current_dic[source][dest] +  int(num_trips)
-                    else:
-                        current_dic[source][dest] = int(num_trips)
+        if(trip):
+            source, dest, num_trips = trip.split(':')
+            #Updates Structures
+            if(source in current_dic):
+                if(dest in current_dic[source]):
+                    current_dic[source][dest] = current_dic[source][dest] +  int(num_trips)
                 else:
-                    current_dic[source] = {}
                     current_dic[source][dest] = int(num_trips)
+            else:
+                current_dic[source] = {}
+                current_dic[source][dest] = int(num_trips)
 
 
 
@@ -62,9 +61,9 @@ for moment in saved.keys():
         for source in saved[moment][hour_of_day].keys():
             for dest in saved[moment][hour_of_day][source].keys():
 
-                const_div = 52
+                const_div = 12
                 if(len(moment) > 2):
-                    const_div = 12
+                    const_div = 52
                 mean_trips = round(saved[moment][hour_of_day][source][dest]/(num_years*const_div),1)
                 if(mean_trips > 0):
                     print_string = print_string + source + ":" + dest + ':' + str(mean_trips) + ';'
