@@ -32,7 +32,6 @@ def hacer_requerimiento(request):
             hora_final_fin = hora_final_fin + 12
 
 
-
     #time strings
     hora_inicio_string = hora_inicio + ':00' + merid_inicio.lower()
     hora_fin_string = hora_fin + ':00' + merid_fin.lower()
