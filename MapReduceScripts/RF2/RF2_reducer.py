@@ -16,6 +16,8 @@ import sys, traceback
 totals = {}
 counts = {}
 
+error = 0
+
 for line in sys.stdin:
     try:
         # remove leading and trailing whitespace
@@ -33,10 +35,15 @@ for line in sys.stdin:
             counts[month] = float(count)
 
     except:
-        print "Exception in user code:"
-        print '-'*60
-        traceback.print_exc(file=sys.stdout)
-        print '-'*60
+        if(error == 0):
+            print "Exception in user code:"
+            print(line)
+            traceback.print_exc(file=sys.stdout)
+        
+        error = error + 1
+        if(error == 10000):
+            error = 0
+
 
 
 for month in totals.keys():
