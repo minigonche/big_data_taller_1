@@ -3,7 +3,8 @@
 
 from django.shortcuts import render
 import ast
-
+from paramiko import SSHClient
+from scp import SCPClient
 
 
 def hacer_requerimiento(request):
@@ -65,6 +66,7 @@ def process_data(start, finish):
     response = {}
 
     data = get_data()
+
     destination_array = ['Bronx', 'EWR', 'Brooklyn', 'Manhattan', 'Queens', 'Staten Island', 'Unknown']
     count_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
@@ -74,6 +76,8 @@ def process_data(start, finish):
 
     while start < finish:
         data = destination_dict[start]
+        if data == []:
+            break
         for i in data:
             i = i.strip()
             destination, count = i.split('\t', 1)
@@ -99,8 +103,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	#return(get_remote_data())
-	return(get_local_data())
+	return(get_remote_data())
+	#return(get_local_data())
 
 
 def get_local_data():
@@ -111,24 +115,41 @@ def get_local_data():
 		Each string corresponds to a line
 	"""
 
-	with open('app1/RF/received_data_sample/RF1_result_sample.txt') as f:
+	with open('website/app1/RF/received_data_sample/RF1_result_sample.txt') as f:
 		return(f.readlines())
 
 
 def get_remote_data():
-	"""
-	Loads the data from local. Meant for testing
+    """
+    Loads the data from local. Ment for testing
 
-	Returns: array of strings
-		Each string corresponds to a line
-	"""
-	raise Error('Not Implemented yet')
+    Returns: array of strings
+        Each string corresponds to a line
+    """
+
+    host = 'bigdata-cluster1-03.virtual.uniandes.edu.co'
+    port = 22
+    usr = 'bigdata07'
+    pwd = '969ba5d6f576c2c4377f2381d2829207'
+
+    ssh = SSHClient()
+    ssh.load_system_host_keys()
+    ssh.connect(host, port, usr, pwd)
 
 
-def runMapReduce(start, end):
-    '''
-    :param start: The hour of the day to start the search. Must be a positive integer from 0-23.
-    :param end: The hour of the day to end the search. Must be a positive integer from 0-23, larger than the start.
-    :return: nothing. This method is responsible for excecuting the mapReduce via FTP.
-    '''
+    # SCPCLient takes a paramiko transport as its only argument
+    scp = SCPClient(ssh.get_transport())
+
+    scp.get(remote_path = 'results/RF1/part-00000',
+        local_path= 'app1/RF/received_data/RF1/')
+
+    scp.close()
+
+    with open('app1/RF/received_data/RF1/part-00000') as f:
+        return f.readline()
+
+
+
+
+
 
