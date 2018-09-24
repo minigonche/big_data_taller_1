@@ -28,6 +28,26 @@
         .p-3 {
           padding: $spacer !important;
         }
+        .nav {
+            color: #ffc000;
+        }
+        .mem {
+            color: #ffd800;
+        }
+        .ny {
+            color: #ffea00;
+        }
+        .avg {
+            color: #ffe953;
+        }
+        .sum {
+            color: #fff589;
+        }
+
+
+
+
+
     </style>
 
         <div class="container">
@@ -40,10 +60,30 @@
         </div>
 
         <div class="container">
+            <div class="row">
+                <div class="col">
+
+                </div>
+                <div class="col">
+                    <p>
+                        <div class="nav"><strong>Navidad - 63.5</strong></div>
+                        <div class="mem"><strong>Memorial Day - 91</strong></div>
+                        <div class="ny"><strong>Año Nuevo - 46.7 </strong></div>
+                        <div class="avg"><strong>Promedio - 89.1 </strong></div>
+                        <div class="sum"><strong>Verano - 140.9 </strong></div>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container">
           <div class="row">
             <div class="col-sm">
                 <!-- Line Chart -->
+                <h7>Costo Promedio De Viaje</h7>
                 <div class="col-sm-8">
+
                     {% block extrahead %}
                     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
                     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
@@ -51,12 +91,11 @@
                     $( document ).ready(function() {
                         var data = {
                             yAxisID: 'Costo Promedio de Viaje',
-                            labels: ['Christmas','Memorial Day', 'New Years','No Holiday','Summer'],
-                            datasets: [
-                                {
+                            labels: ['Navidad','Memorial Day', 'Año Nuevo','Promedio','Verano'],
+                            datasets: [{
+
                                     data: {{ cost }},
-                                },
-                            ]
+                            }],
                         };
                         var ctx = document.getElementById("myBarChart").getContext("2d");
                         var myBarChart = new Chart(ctx).Bar(data);
@@ -71,6 +110,7 @@
             </div>
             <div class="col-sm">
                 <!-- Pie Chart -->
+
                     {% block chart %}
                     <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
                     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
@@ -78,42 +118,33 @@
 
                     $( document ).ready(function() {
                         var ctx = $("#myPieChart").get(0).getContext("2d");
-                        var values = {{ cost|safe }};
+                        var values = {{ rides|safe }};
+                        var options = {title: {text: "Chart Title"}};
                         var data = [
                             {
                                 value: values[0],
                                 color: "#ffc000",
-                                highlight: "lightskyblue",
-                                label: "Christmas"
                             },
                             {
                                 value: values[1],
                                 color: "#ffd800",
-                                highlight: "lightskyblue",
-                                label: "Memorial Day"
                             },
                             {
                                 value: values[2],
                                 color: "#ffea00",
-                                highlight: "lightskyblue",
-                                label: "New Years"
                             },
                             {
                                 value: values[3],
                                 color: "#ffe953",
-                                highlight: "lightskyblue",
-                                label: "No Holiday"
                             },
-                                                        {
+                            {
                                 value: values[4],
                                 color: "#fff589",
-                                highlight: "lightskyblue",
-                                label: "Summer"
-                            },
+                            }
 
 
                         ];
-                        var myPieChart = new Chart(ctx).Doughnut(data);
+                        var myPieChart = new Chart(ctx, options).Doughnut(data);
                     });
                     </script>
                     {% endblock %}

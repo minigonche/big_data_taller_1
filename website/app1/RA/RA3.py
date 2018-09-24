@@ -11,6 +11,7 @@ def hacer_requerimiento(request):
 
 	data = process_data()
 	holidays = ['Christmas','MemorialDay','NewYears','NoHoliday','Summer']
+	rides_per_day = [63.5, 91, 46.7, 89.1, 140.9]
 
 	avg_cost_list = []
 	number_of_rides_list = []
@@ -27,7 +28,7 @@ def hacer_requerimiento(request):
 			avg_cost_list.append(0)
 			number_of_rides_list.append(0)
 
-	context = {'cost': json.dumps(avg_cost_list), 'rides': json.dumps(number_of_rides_list), 'holidays': json.dumps(holidays)}
+	context = {'cost': json.dumps(avg_cost_list), 'rides': json.dumps(rides_per_day), 'holidays': json.dumps(holidays)}
 
 	#process_data()
 
