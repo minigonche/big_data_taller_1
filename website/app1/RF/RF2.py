@@ -51,8 +51,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	#return(get_remote_data())
-	return(get_local_data())
+	return(get_remote_data())
+	#return(get_local_data())
 
 
 def get_local_data():
