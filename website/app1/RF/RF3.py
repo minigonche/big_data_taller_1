@@ -8,10 +8,16 @@ import pickle
 
 def hacer_requerimiento(request):
 
+	num_anhos = 9
+	div_constant = 52
+
 	data = {}
 	
 	dias = {'1':'Lunes','2':'Martes','3':'Miercoles', '4':'Jueves','5':'Viernes','6':'Sabado','7':'Domingo'}
 	airports = { '1': 'Newark', '132': 'JFK', '138':'LaGuardia'}
+
+	#gets the type of summary	
+	consolidado = request.POST.get('RF3_consolidado')
 
 	#Loads the zone dictionary
 	zones = get_zones()
@@ -72,11 +78,24 @@ def hacer_requerimiento(request):
 	#sorts the dictionary
 	i = 0;
 	for dest in sorted(final_dict.items(), key=lambda kv: -1*kv[1]):
-		i = i + 1
-		zone = zones[dest[0]]
-		trips.append({'pos':i, 'dest_name': zone['zone'], 'dest_neighborhood': zone['location'], 'count':dest[1]})
+		if(dest[0] in zones):
+			if(consolidado == "PROMEDIO"):
+				prom_dest = np.round(dest[1]/(num_anhos*div_constant),1)
+				if(prom_dest > 0):
+					i = i + 1
+					zone = zones[dest[0]]
+					trips.append({'pos':i, 'dest_name': zone['zone'], 'dest_neighborhood': zone['location'], 'count':prom_dest})
+			else:
+				i = i + 1
+				zone = zones[dest[0]]
+				trips.append({'pos':i, 'dest_name': zone['zone'], 'dest_neighborhood': zone['location'], 'count':dest[1]})					
 
 	data['trips'] = trips
+
+	if(consolidado == "PROMEDIO"):
+		data['consolidado'] = 'Promedio'
+	else:
+		data['consolidado'] = 'Total'
 
 
 	return render(request, 'app1/response_RF3.html', data)
