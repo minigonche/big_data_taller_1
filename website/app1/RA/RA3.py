@@ -4,14 +4,14 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from paramiko import SSHClient
 from scp import SCPClient
-
+import json
 
 
 def hacer_requerimiento(request):
 
-	context = {}
 	data = process_data()
-	holidays = ['Christmas','NewYears','NoHoliday','Summer']
+	holidays = ['Christmas','MemorialDay','NewYears','NoHoliday','Summer']
+
 	avg_cost_list = []
 	number_of_rides_list = []
 
@@ -20,7 +20,6 @@ def hacer_requerimiento(request):
 		if holiday in list(data.keys()):
 			avg_cost = data[holiday][1]
 			number_of_rides = data[holiday][0]
-			print(avg_cost)
 			avg_cost_list.append(avg_cost)
 			number_of_rides_list.append(number_of_rides)
 
@@ -28,9 +27,7 @@ def hacer_requerimiento(request):
 			avg_cost_list.append(0)
 			number_of_rides_list.append(0)
 
-	context['cost'] = avg_cost_list
-	context['holidays'] = holidays
-	context['rides'] = number_of_rides_list
+	context = {'cost': json.dumps(avg_cost_list), 'rides': json.dumps(number_of_rides_list), 'holidays': json.dumps(holidays)}
 
 	#process_data()
 
@@ -60,8 +57,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	return(get_remote_data())
-	#return(get_local_data())
+	#return(get_remote_data())
+	return(get_local_data())
 
 
 def get_local_data():
