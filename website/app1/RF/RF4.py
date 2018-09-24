@@ -3,6 +3,8 @@
 from django.http import HttpResponse
 import requests
 from django.shortcuts import render
+import ast
+
 
 def hacer_requerimiento(request):
 
@@ -47,3 +49,68 @@ def hacer_requerimiento(request):
 
 
 	return HttpResponse(html)
+
+
+
+
+def process_data():
+	""" 
+	Process the received data for the view to manipulate
+	"""
+	 # imports data and makes a dictionary
+
+	lines = get_data()	
+	destination_dict = ast.literal_eval(lines[0])
+	final_dict = {}
+	for k,v in destination_dict.values():
+		k  = int(k)
+		final_dict[k] = {}
+		current_dic = final_dict[k] 
+		for value in v:
+			hour, zone, num_trips = value.split('\t')
+			hour = int(hour)
+			num_trips = int(num_trips)
+
+			if(hour not in current_dic):
+				current_dic[hour] = {}
+
+			current_dic[hour][zone] = num_trips
+
+	return(final_dict)
+		
+
+
+def get_data():
+	""" 
+	Gets the data. Method designed to switch between local and remote dataset.
+
+	Returns: array of lines
+	"""
+	#return(get_remote_data())
+	return(get_local_data())
+
+
+def get_local_data():
+	""" 
+	Loads the data from local. Ment for testing
+
+	Returns: array of strings
+		Each string corresponds to a line
+	"""
+
+	with open('app1/RF/received_data_sample/RF4_result_sample.txt') as f:
+		return(f.readlines())
+
+
+
+
+def get_remote_data():
+	""" 
+	Loads the data from local. Ment for testing
+
+	Returns: array of strings
+		Each string corresponds to a line
+	"""
+	raise Error('Not Implemented yet')
+	
+
