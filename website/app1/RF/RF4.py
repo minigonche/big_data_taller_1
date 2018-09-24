@@ -4,6 +4,8 @@ from django.http import HttpResponse
 import requests
 from django.shortcuts import render
 import ast
+from paramiko import SSHClient
+from scp import SCPClient
 
 
 def hacer_requerimiento(request):
@@ -103,14 +105,34 @@ def get_local_data():
 
 
 
-
 def get_remote_data():
-	""" 
+	"""
 	Loads the data from local. Ment for testing
 
 	Returns: array of strings
 		Each string corresponds to a line
 	"""
-	raise Error('Not Implemented yet')
+
+
+	host = 'bigdata-cluster1-03.virtual.uniandes.edu.co'
+	port = 22
+	usr = 'bigdata07'
+	pwd = '969ba5d6f576c2c4377f2381d2829207'
+
+	ssh = SSHClient()
+	ssh.load_system_host_keys()
+	ssh.connect(host, port, usr, pwd)
+
+
+	# SCPCLient takes a paramiko transport as its only argument
+	scp = SCPClient(ssh.get_transport())
+
+	scp.get(remote_path = 'results/RF3/part-00000',
+		local_path= 'app1/RF/received_data/RF3/')
+
+	scp.close()
+
+	with open('app1/RF/received_data/RF3/part-00000') as f:
+		return(f.readlines())
 	
 
