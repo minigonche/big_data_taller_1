@@ -73,8 +73,8 @@
 					    <label class="col-2 control-label text-lg-center">Hora Inicio</label>
 					    <div class="col-2">
 					    <select class="form-control" name="RF1_hora_inicio" id="RF1_hora_inicio">
-		                  <option value = 0 >0:00</option>		          
-		                  <option value = 1 >1:00</option>
+						  <option value = 0 >0:00</option>
+						  <option value = 1 >1:00</option>
 		                  <option value = 2 >2:00</option>
 		                  <option value = 3 >3:00</option>
 		                  <option value = 4 >4:00</option>
@@ -496,7 +496,7 @@
 
 	</form>
 
-	<!-- RA2 -->
+	<!-- RA -->
 		 <div class="py-1"><p></p></div>
 	    <div class="container">
        <div class="text-left">
@@ -505,7 +505,7 @@
 
          <div class="py-1"><p></p></div>
 
-
+	<!-- RA2 -->
              <form action="{% url 'app1:RA_2' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'> 
 	{% csrf_token %}
 
@@ -535,10 +535,9 @@
 			</div>
 	</div>
 	</form>
-			<!-- RA3 -->
          <div class="py-1"><p></p></div>
 
-
+	<!-- RA3 -->
              <form action="{% url 'app1:RA_3' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
 	{% csrf_token %}
 

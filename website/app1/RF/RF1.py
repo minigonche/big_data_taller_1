@@ -47,8 +47,12 @@ def hacer_requerimiento(request):
     html_fin = hora_fin_string
 
     top_destination_valores = process_data(hora_final_inicio, hora_final_fin)
-    top_destination = list(top_destination_valores.keys())[0]
-    numero_de_viajes = top_destination_valores[top_destination]
+    if list(top_destination_valores.keys()) == []:
+        data['error'] = 'No se encontró informción para la franja de hora requerida'
+        return render(request, 'app1/error.html', data)
+    else:
+        top_destination = list(top_destination_valores.keys())[0]
+        numero_de_viajes = top_destination_valores[top_destination]
 
     #context -> hora_inicio: html_inicio, hora_fin: html_fin, top_destina
     data['inicio'] = html_incio
@@ -75,9 +79,15 @@ def process_data(start, finish):
         destination_dict = ast.literal_eval(line)
 
     while start < finish:
-        data = destination_dict[start]
+        print(start)
+        try:
+            data = destination_dict[start]
+        except KeyError:
+            start =+ 1
+            continue
         if data == []:
-            break
+            start += 1
+            continue
         for i in data:
             i = i.strip()
             destination, count = i.split('\t', 1)
@@ -103,8 +113,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	return(get_remote_data())
-	#return(get_local_data())
+	#return(get_remote_data())
+	return(get_local_data())
 
 
 def get_local_data():
