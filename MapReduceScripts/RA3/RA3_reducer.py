@@ -4,6 +4,8 @@
 
 import sys
 
+f = open('website/app1/RA/received_data_sample/RA3_result_sample.txt', 'a')
+
 total_count = 0
 holiday_count = 0
 current_holiday = None
@@ -41,6 +43,7 @@ for line in sys.stdin:
         if current_holiday:
             # write result to STDOUT
             holiday_average = holiday_cost / holiday_count
+            f.write('%s\t%s\t%s\t%s\n' % (current_holiday, holiday_cost, holiday_count, holiday_average))
             print('%s\t%s\t%s\t%s' % (current_holiday, holiday_cost, holiday_count, holiday_average))
         holiday_count = count
         holiday_cost = 0
@@ -53,8 +56,9 @@ for line in sys.stdin:
 # do not forget to output the last word if needed!
 if current_holiday == holiday:
     holiday_average = holiday_cost / holiday_count
+    f.write('%s\t%s\t%s\t%s\n' % (current_holiday, holiday_cost, holiday_count, holiday_average))
     print('%s\t%s\t%s\t%s' % (current_holiday, holiday_cost, holiday_count, holiday_average))
 
 total_average =  total_cost / total_count
-
+f.write('%s\t%s\t%s\t%s\n' % ('total', total_cost, total_count, total_average))
 print('%s\t%s\t%s\t%s' % ('total', total_cost, total_count, total_average))

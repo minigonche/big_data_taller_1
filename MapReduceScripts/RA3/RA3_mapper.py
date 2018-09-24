@@ -7,6 +7,37 @@ from datetime import datetime
 
 format = '%Y-%m-%d %H:%M:%S'
 
+def isThanksGiving(pickup_time):
+    #its in november
+    thanksGivingDayDict = {2009: 26, 2010: 25, 2011: 24, 2012: 22, 2013: 28, 2014: 27, 2015: 26,
+                    2016: 24, 2017: 23, 2018: 22}
+    memorialDay = thanksGivingDayDict[pickup_time.year]
+
+    if (pickup_time.month == 11) and (pickup_time.day == memorialDay):
+        return True
+    else:
+        return False
+
+def isMemorialDay(pickup_time):
+    #its in may
+    memorialDayDict = {2009: 25, 2010: 31, 2011: 30, 2012: 28, 2013: 27, 2014: 26, 2015: 25,
+                    2016: 30, 2017: 29, 2018: 28}
+    memorialDay = memorialDayDict[pickup_time.year]
+
+    if (pickup_time.month == 5) and (pickup_time.day == memorialDay):
+        return True
+    else:
+        return False
+
+def isLaborDay(pickup_time):
+
+    laborDayDict = {2009: 7, 2010: 6, 2011: 5, 2012: 3, 2013: 2, 2014: 1, 2015: 7, 2016: 5, 2017: 4, 2018: 3}
+    laborDay = laborDayDict[pickup_time.year][0]
+
+    if (pickup_time.month == 9) and (pickup_time.day == laborDay):
+        return True
+    else:
+        return False
 
 def isChristmas(pickup_time):
 
@@ -75,6 +106,12 @@ def combiner(line):
 
     elif isNewYears(pickup_time):
         return('%s\t%s' % ('newyears', rest))
+
+    elif isLaborDay(pickup_time):
+        return ('%s\t%s' % ('laborday', rest))
+
+    elif isMemorialDay(pickup_time):
+        return ('%s\t%s' % ('memorialday', rest))
 
 
     else:
