@@ -1,10 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>RA3</title>
-</head>
-<body>
-    <h1>RA3</h1>
-</body>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <title>RA3</title>
+    </head>
+    <body>
+
+    <style>
+        .mt-0 {
+          margin-top: 0 !important;
+        }
+
+        .ml-1 {
+          margin-left: ($spacer * .25) !important;
+        }
+
+        .px-2 {
+          padding-left: ($spacer * .5) !important;
+          padding-right: ($spacer * .5) !important;
+        }
+
+        .p-3 {
+          padding: $spacer !important;
+        }
+    </style>
+
+        <div class="container">
+          <div class="py-5 text-center">
+          {% load static %}
+            <img class="d-block mx-auto mb-4" src="{% static 'app1/img/header_noLobo_noPrescolar.jpg' %}" alt="" width="1000" height="342">
+            <h1>Requerimiento Analitico 3</h1>
+            <p class="lead">Análisis Oferta y Demanda</p>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+                <!-- Line Chart -->
+                <div class="col-sm-8">
+                    {% block extrahead %}
+                    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+                    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+                    $( document ).ready(function() {
+                        var data = {
+                            yAxisID: 'Costo Promedio de Viaje',
+                            labels: ['Christmas','Memorial Day', 'New Years','No Holiday','Summer'],
+                            datasets: [
+                                {
+                                    data: {{ cost }},
+                                },
+                            ]
+                        };
+                        var ctx = document.getElementById("myBarChart").getContext("2d");
+                        var myBarChart = new Chart(ctx).Bar(data);
+                    });
+                    </script>
+                    {% endblock %}
+
+                    {% block content %}
+                    <canvas id="myBarChart" width="500" height="300"></canvas>
+                    {% endblock %}
+                </div>
+            </div>
+            <div class="col-sm">
+                <!-- Pie Chart -->
+                    {% block chart %}
+                    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js" type="text/javascript"></script>
+                    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+                    <script type="text/javascript">
+
+                    $( document ).ready(function() {
+                        var ctx = $("#myPieChart").get(0).getContext("2d");
+                        var values = {{ cost|safe }};
+                        var data = [
+                            {
+                                value: values[0],
+                                color: "#ffc000",
+                                highlight: "lightskyblue",
+                                label: "Christmas"
+                            },
+                            {
+                                value: values[1],
+                                color: "#ffd800",
+                                highlight: "lightskyblue",
+                                label: "Memorial Day"
+                            },
+                            {
+                                value: values[2],
+                                color: "#ffea00",
+                                highlight: "lightskyblue",
+                                label: "New Years"
+                            },
+                            {
+                                value: values[3],
+                                color: "#ffe953",
+                                highlight: "lightskyblue",
+                                label: "No Holiday"
+                            },
+                                                        {
+                                value: values[4],
+                                color: "#fff589",
+                                highlight: "lightskyblue",
+                                label: "Summer"
+                            },
+
+
+                        ];
+                        var myPieChart = new Chart(ctx).Doughnut(data);
+                    });
+                    </script>
+                    {% endblock %}
+
+                    {% block chartcontent %}
+                    <canvas id="myPieChart" width="500" height="300"></canvas>
+                    {% endblock %}
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+
+            <div class="py-1 text-center">
+                <p class="lead"> </p>
+                </div>
+
+                <div>
+                <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app1:index' %}'" >Volver</button>
+            </div>
+
+        </div>
+
+
+        <!-- Optional JavaScript --><!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
 </html>
+
+
