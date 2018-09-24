@@ -10,32 +10,35 @@ franja de horas del día, para cada día de la semana
 
 import sys
 
-def makeMonthDict():
-    i = 1
-    month_dict = {}
-    while i < 13:
-        month_dict[i] = []
+def makeDayDict():
+    #Monday is 0 and Sunday is 6
+    i = 0
+    day_dict = {}
+    while i < 7:
+        day_dict[i] = []
         i += 1
 
-    return month_dict
+    return day_dict
 
-def demandByMonth(month_dict):
+def demandByDay(day_dict):
 
     for line in sys.stdin:
         line = line.strip()
         line_length = line.split('\t')
 
-        if len(line_length) == 3:
-            month, PUlocation = line.split('\t', 1) #PUlocation includes hour
-            month = int(month)
+        if len(line_length) == 4:
+            day, PUlocation = line.split('\t', 1) #PUlocation includes hour
+
+            day = int(day)
+
 
         else:
          continue
 
 
-        month_dict[month].append(PUlocation)
+        day_dict[day].append(PUlocation)
 
-    return month_dict
+    return day_dict
 
 def countDemand(PUlocation_list):
     counted_list = []
@@ -55,16 +58,18 @@ def countDemand(PUlocation_list):
     return counted_list
 
 def reducer():
-    month_dict = makeMonthDict()
-    final_dict = makeMonthDict()
-    demandByMonth_dict = demandByMonth(month_dict)
-    i = 1
+    day_dict = makeDayDict()
+    final_dict = makeDayDict()
+    demandByDay_dict = demandByDay(day_dict)
+    i = 0
 
-    while i < 13:
-        counted_PUlocation_list = countDemand(demandByMonth_dict[i])
+    while i < 7:
+        counted_PUlocation_list = countDemand(demandByDay_dict[i])
         final_dict[i] = counted_PUlocation_list
         i += 1
 
-
+    for i in [0, 1, 2, 3, 4, 5, 6]:
+        day_list = ['Mon', 'Tue', 'Wed', 'Thru', 'Fri', 'Sat', 'Sun']
+        print('%s\t%s' % (day_list[i], final_dict[i]))
 
 reducer()

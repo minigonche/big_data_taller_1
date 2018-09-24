@@ -7,8 +7,6 @@ from datetime import datetime
 #init
 
 # Date Format YYYY-MM-DD hh:mm:ss
-
-
 format = '%Y-%m-%d %H:%M:%S'
 inTimeFrame = False
 hour = None
@@ -36,7 +34,7 @@ for line in sys.stdin:
     data = line.split(',')
     data_lenght = len(data)
     pickupTime = None
-    PUlocation = None
+    destination = None
 
     if data_lenght in [3, 5, 17, 18, 19, 20, 21]:
             pickupTimeStr = data[1]
@@ -48,28 +46,26 @@ for line in sys.stdin:
     if (data_lenght in [5, 17, 19]):
 
         if (data_lenght == 5):
-            PUlocation = data[3]
+            destination = data[4]
 
         elif (data_lenght == 17):
-            PUlocation = data[7]
+            destination = data[8]
 
         elif (data_lenght == 19):  # More than one type of header has this length
             # Checks that is not a coordinate (lattitude or longitud)
             if ('.' in data[6] or data[6] == 0):
-                PUlocation = None
+                destination = None
             else:
-                PUlocation = data[5]
+                destination = data[6]
 
     if pickupTime:
         pickupTime = datetime.strptime(pickupTime, format)
         hour = pickupTime.hour
-        month = pickupTime.month
-        day = pickupTime.date().weekday()
 
     else:
         hour = None
 
-    if PUlocation and hour:
+    if destination and hour:
         #translate destination zone to borough
-        PUlocation = location_by_ID_lookup(PUlocation)
-        print('%s\t%s\t%s\t%s' % (day, hour,  month, PUlocation))
+        destination = location_by_ID_lookup(destination)
+        print('%s\t%s' % (hour, destination))
