@@ -123,7 +123,7 @@ def get_local_data():
 		Each string corresponds to a line
 	"""
 
-	with open('website/app1/RF/received_data_sample/RF1_result_sample.txt') as f:
+	with open('app1/RF/received_data_sample/RF1_result_sample.txt') as f:
 		return(f.readlines())
 
 
