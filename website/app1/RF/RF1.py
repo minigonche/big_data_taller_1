@@ -79,11 +79,10 @@ def process_data(start, finish):
         destination_dict = ast.literal_eval(line)
 
     while start < finish:
-        print(start)
         try:
             data = destination_dict[start]
         except KeyError:
-            start =+ 1
+            start += 1
             continue
         if data == []:
             start += 1
@@ -99,7 +98,6 @@ def process_data(start, finish):
                 continue
         start += 1
         top_destination_index = count_array.index(max(count_array))
-        print(len(destination_array))
         top_destination = destination_array[top_destination_index]
 
         response[top_destination] = max(count_array)
