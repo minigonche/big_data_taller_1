@@ -14,6 +14,10 @@ import sys
 
 saved = {}
 
+#number of years
+num_years = 9
+
+
 for line in sys.stdin:
     # remove leading and trailing whitespace
     line = line.strip()
@@ -53,10 +57,16 @@ for line in sys.stdin:
 
 for moment in saved.keys():
     for hour_of_day in saved[moment].keys():
-        print_string = ''
+        print_string = ';'
 
         for source in saved[moment][hour_of_day].keys():
             for dest in saved[moment][hour_of_day][source].keys():
-                print_string = print_string + source + ":" + dest + ':' + str(saved[moment][hour_of_day][source][dest]) + ';'
 
-        print('%s\t%s\t%s' % (moment, hour_of_day,print_string))
+                const_div = 52
+                if(len(moment) > 2):
+                    const_div = 12
+                mean_trips = round(saved[moment][hour_of_day][source][dest]/(num_years*const_div),1)
+                if(mean_trips > 0):
+                    print_string = print_string + source + ":" + dest + ':' + str(mean_trips) + ';'
+
+        print('%s\t%s\t%s' % (moment, hour_of_day, print_string))
