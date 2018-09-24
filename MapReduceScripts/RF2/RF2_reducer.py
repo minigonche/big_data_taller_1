@@ -12,6 +12,7 @@ import sys, traceback
 # Output format
 # Same
 
+print_errors = False
 
 totals = {}
 counts = {}
@@ -36,9 +37,10 @@ for line in sys.stdin:
 
     except:
         if(error == 0):
-            print "Exception in user code:"
-            print(line)
-            traceback.print_exc(file=sys.stdout)
+            if(print_errors):
+                print "Exception in user code:"
+                print(line)
+                traceback.print_exc(file=sys.stdout)
         
         error = error + 1
         if(error == 10000):
@@ -50,10 +52,11 @@ for month in totals.keys():
     try:
         print('%s\t%s\t%s' % (month, totals[month], counts[month]))
     except:
-        print "Exception in user code:"
-        print '-'*60
-        traceback.print_exc(file=sys.stdout)
-        print '-'*60
+        if(print_errors):
+            print "Exception in user code:"
+            print '-'*60
+            traceback.print_exc(file=sys.stdout)
+            print '-'*60
 
 
 

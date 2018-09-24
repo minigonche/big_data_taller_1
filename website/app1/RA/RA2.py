@@ -78,7 +78,7 @@ def process_data():
 				source, destination, num_trips = trip.split(':')
 				source = int(source)
 				destination = int(destination)
-				num_trips = int(num_trips)
+				num_trips = float(num_trips)
 
 
 				#Cosntruct the average				
@@ -128,8 +128,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	return(get_remote_data())
-	#return(get_local_data())
+	#return(get_remote_data())
+	return(get_local_data())
 
 
 def get_local_data():
