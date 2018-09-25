@@ -42,10 +42,10 @@ def process_data():
 	"""
 	lines = get_data()
 	response = {}
-	for line in lines:
-		print(line)
+	for line in lines:		
 		line = line.strip()
-		holiday, total_cost, number_of_trips, average_cost = line.split('\t', 3)
+		if(line):
+			holiday, total_cost, number_of_trips, average_cost = line.split('\t', 3)
 
 
 		response[holiday] = [int(number_of_trips), float(average_cost)]
@@ -58,8 +58,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	#return(get_remote_data())
-	return(get_local_data())
+	return(get_remote_data())
+	#return(get_local_data())
 
 
 def get_local_data():

@@ -127,7 +127,7 @@
           <option value = 0 >Lunes</option>
           <option value = 1 >Martes</option>
           <option value = 2 >Miercoles</option>
-          <option value = 3 >Jueves</option>
+          <option value = 3 selected>Jueves</option>
           <option value = 4 >Viernes</option>
           <option value = 5 >Sabado</option>
           <option value = 6 >Domingo</option>
@@ -275,6 +275,10 @@
                 <th scope="row" class="lead">Viajes</th>
                 <td id="info_viajes">20</td>
               </tr>
+              <tr>
+                <th scope="row" class="lead">Atractores</th>
+                <td id="info_atractores">Ninguno</td>
+              </tr>
             </tbody>
         </table>
         </div>
@@ -282,21 +286,21 @@
       </div>
     </div>
 
-
-
-
-
-    <div class="container">
-
       <div class="py-1 text-center">
         <p class="lead"> </p>
       </div>
 
-      <div>
-        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app1:index' %}'" >Volver</button>
-      </div>
 
+    <div class="container" id="info_nodo">
+      <div class = "row">
+          <div class = "col-4"></div>
+          <div class = "col-4 text-center">
+               <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app1:index' %}'" >Volver</button>
+          </div>
+          <div class = "col-4"></div>
     </div>
+  </div>
+
 
 
     <script>
@@ -324,10 +328,11 @@
             var links = null
             var nodes = null
             var num_trips = null
-            var div_constant = 0.1
+            var div_constant = 1
             var max_arch_value = 2
             var current_node_id = null
             var current_num_trips = null
+            var enlarging_const = 1
 
             //Weekdays
             weekdays = ["MON","TUE","WED","THU","FRI","SAT","SUN"]
@@ -440,7 +445,7 @@
                     .data(graph_nodes)
                     .enter().append('circle')
                     .attr('r', function (d) {
-                      return Math.min( 500*current_sizes[pos][d.id],10)})
+                      return Math.min( enlarging_const*current_sizes[pos][d.id],10)})
                     .on('click', show_node_info)
                     .call(drag)
 
@@ -469,6 +474,22 @@
                   document.getElementById("info_borough").innerHTML = node_info[current_node_id]["borough"];
                   document.getElementById("info_barrio").innerHTML = node_info[current_node_id]["barrio"];                  
                   document.getElementById("info_viajes").innerHTML = current_num_trips[pos][current_node_id];
+
+                  atractors = node_info[current_node_id]["atractors"]
+                  if(atractors.length > 0 )
+                  {
+                    var resp = ""
+                    for(var i = 0; i < atractors.length ; i++ )
+                    {
+                      resp = resp + atractors[i].name + ", "
+                    }
+
+                    document.getElementById("info_atractores").innerHTML = resp
+                  }
+                  else
+                  {
+                    document.getElementById("info_atractores").innerHTML = "Ninguno"
+                  }
                   
 
               }
@@ -524,7 +545,7 @@
                       .data(graph_nodes)
                       .enter().append('circle')
                       .attr('r', function (d) {
-                        return Math.min(500*current_sizes[pos][d.id],10)})
+                        return Math.min(enlarging_const*current_sizes[pos][d.id],10)})
                       .on('click', show_node_info)
                       .call(drag)
 
@@ -848,7 +869,7 @@
               .style("stroke", "black")
               .style("stroke-width", "1px")
               .style("fill", "steelblue")
-              .style("fill-opacity", function (d) {return d.weight; })
+              .style("fill-opacity", function (d) {return d.weight*0.1; })
               .on("mouseover", gridOver)
               .on("mouseout", gridOut)
             .append("svg:title")

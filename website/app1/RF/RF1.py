@@ -73,9 +73,8 @@ def process_data(start, finish):
     destination_array = ['Bronx', 'EWR', 'Brooklyn', 'Manhattan', 'Queens', 'Staten Island', 'Unknown']
     count_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-    # imports data and makes a dictionary
-    for line in data:
-        destination_dict = ast.literal_eval(line)
+    # imports data and makes a dictionary    
+    destination_dict = ast.literal_eval(data)
 
     while start < finish:
         try:
@@ -110,8 +109,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	#return(get_remote_data())
-	return(get_local_data())
+	return(get_remote_data())
+	#return(get_local_data())
 
 
 def get_local_data():

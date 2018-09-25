@@ -8,13 +8,17 @@ import copy
 import json
 from paramiko import SSHClient
 from scp import SCPClient
+import json
+from datetime import datetime
 
 def hacer_requerimiento(request):
 
 	data = {}
 
-	
-	#process_data()
+	if(get_hours_since_updated() >= 24):
+		process_data()
+		print_received()
+
 
 
 	return render(request,'app1/RA2_index.html', data)
@@ -128,8 +132,8 @@ def get_data():
 
 	Returns: array of lines
 	"""
-	#return(get_remote_data())
-	return(get_local_data())
+	return(get_remote_data())
+	#return(get_local_data())
 
 
 def get_local_data():
@@ -142,6 +146,26 @@ def get_local_data():
 
 	with open('app1/RA/received_data_sample/RA2_result_sample.txt') as f:
 		return(f.readlines())
+
+
+
+
+def get_hours_since_updated():
+	with open('app1/static/app1/local_jsons/RA2/config.json') as f:
+		js = json.load(f)
+		date_format = '%d-%m-%Y %H:%M'
+		date = datetime.strptime(js['last_query'],date_format)
+		diff = datetime.now() - date
+		return(diff.days*24)
+
+def print_received():
+	with open('app1/static/app1/local_jsons/RA2/config.json', 'w') as f:
+		date_format = '%d-%m-%Y %H:%M'
+		f.write('{"last_query" : "' + datetime.now().strftime(date_format) + '"}')
+
+
+
+
 
 
 def get_remote_data():
@@ -187,3 +211,4 @@ class MyEncoder(json.JSONEncoder):
 			return obj.tolist()
 		else:
 			return super(MyEncoder, self).default(obj)
+
