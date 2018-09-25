@@ -20,7 +20,7 @@ def hacer_requerimiento(request):
 
 	valores = process_data()
 	if(mes in valores):
-		data['valor'] = str(np.round(valores[mes][0],2)) + ' USD'
+		data['valor'] = str(np.round(valores[mes][0]/valores[mes][1],2)) + ' USD'
 		data['total_viajes'] = int(np.round(valores[mes][1],0))
 	else:
 		data['total_viajes'] = 0
