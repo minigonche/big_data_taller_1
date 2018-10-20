@@ -4,6 +4,16 @@ import json
 import requests
 from pymongo import MongoClient
 
+#create a Mongoclient
+client = MongoClient('localhost', 27017)
+
+# Use twitterdb database. If it doesn't exist, it will be created.
+db = client.twitterdb
+collection = db.test_collection
+
+
+
+#Tweeter developer API keys
 consumer_token = 'dHAWevYBB52A2W6rmROpCoOKA'
 consumer_secret = 'xKdrF5quPEkKj4GSdEaOpskjA1KUqPOGrNQpbpJqwXfONBfJJm'
 access_token = '1051945673267048448-dpEKHJPMaAmHRtWqK75Z0qBZhNkuuw'
@@ -13,7 +23,7 @@ auth = tweepy.OAuthHandler(consumer_token, consumer_secret)
 auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-#fetch a request token
+
 
 def get_location():
     location_access_key = 'a22fcac6e1b0c3372d259840cf9388f5'
@@ -26,6 +36,7 @@ def get_location():
     return '{},{}'.format(lat,lon)
 
 
+
 def limit_handled(cursor):
     while True:
         try:
@@ -35,13 +46,16 @@ def limit_handled(cursor):
             time.sleep(15 * 60)
             continue
 
+def display_results(response):
+    for page in response:
+        print(json.dumps(page[1]._json, indent=4))
+        break
 
 
-def saveToDB():
-    #POR IMPLEMENTAR
-
-    print('saving to database')
-
+def saveToDB(response):
+    for page in response:
+        tweet_to_save = (dict(page[1]._json))
+        collection.insert(tweet_to_save)
 
 
 def standardSearch(params):
@@ -70,12 +84,6 @@ def standardSearch(params):
 
 
     return limit_handled(tweepy.Cursor(api.search, q=parameters_to_send[0], count=parameters_to_send[2], geocode='{}km'.format(parameters_to_send[3])).pages())
-
-
-def display_results(response):
-    for page in response:
-        print(json.dumps(page[1]._json, indent=4))
-        break
 
 
 def get_followers(params):
@@ -146,7 +154,7 @@ def main():
 
             save = input('Would you like to save this collection of tweets to the database?   Y/n  ')
             if save.lower() == 'y':
-                saveToDB()
+                saveToDB(response)
 
         elif API == '2':
 
@@ -159,7 +167,7 @@ def main():
                 params = input('Input parameters as csv, with a key and value separated by a colon (:) - ')
                 correct = input('These are the parameters you inputed, is this correct? {}  Y/n  '.format(params)).lower()
 
-            #make request
+
             response = standardSearch(params)
             display = input('Would you like to view a sample of the retreived response?   Y/n  ')
             if display.lower() == 'y':
@@ -167,7 +175,6 @@ def main():
 
             save = input('Would you like to save this collection of tweets to the database?   Y/n  ')
             if save.lower() == 'y':
-                saveToDB()
-
+                saveToDB(response)
 
 main()
