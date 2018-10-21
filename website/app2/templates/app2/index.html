@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Taller 1</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+
+  </head>
+
+	<body>
+	<div class="container">
+      <div class="py-5 text-center">
+      {% load static %}
+        <img class="d-block mx-auto mb-4" src="{% static "app2/img/header.png" %}" alt="" width="1000" height="342">
+        <h1>Taller 2</h1>
+        <p class="lead">Interfaz Taller 2</p>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+       <div class="text-left">
+        <h2>Descripción</h2>
+     </div>
+
+      <div class="py-5">
+        <p> La siguiente interfaz tiene como proposito mostrar los resultados del Taller 2 para el curso: MINE4102 – Análisis de Información sobre Big Data.</p>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+       <div class="text-left">
+        <h3>Analisis de Coyuntura en Twitter</h3>
+     </div>
+
+     <div class="py-5">
+       <p> Descripcion del tema usado sobre los tuits </p>
+     </div>
+   </div>
+
+
+	<!-- RA -->
+		 <div class="py-1"><p></p></div>
+	    <div class="container">
+       <div class="text-left">
+        <h3>Visualizaciones</h3>
+     </div>
+
+         <div class="py-1"><p></p></div>
+
+	<!-- Polaridad -->
+             <form action="{% url 'app2:polaridad' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+	{% csrf_token %}
+
+	  <div class="container">
+       <div class="text-left">
+        <h4>Análisis por Polaridad</h4>
+     </div>
+
+      <div class="py-2">
+        <p> Descripcion del Análisis por polaridad</p>
+      </div>
+    </div>
+
+
+	<div class="form-group">
+
+		<div class="container">
+				<div class="row">
+					<div class="col-3"></div>
+	            	<div class="col-6">
+	            		<div class="form-group text-center">
+							<input type="submit"  id='send_form' class="btn btn-primary" value="Ir al Análisis">
+						</div>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+	</div>
+	</form>
+
+
+         <div class="py-1"><p></p></div>
+
+
+         <!-- Historico -->
+                    <form action="{% url 'app2:historico' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+       	{% csrf_token %}
+
+       	  <div class="container">
+              <div class="text-left">
+               <h4>Análisis Historico</h4>
+            </div>
+
+             <div class="py-2">
+               <p> Descripcion del Análisis historico</p>
+             </div>
+           </div>
+
+
+       	<div class="form-group">
+
+       		<div class="container">
+       				<div class="row">
+       					<div class="col-3"></div>
+       	            	<div class="col-6">
+       	            		<div class="form-group text-center">
+       							<input type="submit"  id='send_form' class="btn btn-primary" value="Ir al Análisis">
+       						</div>
+       					</div>
+       					<div class="col-3"></div>
+       				</div>
+       			</div>
+       	</div>
+       	</form>
+
+
+      <div class="py-1"><p></p></div>
+
+
+
+      <!-- Matoneo -->
+                 <form action="{% url 'app2:matoneo' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+    	{% csrf_token %}
+
+    	  <div class="container">
+           <div class="text-left">
+            <h4>Análisis Matoneo</h4>
+         </div>
+
+          <div class="py-2">
+            <p> Descripcion del análisis matoneo</p>
+          </div>
+        </div>
+
+
+    	<div class="form-group">
+
+    		<div class="container">
+    				<div class="row">
+    					<div class="col-3"></div>
+    	            	<div class="col-6">
+    	            		<div class="form-group text-center">
+    							<input type="submit"  id='send_form' class="btn btn-primary" value="Ir al Análisis">
+    						</div>
+    					</div>
+    					<div class="col-3"></div>
+    				</div>
+    			</div>
+    	</div>
+    	</form>
+
+
+
+
+	</body>
+</html>
