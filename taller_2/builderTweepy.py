@@ -9,7 +9,7 @@ client = MongoClient('localhost', 27017)
 
 # Use twitterdb database. If it doesn't exist, it will be created.
 db = client.twitterdb
-collection = db.test_collection
+collection = db.testcollection1
 
 
 
@@ -53,9 +53,14 @@ def display_results(response):
 
 
 def saveToDB(response):
+    stop = 0
     for page in response:
+        if stop == 10:
+            break
         tweet_to_save = (dict(page[1]._json))
-        collection.insert(tweet_to_save)
+        collection.insert_one(tweet_to_save)
+
+        stop =+ 1
 
 
 def standardSearch(params):
@@ -106,9 +111,13 @@ def get_followers(params):
             index = parameters_to_send.index(i)
             parameters_to_send[index] = default_params[index]
 
+    try:
+        response = limit_handled(tweepy.Cursor(api.followers, id=parameters_to_send[0],count =parameters_to_send[1]).pages())
+    except tweepy.error.TweepError:
+        print("Failed to run the command on that user, Skipping...")
 
-    for page in limit_handled(tweepy.Cursor(api.followers, id=parameters_to_send[0],count =parameters_to_send[1]).pages()): #The Curson() object tries to make pagination easier
-        print(page)
+
+    return response
 
 def main():
     running = True
@@ -168,7 +177,7 @@ def main():
                 correct = input('These are the parameters you inputed, is this correct? {}  Y/n  '.format(params)).lower()
 
 
-            response = standardSearch(params)
+            response = get_followers(params)
             display = input('Would you like to view a sample of the retreived response?   Y/n  ')
             if display.lower() == 'y':
                 display_results(response)
@@ -178,3 +187,4 @@ def main():
                 saveToDB(response)
 
 main()
+print(get_location())
