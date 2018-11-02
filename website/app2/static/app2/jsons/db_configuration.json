@@ -1,0 +1,4 @@
+{
+  "client_location":"localhost:27017",
+  "db_name":"g7_tweets"
+}
