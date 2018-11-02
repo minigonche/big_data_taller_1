@@ -83,7 +83,7 @@
                             .force('link', d3.forceLink()
                                 .id(function (d) { return d.user_id; }));
 
-                    d3.json('{% static "app2/local_jsons/Historico/users.json" %}', function (err, graph) {
+                    d3.json('{% static "app2/jsons/Historico/users.json" %}', function (err, graph) {
                         if(err) throw err;
 
 
