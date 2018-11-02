@@ -1,0 +1,136 @@
+{
+  "nodes": [
+
+    {
+      "user_id": "938612753551581186",
+      "clasification": "MV"
+    },
+
+    {
+      "user_id": "2767590820",
+      "clasification": "M"
+    },
+
+    {
+      "user_id": "3742092852",
+      "clasification": "FV"
+    },
+
+    {
+      "user_id": "553197687",
+      "clasification": "F"
+    },
+
+    {
+      "user_id": "136072687",
+      "clasification": "N"
+    },
+    {
+      "user_id": "2220651994",
+      "clasification": "F"
+    },
+    {
+      "user_id": "253369881",
+      "clasification": "F"
+    },
+    {
+      "user_id": "2458031898",
+      "clasification": "N"
+    },
+    {
+      "user_id": "991339612185513990",
+      "clasification": "N"
+    },
+    {
+      "user_id": "2863907283",
+      "clasification": "FV"
+    },
+    {
+      "user_id": "4915103069",
+      "clasification": "M"
+    },
+    {
+      "user_id": "864611654755115011",
+      "clasification": "M"
+    },
+    {
+      "user_id": "877321052941987840",
+      "clasification": "M"
+    },
+    {
+      "user_id": "305764459",
+      "clasification": "MV"
+    },
+    {
+      "user_id": "261821671",
+      "clasification": "F"
+    },
+    {
+      "user_id": "482025891",
+      "clasification": "F"
+    },
+      {
+      "user_id": "144659694",
+      "clasification": "N"
+    }
+  ],
+
+  "links": [
+    {
+      "source": "144659694",
+      "target": "482025891"
+    },
+    {
+      "source": "261821671",
+      "target": "482025891"
+    },
+    {
+      "source": "305764459",
+      "target": "938612753551581186"
+    },
+    {
+      "source": "144659694",
+      "target": "877321052941987840"
+    },
+    {
+      "source": "877321052941987840",
+      "target": "2863907283"
+    },
+    {
+      "source": "2767590820",
+      "target": "938612753551581186"
+    },
+    {
+      "source": "2863907283",
+      "target": "2458031898"
+    },
+    {
+      "source": "553197687",
+      "target": "2863907283"
+    },
+    {
+      "source": "144659694",
+      "target": "877321052941987840"
+    },
+    {
+      "source": "2767590820",
+      "target": "482025891"
+    },
+    {
+      "source": "2863907283",
+      "target": "482025891"
+    },
+    {
+      "source": "144659694",
+      "target": "3742092852"
+    },
+    {
+      "source": "305764459",
+      "target": "877321052941987840"
+    },
+    {
+      "source": "864611654755115011",
+      "target": "2863907283"
+    }
+  ]
+}
