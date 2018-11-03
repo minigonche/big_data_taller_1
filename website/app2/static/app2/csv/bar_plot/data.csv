@@ -1,0 +1,8 @@
+Measure,Propio,Otro
+Accuracy-Todos,95,91
+Precision-Negativo,86,82
+Recall-Negativo,72,63
+Precision-Neutro,56,12
+Recall-Neutro,77,83
+Precision-Positivo,86,92
+Recall-Positivo,21,32
