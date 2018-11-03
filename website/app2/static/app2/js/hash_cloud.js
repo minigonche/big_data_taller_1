@@ -30,6 +30,7 @@ var dibujar_polaridad = function(path)
           var max = d3.max(Object.keys(words), function(k){
               return words[k].count;
           });
+
           console.log(max);
 
           var font_size = d3.scale.linear()
@@ -42,8 +43,8 @@ var dibujar_polaridad = function(path)
               .interpolate(d3.interpolateHcl);*/
 
           var color = d3.scale.quantize()
-                .domain([-max, max])
-                .range([d3.hcl(36, 65, 50), d3.hcl(150, 65, 50)]);
+              .domain([-1,0, 1])
+              .range([d3.hcl(36, 65, 50),d3.hcl(0, 0, 60), d3.hcl(150, 65, 50)]);
 
 
 
@@ -151,8 +152,8 @@ d3.json(path, function(error, data) {
         .interpolate(d3.interpolateHcl);*/
 
     var color = d3.scale.quantize()
-          .domain([-max, max])
-          .range([d3.hcl(36, 65, 50), d3.hcl(150, 65, 50)]);
+        .domain([-2,-1, 0, 1, 2])
+        .range([d3.hcl(250, 85, 20),d3.hcl(250, 85, 60), d3.hcl(0, 0, 60), d3.hcl(350, 75, 60), d3.hcl(25, 100, 55)]);
 
 
 

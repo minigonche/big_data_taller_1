@@ -37,7 +37,7 @@
 
         document.getElementById("nube_polaridad").style.display = "block";
         document.getElementById("nube_sexismo").style.display = "none";
-        dibujar_polaridad("{% static "app2/jsons/hash_cloud/frequency_polaridad.json" %}")
+        dibujar_polaridad("{% static "app2/jsons/hash_cloud/frequency_polaridad.json" %}", 'polaridad')
       }
 
       var ver_cloud_sexismo = function()
@@ -45,7 +45,7 @@
 
         document.getElementById("nube_polaridad").style.display = "none";
         document.getElementById("nube_sexismo").style.display = "block";
-        dibujar_sexismo("{% static "app2/jsons/hash_cloud/frequency_sexismo.json" %}")
+        dibujar_sexismo("{% static "app2/jsons/hash_cloud/frequency_sexismo.json" %}", 'sexismo')
 
       }
 
@@ -97,30 +97,44 @@
 
   </div>
 
-    <div class="container">
-      <div class="py-1">
-        <p> </p>
-      </div>
-    </div>
+    <div class="container"><div class="py-1"><p> </p></div></div>
 
 
     <div  class="container">
       <div class = "row">
-        <div class = "col-3 text-center">
+        <div class = "col-2 text-center">
           <button type="button" class="btn btn-secondary" onclick="nav_ejemplos()" > Tuits Ejemplo</button>
         </div>
-        <div class = "col-3 text-center">
+        <div class = "col-2 text-center">
           <button type="button" class="btn btn-secondary" onclick="nav_nubes()" > Nubes Palabras</button>
         </div>
-        <div class = "col-3">
+        <div class = "col-2 text-center">
           <button type="button" class="btn btn-secondary" onclick="nav_plots()" > Comparacion </button>
         </div>
-        <div class = "col-3 text-center">
-          <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app2:index' %}'" > Volver</button>
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'app2:clasificar' %}'" > Clasificador </button>
         </div>
-
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'app2:buscar_distribucion' %}'" > Ver Distribucion </button>
+        </div>
       </div>
     </div>
+
+
+    <!-- Espacio -->
+    <div class="container"><div class="py-1"><p></p></div></div>
+    
+    <div  class="container">
+      <div class = "row">
+        <div class = "col-5 text-center"></div>
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app2:index' %}'" > Volver</button>
+        </div>
+        <div class = "col-5 text-center"></div>
+      </div>
+    </div>
+
+
 
 
     <!-- Espacio -->
@@ -317,8 +331,8 @@
      <h2> Comparación de Resultados</h2>
     </div>
     <div class = "container">
-      <label class="radio-inline lead"><input type="radio" name="mode" value="Propio" checked>Propio</label>
-      <label class="radio-inline lead"><input type="radio" name="mode" value="Otro">Otro</label>
+      <label class="radio-inline lead"><input id="radio_1" type="radio" name="mode" value="Propio" checked>Propio</label>
+      <label class="radio-inline lead"><input id="radio_2" type="radio" name="mode" value="Otro">Otro</label>
     </div>
     <div class="container" id="par_plot_chart">
     <div>

@@ -41,6 +41,7 @@ var dibujar_bar_plot = function(path)
       var countType = undefined;
 
       d3.csv(path, function(error, data) {
+
         if (error) throw error;
         var sortType = 'Propio'
 
@@ -119,7 +120,10 @@ var dibujar_bar_plot = function(path)
 
       function change() {
         sortType = this.value
-        transitionData(sortType);
+        if(sortType == 'Propio' || sortType == 'Otro')
+        {
+          transitionData(sortType);
+        }
       }
 
       function transitionData(sortType){

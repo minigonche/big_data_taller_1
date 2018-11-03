@@ -15,7 +15,7 @@ def index(request):
     return render(request, 'app2/index.html', None)
 
 def Polaridad(request):
-	return pol.hacer_requerimiento(request, dar_base_de_datos())
+	return pol.hacer_requerimiento_polaridad(request, dar_base_de_datos())
 
 def Historico(request):
 	return his.hacer_requerimiento(request, dar_base_de_datos())
@@ -23,8 +23,12 @@ def Historico(request):
 def Matoneo(request):
 	return mat.hacer_requerimiento(request, dar_base_de_datos())
 
+def Clasificar(request):
+    return pol.hacer_requerimiento_clasificar(request, dar_base_de_datos())
 
 
+def BuscarDistribucion(request):
+    return pol.hacer_requerimiento_buscar_dsitribucion(request, dar_base_de_datos())
 
 def dar_base_de_datos():
     with open('app2/static/app2/jsons/db_configuration.json','r') as f:

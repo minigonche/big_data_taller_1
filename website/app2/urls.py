@@ -9,5 +9,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('polaridad', views.Polaridad, name='polaridad'),
     path('historico', views.Historico, name='historico'),
-    path('matoneo', views.Matoneo, name='matoneo')
+    path('matoneo', views.Matoneo, name='matoneo'),
+    path('clasificar', views.Clasificar, name='clasificar'),
+    path('buscar_distribucion', views.BuscarDistribucion, name='buscar_distribucion')
 ]
