@@ -31,7 +31,7 @@ def process_data():
     links = []
 
 
-    for user in friend_collection.find().limit(50):
+    for user in friend_collection.find().limit(100):
 
         user_id = user["_id"]
         friends = user["friends"]

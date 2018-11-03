@@ -50,7 +50,7 @@
                     var canvas = d3.select('#network'),
                         width = canvas.attr('width'),
                         height = canvas.attr('height'),
-                        r = 5,
+                        r = 3,
                         ctx = canvas.node().getContext('2d'),
                         simulation = d3.forceSimulation()
                             .force('x', d3.forceX(width/2))
@@ -96,8 +96,6 @@
                             return '#068587';
                         } else {return '#ED553B'}
                     }
-
-
 
                     <!-- variables x and y are automatically controlled by simulation system -->
                     function drawNode(d) {
