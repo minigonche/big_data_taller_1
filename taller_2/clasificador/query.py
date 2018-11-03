@@ -7,7 +7,7 @@ myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mongo_db = myclient["g7_tweets"]
 
 
-words = ['colombine','feminismo']
+words = ['feminismo']
 
 
 exp = ""
