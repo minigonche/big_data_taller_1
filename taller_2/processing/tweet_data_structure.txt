@@ -1,0 +1,65 @@
+{
+    created_at: 'CREATION_DATE',
+    id: 'ID',
+    text: 'TEXT',
+    entities: {
+        hastags: 'HASHTAG',
+        symbols: 'SYMBOLS',
+        user_mentions: [
+            {
+                screen_name: 'USER_MENTION_SCREEN_NAME',
+                name: 'USER_MENTION_NAME',
+                id: 'USER_MENTION_ID',
+            }
+        ],
+    },
+    user: {
+        id: 'USER_ID',
+        name: 'USER_NAME',
+        screen_name: 'USER_SCREEN_NAME',
+        location: 'USER_LOCATION',
+        description: 'USER_DESCRIPTION',
+        created_at: 'USER_CREATION_DATE',
+        favourites_count: 'USER_FAVORITE_COUNT'
+        followers_count: 'USER_FOLLOWERS_COUNT',
+        friends_count: 'USER_FRIENDS_COUNT',
+        verified: 'USER_VERIFIED',
+        statuses_count: 'USER_STATUSES_COUNT'
+        lang: 'USER_LANGUAGE'
+    },
+    geo: 'GEO',
+    coordinates: 'COORDINATES',
+    retweeted_status: {
+        created_at: 'RETWEET_CREATION_DATE',
+        id: 'RETWEET_ID',
+        text: 'RETWEET_TEXT',
+        entities: {
+            hastags: 'RETWEET_HASHTAG',
+            symbols: 'RETWEET_SYMBOLS',
+            user_mentions: [
+                {
+                    screen_name: 'RETWEETED_USER_MENTION_SCREEN_NAME',
+                    name: 'RETWEETED_USER_MENTION_NAME',
+                    id: 'RETWEETED_USER_MENTION_ID',
+                }
+            ],
+        },
+        user: {
+            id: 'RETWEETED_USER_ID',
+            name: 'RETWEETED_USER_NAME',
+            screen_name: 'RETWEETED_USER_SCREEN_NAME',
+            location: 'RETWEETED_USER_LOCATION',
+            description: 'RETWEETED_USER_DESCRIPTION',
+            followers_count: 'RETWEETED_USER_FOLLOWERS_COUNT',
+            friends_count: 'RETWEETED_USER_FRIENDS_COUNT',
+            created_at: 'RETWEETED_USER_CREATION_DATE',
+            verified: 'RETWEETED_USER_VERIFIED'
+            statuses_count: 'RETWEETED_USER_STATUSES_COUNT',
+            lang: RETWEETED_USER_LANGUAGE
+        },
+        geo: 'RETWEET_GEO',
+        coordinates: 'RETWEET_COORDINATES',
+        retweet_count: 'RETWEET_COUNT'
+        favoritw_count: 'RETWEET_FAVORITE_COUNT'
+    }
+}
