@@ -6,6 +6,7 @@ from app2.Requerimientos import Polaridad as pol
 from app2.Requerimientos import Historico as his
 from app2.Requerimientos import Matoneo as mat
 
+
 import json
 import pymongo
 
@@ -18,7 +19,13 @@ def Polaridad(request):
 	return pol.hacer_requerimiento_polaridad(request, dar_base_de_datos())
 
 def Historico(request):
-	return his.hacer_requerimiento(request, dar_base_de_datos())
+	return his.hacer_requerimiento(request)
+
+def rankedNetwork(request):
+	return his.ranked_network(request)
+
+def historicGrowth(request):
+	return his.historic_growth(request)
 
 def Matoneo(request):
 	return mat.hacer_requerimiento(request, dar_base_de_datos())
@@ -40,4 +47,4 @@ def dar_base_de_datos():
 
         return(mydb)
 
-    raise("Hibo un error conectando a la base de datos")
+    raise("Hubo un error conectando a la base de datos")

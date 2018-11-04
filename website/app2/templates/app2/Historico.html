@@ -36,88 +36,16 @@
 
         </div>
 
-        <div class="container">
-            <div class="py-1">
-                <canvas id="network" width="1000" height="1000 "></canvas>
-                <script src="https://d3js.org/d3.v4.min.js"></script>
-
-                <script>
-
-                    /* global d3 */
-
-
-                    <!--This creates a canvas -->
-                    var canvas = d3.select('#network'),
-                        width = canvas.attr('width'),
-                        height = canvas.attr('height'),
-                        r = 3,
-                        ctx = canvas.node().getContext('2d'),
-                        simulation = d3.forceSimulation()
-                            .force('x', d3.forceX(width/2))
-                            .force('y', d3.forceY(height/2))
-                            .force('collide', d3.forceCollide(r + 5 ))
-                            // .force('charge', d3.forceManyBody()
-                            //     .strength(-5))
-                            .force('link', d3.forceLink()
-                                .id(function (d) { return d.user_id; }));
-
-                    d3.json('{% static "app2/jsons/Historico/users_test.json" %}', function (err, graph) {
-                        if(err) throw err;
-
-
-                        simulation
-                            .nodes(graph.nodes)
-                            .on('tick', update)
-                            .force('link')
-                                .links(graph.links);
-
-                        function update() {
-                            ctx.clearRect(0, 0, width, height);
-                            ctx.beginPath();                <!-- 'pencil down' -->
-                            ctx.globalAlpha = 0.5;          <!-- 'opacity' -->
-                            ctx.strokeStyle = "#aaa";
-                            graph.links.forEach(drawLink);  <!-- call draw function -->
-                            ctx.stroke();
-
-
-                                           <!-- 'pencil down' -->
-                            ctx.globalAlpha = 1.0;
-                            graph.nodes.forEach(drawNode);  <!-- call draw function -->
-                                                 <!-- 'print' -->
-                        }
-
-                    });
-
-
-                    function selectColor(d) {
-                        if(d.classification < 0){
-                            return '#4FB99F';
-                        } else if(d.classification > 0) {
-                            return '#068587';
-                        } else {return '#ED553B'}
-                    }
-
-                    <!-- variables x and y are automatically controlled by simulation system -->
-                    function drawNode(d) {
-
-                        ctx.beginPath();
-                        ctx.fillStyle = selectColor(d) ;
-                        ctx.moveTo(d.x, d.y);       <!-- Iterates over the nodes in graph -->
-                        ctx.arc(d.x, d.y, r, 0, 2 * Math.PI);   <!-- draws a circle -->
-                        ctx.fill();
-                    }
-
-                    function drawLink(l) {
-                        ctx.moveTo(l.source.x, l.source.y);      <!-- Iterates over the source nodes in graph -->
-                        ctx.lineTo(l.target.x, l.target.y);       <!-- draws a line -->
-
-                    }
-
-                </script>
-
+        <div  class="container">
+            <div class = "row">
+                <div class = "col-2 text-center">
+                    <button type="button" class="btn btn-secondary" onclick="location.href='{%url 'app2:rankedNetwork' %}'">Red con <i>Rank</i></button>
+                </div>
+                <div class = "col-2 text-center">
+                    <button type="button" class="btn btn-secondary" onclick="location.href='{%url 'app2:rankedNetwork' %}'">Crecimiento Historico</button>
+                </div>
             </div>
         </div>
-
 
 
         <!-- BOTON VOLVER -->

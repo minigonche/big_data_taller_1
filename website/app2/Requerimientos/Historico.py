@@ -12,16 +12,18 @@ db = client.twitterdb
 friend_collection = db.friend_collection
 collection = db.testcollection1
 ranked_collection = db.ranked_collection
+condensed_collection = db.condensed_collection
 
 def hacer_requerimiento(request):
 
     # TODO
 
-    process_data()
+
     return render(request, 'app2/Historico.html', None)
 
 
-def process_data():
+
+def ranked_network(request):
     """
     Process the data for the webpage to use
     Export all data to the static/app2/Historico folder for D3.js to consume
@@ -33,7 +35,7 @@ def process_data():
     links = []
 
 
-    for user in friend_collection.find().limit(50):
+    for user in condensed_collection.find().limit(100):
 
         user_id = user["_id"]
         friends = user["friends"]
@@ -52,7 +54,7 @@ def process_data():
 
         count = 0
         for friend in friends:
-            if count == 50:
+            if count == 10:
                 break
             #add to json
             TTF = 0
@@ -73,4 +75,10 @@ def process_data():
         "w") as outfile:
         json.dump(user_json, outfile)
 
-process_data()
+    return render(request, 'app2/ranked_network.html', None)
+
+def historic_growth(request):
+
+    # TODO
+
+    return render(request, 'app2/historic_growth.html', None)
