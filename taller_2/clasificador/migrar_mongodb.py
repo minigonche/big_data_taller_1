@@ -39,10 +39,6 @@ def actualizar_hash_clouds(texto):
 
 
 
-
-
-
-
 #Inicializa la colleccion
 mydb.polaridad.drop()
 mycol = mydb["polaridad"]

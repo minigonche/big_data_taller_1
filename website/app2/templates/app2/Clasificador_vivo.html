@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Taller 2</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+
+  </head>
+
+	<body>
+	<div class="container">
+      <div class="py-5 text-center">
+      {% load static %}
+        <img class="d-block mx-auto mb-4" src="{% static "app2/img/header.png" %}" alt="" width="1000" height="342">
+        <h1>Taller 2</h1>
+        <p class="lead"></p>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+       <div class="text-left">
+        <h2>Clasificador en Vivo</h2>
+     </div>
+
+     <div class="py-2">
+       <p class="lead"> Esta página permite clasificar la Polaridad y el Sexismo del texto recibido segun los clasificadores entrenados.</p>
+     </div>
+  </div>
+
+    <div class="container"><div class="py-1"><p> </p></div></div>
+
+<form action="{% url 'app2:clasificar' %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+    <div class="container">
+       <div class="py-1 text-center">
+       <p class="lead"> Texto</p>
+       </div>
+   <div class = "row">
+     <div class="col-2"></div>
+     <div class="col-8">
+     <div class="form-group">
+       <label for="tarot_democraticas">Escriba el texto que desea clasificar (en español)</label>
+       <textarea class="form-control" id="texto_input" name="texto_input" rows="3">{{texto}}</textarea>
+       </div>
+     </div>
+     <div class="col-2"></div>
+      </div>
+      </div>
+
+
+      <div class="container">
+          <div class="row">
+            <div class="col-4"></div>
+                  <div class="col-4 text-center">
+                    <div class="form-group">
+                <input type="submit"  class="btn btn-success" value="Clasificar">
+              </div>
+            </div>
+            <div class="col-4"></div>
+          </div>
+      </div>
+
+    </form>
+
+
+
+    <div class="container">
+      <div class="text-center">
+       <h3>Resultados Clasificacion</h3>
+    </div>
+
+
+     <div class="container">
+         <div class="row">
+           <div class="col-1 text-center"></div>
+           <div class="col-5 text-center">
+             <div class="jumbotron bg-{{polaridad_background}}">
+               <div class="container">
+                 <h2 class="display-3">Polaridad:</h2>
+                 <h4 class="display-4">{{polaridad}}</h4>
+               </div>
+             </div>
+           </div>
+
+           <div class="col-5 text-center">
+             <div class="jumbotron bg-{{sexismo_background}}">
+               <div class="container">
+                 <h2 class="display-3">Sexismo:</h2>
+                 <h4 class="display-4">{{sexismo}}</h4>
+               </div>
+             </div>
+           </div>
+           <div class="col-1 text-center"></div>
+         </div>
+
+     </div>
+    </div>
+
+<div class="container"><div class="py-1"><p> </p></div></div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-5"></div>
+          <div class="col-2 text-center">
+            <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app2:polaridad' %}'" > Volver</button>
+          </div>
+          <div class="col-5"></div>
+        </div>
+      </div>
+
+<div class="container"><div class="py-1"><p> </p></div></div>
+<div class="container"><div class="py-1"><p> </p></div></div>
+
+
+
+
+	</body>
+</html>

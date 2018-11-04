@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Taller 2</title>
+
+    {% load static %}
+    <!-- JavaScript Libraries //-->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="{% static "app2/js/pie_chart.js" %}"></script>
+
+    <!-- CSS Style //-->
+    <link href="{% static "app2/css/pie_chart.css" %}" rel="stylesheet" type="text/css">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+
+  </head>
+
+	<body>
+	<div class="container">
+      <div class="py-5 text-center">
+      {% load static %}
+        <img class="d-block mx-auto mb-4" src="{% static "app2/img/header.png" %}" alt="" width="1000" height="342">
+        <h1>Taller 2</h1>
+        <p class="lead"></p>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+       <div class="text-left">
+        <h2>Distribucion de Polaridades</h2>
+     </div>
+
+     <div class="py-2">
+       <p class="lead"> Esta pagina permite ver el comportamiento de grupos de palabras en cuanto frecuencia y polaridad</p>
+     </div>
+  </div>
+
+    <div class="container"><div class="py-1"><p> </p></div></div>
+
+<form action="{% url 'app2:buscar_distribucion' %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+  {% csrf_token %}
+    <div class="container">
+       <div class="py-1 text-center">
+       <p class="lead"> Palabras</p>
+       </div>
+   <div class = "row">
+     <div class="col-2"></div>
+     <div class="col-8">
+     <div class="form-group">
+       <label for="texto_input">Escriba las palabras separadas por comas.</label>
+       <textarea class="form-control" id="texto_input" name="texto_input" rows="3">{{texto}}</textarea>
+       </div>
+     </div>
+     <div class="col-2"></div>
+      </div>
+      </div>
+
+
+      <div class="container">
+          <div class="row">
+            <div class="col-4"></div>
+                  <div class="col-4 text-center">
+                    <div class="form-group">
+                <input type="submit"  class="btn btn-success" value="Buscar Distribucion">
+              </div>
+            </div>
+            <div class="col-4"></div>
+          </div>
+      </div>
+
+    </form>
+
+     <div class="container">
+       <div class="text-center">
+        <h3>Distribucion Encontrada</h3>
+        <p class="lead"> Distribucion de los tuits con las palabras: </p>
+        <p class="lead"> {{palabras}} </p>
+        <h4> Total: {{total}}</h4>
+       <div style="margin:50px;text-align:center" id="chart"></div>
+
+    </div>
+  </div>
+
+<div class="container"><div class="py-1"><p> </p></div></div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-5"></div>
+          <div class="col-2 text-center">
+            <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app2:polaridad' %}'" > Volver</button>
+          </div>
+          <div class="col-5"></div>
+        </div>
+      </div>
+
+<div class="container"><div class="py-1"><p> </p></div></div>
+<div class="container"><div class="py-1"><p> </p></div></div>
+
+
+
+<script>
+  cargar_datos("{% static "app2/csv/pie_chart/polaridades.csv" %}", {{sin_datos}})
+</script>
+
+
+
+	</body>
+</html>

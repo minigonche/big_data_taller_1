@@ -7,13 +7,73 @@
     <meta name="author" content="">
 
     <title>Taller 2</title>
-
+     {% load static %}
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
-
+  <link rel="stylesheet" href="{% static "app2/css/bar_plot.css" %}">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="{% static "app2/js/layout.cloud.js" %}"></script>
+  <script src="{% static "app2/js/hash_cloud.js" %}"></script>
+  <script src="{% static "app2/js/bar_plot.js" %}"></script>
+  <script src="http://d3js.org/queue.v1.min.js"></script>
+  <script src="http://davidbau.com/encode/seedrandom-min.js"></script>
 
   </head>
 
+
 	<body>
+
+
+    <!-- Scripts -->
+    <script>
+
+      Math.seedrandom('abcde');  // define a fixed random seed, to avoid to have a different layout on each page reload. change the string to randomize
+
+      var dibujo_polaridad = false
+      var dibujo_sexismo = false
+      var dibujo_plot = false
+
+      var ver_cloud_polaridad = function()
+      {
+
+        document.getElementById("nube_polaridad").style.display = "block";
+        document.getElementById("nube_sexismo").style.display = "none";
+        dibujar_polaridad("{% static "app2/jsons/hash_cloud/frequency_polaridad.json" %}", 'polaridad')
+      }
+
+      var ver_cloud_sexismo = function()
+      {
+
+        document.getElementById("nube_polaridad").style.display = "none";
+        document.getElementById("nube_sexismo").style.display = "block";
+        dibujar_sexismo("{% static "app2/jsons/hash_cloud/frequency_sexismo.json" %}", 'sexismo')
+
+      }
+
+      var nav_ejemplos = function()
+      {
+        document.getElementById("ejemplos_clasificacion").style.display = "block";
+        document.getElementById("word_clouds").style.display = "none";
+        document.getElementById("plots_comparativos").style.display = "none";
+      }
+
+      var nav_nubes = function()
+      {
+        document.getElementById("ejemplos_clasificacion").style.display = "none";
+        document.getElementById("word_clouds").style.display = "block";
+        document.getElementById("plots_comparativos").style.display = "none";
+        ver_cloud_polaridad()
+      }
+
+      var nav_plots = function()
+      {
+        document.getElementById("ejemplos_clasificacion").style.display = "none";
+        document.getElementById("word_clouds").style.display = "none";
+        document.getElementById("plots_comparativos").style.display = "block";
+        ver_cloud_polaridad()
+      }
+
+    </script>
+
 	<div class="container">
       <div class="py-5 text-center">
       {% load static %}
@@ -25,40 +85,267 @@
 
 
 
+
     <div class="container">
        <div class="text-left">
         <h2>Análisis por Polaridad</h2>
      </div>
 
       <div class="py-2">
-        <p class="lead"> POR IMPLEMENTAR </p>
+        <p class="lead"> Texto Descriptio de la pagina</p>
       </div>
 
   </div>
 
-    <div class="container">
-      <div class="py-1">
-        <p> </p>
+    <div class="container"><div class="py-1"><p> </p></div></div>
+
+
+    <div  class="container">
+      <div class = "row">
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-secondary" onclick="nav_ejemplos()" > Tuits Ejemplo</button>
+        </div>
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-secondary" onclick="nav_nubes()" > Nubes Palabras</button>
+        </div>
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-secondary" onclick="nav_plots()" > Comparacion </button>
+        </div>
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'app2:clasificar' %}'" > Clasificador </button>
+        </div>
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-secondary" onclick="location.href='{% url 'app2:buscar_distribucion' %}'" > Ver Distribucion </button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Espacio -->
+    <div class="container"><div class="py-1"><p></p></div></div>
+    
+    <div  class="container">
+      <div class = "row">
+        <div class = "col-5 text-center"></div>
+        <div class = "col-2 text-center">
+          <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app2:index' %}'" > Volver</button>
+        </div>
+        <div class = "col-5 text-center"></div>
       </div>
     </div>
 
 
 
 
-      <div class="container">
-        <div class="row">
-          <div class="col-4"></div>
-          <div class="col-4 text-center">
-            <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app2:index' %}'" > Volver</button>
-          </div>
-          <div class="col-4"></div>
+    <!-- Espacio -->
+    <div class="container"><div class="py-1"><p></p></div></div>
+
+    <div class="container" id="ejemplos_clasificacion">
+       <div class="text-left">
+        <h2>Ejemplos de Clasificación</h2>
+     </div>
+
+       <div class="container">
+         <div class="text-center">
+          <h3>Polaridad</h3>
+       </div>
+
+
+        <div class="container">
+           <div class="row">
+
+             <div class="col-4 text-center">
+               <span class="badge badge-success">Positivo</span>
+             </div>
+
+
+             <div class="col-4 text-center">
+               <span class="badge badge-secondary">Neutro</span>
+              </div>
+
+              <div class="col-4 text-center">
+                <span class="badge badge-danger">Negativo</span>
+               </div>
+
+           </div>
+
+            <div class="row">
+
+              <div class="col-4 text-center">
+                <div class="jumbotron bg-success">
+                  <div class="container">
+                    <h4 class="display-8">{{ polaridad.positivo.screen_name}}</h1>
+                    <p class="small">{{ polaridad.positivo.full_text }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4 text-center">
+                <div class="jumbotron">
+                  <div class="container">
+                    <h4 class="display-8">{{ polaridad.neutro.screen_name}}</h1>
+                    <p class="small">{{ polaridad.neutro.full_text }}</p>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="col-4 text-center">
+                <div class="jumbotron bg-danger">
+                  <div class="container">
+                    <h4 class="display-8">{{ polaridad.negativo.screen_name}}</h1>
+                    <p class="small">{{ polaridad.negativo.full_text }}</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+        </div>
+
+      <!-- Espacio -->
+      <div class="container"><div class="py-1"><p></p></div></div>
+
+  <div class="container">
+    <div class="text-center">
+     <h3>Sexismo</h3>
+  </div>
+
+  <div class="container" id="ejemplos_sexismo">
+     <div class="row">
+
+       <div class="col-4 text-center">
+         <span class="badge badge-warning">Machismo</span>
+       </div>
+
+       <div class="col-4 text-center">
+         <span class="badge badge-secondary">Neutro</span>
+        </div>
+
+        <div class="col-4 text-center">
+          <span class="badge badge-warning">Feminismo</span>
+        </div>
+
+     </div>
+
+
+     <div class="row">
+
+
+       <div class="col-4 text-center">
+           <div class="row">
+             <div class="jumbotron bg-warning">
+               <div class="container">
+                 <h4 class="display-8">{{ sexismo.machista.screen_name}}</h1>
+                 <p class="small">{{ sexismo.machista.full_text }}</p>
+               </div>
+             </div>
+            </div>
+
+            <div class="row">
+              <div class ="col-12 text-center">
+                <span class="badge badge-danger">Machismo Violento</span>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="jumbotron bg-danger">
+                <div class="container">
+                  <h4 class="display-8">{{ sexismo.machista_violento.screen_name}}</h1>
+                  <p class="small">{{ sexismo.machista_violento.full_text }}</p>
+                </div>
+              </div>
+             </div>
+       </div>
+
+       <div class="col-4 text-center">
+         <div class="jumbotron bg-secondary">
+           <div class="container">
+             <h4 class="display-8">{{ sexismo.neutro.screen_name}}</h1>
+             <p class="small">{{ sexismo.neutro.full_text }}</p>
+           </div>
+         </div>
+        </div>
+
+        <div class="col-4 text-center">
+            <div class="row">
+              <div class="jumbotron bg-warning">
+                <div class="container">
+                  <h4 class="display-8">{{ sexismo.feminista.screen_name}}</h1>
+                  <p class="small">{{ sexismo.feminista.full_text }}</p>
+                </div>
+              </div>
+             </div>
+
+            <div class="row">
+              <div class ="col-12 text-center">
+                <span class="badge badge-danger">Feminismo Violento</span>
+              </div>
+            </div>
+
+             <div class="row">
+               <div class="jumbotron bg-danger">
+                 <div class="container">
+                   <h4 class="display-8">{{ sexismo.feminista_violento.screen_name}}</h1>
+                   <p class="small">{{ sexismo.feminista_violento.full_text }}</p>
+                 </div>
+               </div>
+              </div>
         </div>
       </div>
 
+  </div>
+</div>
+</div>
+</div>
+
+    <div class="container" id= "word_clouds">
+     <div class="text-left">
+      <h2>Nubes de Hash-Tags</h2>
+   </div>
 
 
+        <div class = "form-group">
+          <div class = "row">
+             <div class = "col-3"></div>
+             <div class = "col-3 text-center">
+               <label class="radio-inline lead"><input type="radio" name="radioTipo" onclick="ver_cloud_polaridad()" checked>Polaridad</label>
+             </div>
+             <div class = "col-3 text-center">
+             <label class="radio-inline lead"><input type="radio" name="radioTipo" onclick="ver_cloud_sexismo()">Sexismo</label>
+             </div>
+             <div class = "col-3"></div>
+           </div>
+       </div>
 
 
+       <!-- Espacio -->
+       <div class="container"><div class="py-1"><p></p></div></div>
+       <div class = "container" id="nube_polaridad" ></div>
+       <div class = "container" id="nube_sexismo"></div>
+  </div>
+
+
+  <div class="container" id= "plots_comparativos">
+    <div class="text-left">
+     <h2> Comparación de Resultados</h2>
+    </div>
+    <div class = "container">
+      <label class="radio-inline lead"><input id="radio_1" type="radio" name="mode" value="Propio" checked>Propio</label>
+      <label class="radio-inline lead"><input id="radio_2" type="radio" name="mode" value="Otro">Otro</label>
+    </div>
+    <div class="container" id="par_plot_chart">
+    <div>
+  <div>
+
+
+<script>
+      document.getElementById("ejemplos_clasificacion").style.display = "none";
+      document.getElementById("word_clouds").style.display = "none";
+      document.getElementById("plots_comparativos").style.display = "none";
+
+      dibujar_bar_plot("{% static "app2/csv/bar_plot/data.csv" %}")
+</script>
 
 	</body>
 </html>

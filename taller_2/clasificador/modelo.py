@@ -5,8 +5,9 @@ from nltk.corpus import stopwords # Import the stop word list
 from nltk.tokenize import RegexpTokenizer
 from nltk.stem.snowball import SpanishStemmer, EnglishStemmer
 import pandas as pd
-from sklearn.feature_extraction.text import HashingVectorizer
+from sklearn.feature_extraction.text import HashingVectorizer, CountVectorizer
 from sklearn import svm
+from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import numpy as np
@@ -22,8 +23,9 @@ class Clasificador:
         self.modelo = modelo
 
 
+
     def predict(self, X_entrada):
-        X_entrada = self.vectorizer.fit_transform(X_entrada)
+        X_entrada = self.vectorizer.transform(X_entrada)
         return(self.modelo.predict(X_entrada))
 
 
@@ -85,6 +87,8 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
 
     #Prepara los datos
 
+
+
     #Tokenizador
     my_tokenizer = RegexpTokenizer("[\w']+")
 
@@ -94,48 +98,61 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
         stemmer = EnglishStemmer()
 
 
+
     #Funcion stemmer
     def tokenizer_stemmer(document):
         return [stemmer.stem(token) for token in my_tokenizer.tokenize(document)]
 
-    vectorizer = HashingVectorizer(analyzer = "word",
+    hash_vectorizer = HashingVectorizer(analyzer = "word",
                                  tokenizer = tokenizer_stemmer,
                                  preprocessor = None,
-                               #  stop_words = stopwords.words("spanish"),
+                                 #stop_words = stopwords.words(idioma),
                                  n_features = 10000,
                                  strip_accents='ascii',
                                  encoding = 'utf-8',
                                  ngram_range = (1,3))
 
+    count_vectorizer = CountVectorizer(analyzer = "word",
+                                 tokenizer = tokenizer_stemmer,
+                                 preprocessor = None,
+                                 #stop_words = stopwords.words(idioma),
+                                 strip_accents='ascii',
+                                 encoding = 'utf-8',
+                                 ngram_range = (1,3))
 
-    X = vectorizer.fit_transform(X)
+    X_svm = hash_vectorizer.fit_transform(X)
+    X_mnb = count_vectorizer.fit_transform(X)
 
-    kernels = []
-    kernels.append('linear')
-    kernels.append('polynomial')
-    kernels.append('rbf')
-    kernels.append('sigmoid')
+    option_machines = []
+    option_machines.append('linear')
+    option_machines.append('polynomial')
+    option_machines.append('rbf')
+    option_machines.append('sigmoid')
+    option_machines.append('bayes')
+
+    prueba = False
 
     #Parameters
-    num_ite = 20
+    num_ite = 5
     C = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000]
     coef = [-10,0,10]
     degrees = [2,3,4,5]
     gamma = [0.1,1,10]
+    alpha = [0,0.5,1,5,10]
 
     # parametros de prueba
-    # Quitar comentarios para correr esquema mas pequenho
-    #num_ite = 2
-    #C = [10]
-    #coef = [0]
-    #degrees = [2]
-    #gamma = [0.1]
-
+    if(prueba):
+        num_ite = 2
+        C = [10]
+        coef = [0]
+        degrees = [2]
+        gamma = [0.1]
+        alpha = [1]
 
     machines = {}
     final_scores = {}
 
-    if('linear' in kernels):
+    if('linear' in option_machines):
         #Kernel Lineal
         configurations = list(itertools.product(C))
         scores = {}
@@ -145,7 +162,7 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
             print('     Iteration ' + str(i+1) + ' of ' + str(num_ite))
 
             #Divide los datos
-            X_train, X_test, y_train, y_test = balanced_split(X, y, test_size=0.2)
+            X_train, X_test, y_train, y_test = balanced_split(X_svm, y, test_size=0.2)
 
             for conf in configurations:
 
@@ -174,7 +191,7 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
 
         print(' ')
 
-    if('polynomial' in kernels):
+    if('polynomial' in option_machines):
         #Kernel polynomial
         configurations = list(itertools.product(C,degrees, coef))
         scores = {}
@@ -185,7 +202,7 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
             print('     Iteration ' + str(i+1) + ' of ' + str(num_ite))
 
             #Divide los datos
-            X_train, X_test, y_train, y_test = balanced_split(X, y, test_size=0.2)
+            X_train, X_test, y_train, y_test = balanced_split(X_svm, y, test_size=0.2)
 
             for conf in configurations:
 
@@ -216,7 +233,7 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
 
 
 
-    if('rbf' in kernels):
+    if('rbf' in option_machines):
         #Kernel polynomial
         configurations = list(itertools.product(C,gamma))
         scores = {}
@@ -227,7 +244,7 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
             print('     Iteration ' + str(i+1) + ' of ' + str(num_ite))
 
             #Divide los datos
-            X_train, X_test, y_train, y_test = balanced_split(X, y, test_size=0.2)
+            X_train, X_test, y_train, y_test = balanced_split(X_svm, y, test_size=0.2)
 
             for conf in configurations:
 
@@ -257,7 +274,7 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
         print(' ')
 
 
-    if('sigmoid' in kernels):
+    if('sigmoid' in option_machines):
         #Kernel polynomial
         configurations = list(itertools.product(C, coef))
         scores = {}
@@ -268,7 +285,7 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
             print('     Iteration ' + str(i+1) + ' of ' + str(num_ite))
 
             #Divide los datos
-            X_train, X_test, y_train, y_test = balanced_split(X, y, test_size=0.2)
+            X_train, X_test, y_train, y_test = balanced_split(X_svm, y, test_size=0.2)
 
             for conf in configurations:
 
@@ -298,19 +315,66 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
         print(' ')
 
 
-    ker = max(final_scores.items(), key=operator.itemgetter(1))[0]
+    if('bayes' in option_machines):
 
-    final_machine = machines[ker]
+        #Bayes
+        configurations = list(itertools.product(alpha))
+        scores = {}
+
+        print('Multinomial Bayes')
+
+        for i in range(num_ite):
+            print('     Iteration ' + str(i+1) + ' of ' + str(num_ite))
+
+            #Divide los datos
+            X_train, X_test, y_train, y_test = balanced_split(X_mnb, y, test_size=0.2)
+
+            for conf in configurations:
+
+                clf = MultinomialNB(alpha = conf[0])
+                clf.fit(X_train, y_train)
+
+                y_predicted = clf.predict(X_test)
+
+                score = fitness(y_test, y_predicted)
+
+                if(conf not in scores):
+                    scores[conf] = 0
+
+                scores[conf] = scores[conf] + score
+
+                print('         Configuration: alpha = ' + str(conf[0]) + ' -- Score: ' + str(np.round(score,round_num)))
+
+        scores = {k: v / num_ite for k, v in scores.items()}
+
+        print(' ')
+
+        conf = max(scores.items(), key=operator.itemgetter(1))[0]
+        print(' Max Score: ' + str(scores[conf]))
+        final_scores['bayes'] = scores[conf]
+        machines['bayes'] = MultinomialNB(alpha = conf[0])
+
+        print(' ')
+
+
+    mac = max(final_scores.items(), key=operator.itemgetter(1))[0]
+
+    final_machine = machines[mac]
 
     print('')
-    print('Best Kernel: ' + str(ker))
-    print('Score: ' + str(final_scores[ker]))
+    print('Best Machine: ' + str(mac))
+    print('Score: ' + str(final_scores[mac]))
 
-    final_machine.fit(X,y)
+    if(mac == 'bayes'):
+        final_machine.fit(X_mnb,y)
+        clasificador = Clasificador(final_machine, count_vectorizer)
+        return(clasificador)
+    else:
+        final_machine.fit(X_svm,y)
+        clasificador = Clasificador(final_machine, hash_vectorizer)
+        return(clasificador)
 
 
-    clasificador = Clasificador(final_machine, vectorizer)
-    return(clasificador)
 
 
 data = pd.read_csv('data/dataset_otro.txt', sep='\t', encoding = "ISO-8859-1")
