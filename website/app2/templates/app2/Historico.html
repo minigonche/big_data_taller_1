@@ -29,31 +29,45 @@
             <div class="text-left">
                 <h2>Análisis Histórico</h2>
             </div>
-
             <div class="py-2">
-                <p class="lead"> POR IMPLEMENTAR </p>
+                <p class="lead">
+                    La visualización de <b>Red por <i>Rank</i></b> nos permite escoger uno de tres maneras de evaluar inlfuencia del usuario, mientras que
+                    la visualización de <b>Crecimiento Histórico</b> nos permite evaluar como la red ha crecido a travez de los años.
+                </p>
             </div>
-
         </div>
 
-        <div  class="container">
-            <div class = "row">
-                <div class = "col-2 text-center">
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
                     <button type="button" class="btn btn-secondary" onclick="location.href='{%url 'app2:rankedNetwork' %}'">Red con <i>Rank</i></button>
                 </div>
-                <div class = "col-2 text-center">
-                    <button type="button" class="btn btn-secondary" onclick="location.href='{%url 'app2:rankedNetwork' %}'">Crecimiento Historico</button>
+                <div class="col text-center">
+                    <button type="button" class="btn btn-secondary" onclick="location.href='{%url 'app2:historicGrowth' %}'">Crecimiento Histórico</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <img class="d-block mx-auto mb-4" style="border: #6c757d 3px solid; margin: 25px 25px 25px 25px" src="{% static "app2/img/ranked_network.png" %}" alt="" width="342" height="342">
+                </div>
+                <div class="col text-center">
+                    <img class="d-block mx-auto mb-4" style="border: #6c757d 3px solid; margin: 25px 25px 25px 25px" src="{% static "app2/img/ranked_network.png" %}" alt="" width="342" height="342">
                 </div>
             </div>
         </div>
 
 
         <!-- BOTON VOLVER -->
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-4"></div>
                     <div class="col-4 text-center">
-                        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app2:index' %}'" > Volver</button>
+                        <button type="button" class="btn btn-primary" style="margin: 100px 100px 100px 100px" onclick="location.href='{% url 'app2:index' %}'" > Volver</button>
                     </div>
                 <div class="col-4"></div>
             </div>
@@ -66,3 +80,4 @@
 
     </body>
 </html>
+

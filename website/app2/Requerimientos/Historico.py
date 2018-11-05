@@ -54,7 +54,7 @@ def ranked_network(request):
 
         count = 0
         for friend in friends:
-            if count == 10:
+            if count == 50:
                 break
             #add to json
             TTF = 0
