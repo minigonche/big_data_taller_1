@@ -37,6 +37,7 @@ def Clasificar(request):
 def BuscarDistribucion(request):
     return pol.hacer_requerimiento_buscar_dsitribucion(request, dar_base_de_datos())
 
+
 def dar_base_de_datos():
     with open('app2/static/app2/jsons/db_configuration.json','r') as f:
         data = json.load(f)
