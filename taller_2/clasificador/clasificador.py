@@ -4,7 +4,6 @@
 #Clasificador polaridad
 from classifier import *
 
-
 # Librerias externas
 import numpy as np
 import pickle
@@ -18,8 +17,8 @@ class Clasificador:
     def __init__(self, pickle_loc = "clasificador.pkl"):
 
         self.polaridad = SentimentClassifier()
-        with open(pickle_loc, "rb") as input_file:
-            self.clasificador = pickle.load()
+        #with open(pickle_loc, "rb") as input_file:
+        #    self.clasificador = pickle.load()
 
 
     def dar_polaridad(self, text):

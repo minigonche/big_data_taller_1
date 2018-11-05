@@ -43,6 +43,7 @@ def actualizar_hash_clouds(texto):
 mydb.polaridad.drop()
 mycol = mydb["polaridad"]
 
+count = 0
 with open("../scrapping/polaridad/data/2018-10-22/2018-10-22.txt",'r') as f:
     for line in f.readlines():
 
@@ -51,7 +52,8 @@ with open("../scrapping/polaridad/data/2018-10-22/2018-10-22.txt",'r') as f:
         item['polaridad'] = cla.dar_polaridad(item['full_text'])
         item['sexismo'] = cla.dar_sexismo(item['full_text'])
         actualizar_hash_clouds(item['full_text'])
-
+        
+        count += 1
         x = mycol.insert_one(item)
         print(x.inserted_id)
 
@@ -65,4 +67,5 @@ with open("hash_cloud/frequency_polaridad.json",'w') as f:
 with open("hash_cloud/frequency_sexismo.json",'w') as f:
     json.dump(sexismo_count, f)
 
+print(count)
 print("Listo")
