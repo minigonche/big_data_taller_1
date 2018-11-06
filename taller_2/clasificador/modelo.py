@@ -15,25 +15,20 @@ import itertools
 import operator
 from scipy.sparse import vstack
 import collections
-
-class Clasificador:
-
-    def __init__(self, modelo, vectorizer):
-        self.vectorizer = vectorizer
-        self.modelo = modelo
+import pprint
+import sklearn
+import pickle
 
 
-
-    def predict(self, X_entrada):
-        X_entrada = self.vectorizer.transform(X_entrada)
-        return(self.modelo.predict(X_entrada))
-
-
+from clasificador import EncapsularClasificador
 
 def balanced_split(X,y, test_size = 0.2):
     """
     Metodo que divide la muestra de forma balanceada
     """
+
+    if(type(X) == type([1,2])):
+        X = np.array(X)
 
     X_train, X_test, y_train, y_test = None, None, None, None
 
@@ -49,8 +44,12 @@ def balanced_split(X,y, test_size = 0.2):
         if(X_train is None):
             X_train, X_test, y_train, y_test = X_label_train, X_label_test, y_label_train, y_label_test
         else:
-            X_train = vstack([X_train, X_label_train])
-            X_test = vstack([X_test, X_label_test])
+            if(type(X_train) == type(np.array([1]))):
+                X_train = np.concatenate((X_train, X_label_train))
+                X_test = np.concatenate((X_test, X_label_test))
+            else:
+                X_train = vstack([X_train, X_label_train])
+                X_test = vstack([X_test, X_label_test])
             #Numpy structures
             y_train = np.concatenate((y_train,y_label_train))
             y_test = np.concatenate((y_test,y_label_test))
@@ -120,28 +119,34 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
                                  encoding = 'utf-8',
                                  ngram_range = (1,3))
 
+
+    hash_vectorizer = count_vectorizer
+
     X_svm = hash_vectorizer.fit_transform(X)
     X_mnb = count_vectorizer.fit_transform(X)
 
-    option_machines = []
-    option_machines.append('linear')
-    option_machines.append('polynomial')
-    option_machines.append('rbf')
-    option_machines.append('sigmoid')
-    option_machines.append('bayes')
+
 
     prueba = False
 
     #Parameters
-    num_ite = 5
-    C = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000]
-    coef = [-10,0,10]
-    degrees = [2,3,4,5]
-    gamma = [0.1,1,10]
-    alpha = [0,0.5,1,5,10]
-
-    # parametros de prueba
-    if(prueba):
+    if(not prueba):
+        option_machines = []
+        option_machines.append('linear')
+        option_machines.append('polynomial')
+        option_machines.append('rbf')
+        option_machines.append('sigmoid')
+        option_machines.append('bayes')
+        num_ite = 5
+        C = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000]
+        coef = [-10,0,10]
+        degrees = [2,3,4,5]
+        gamma = [0.1,1,10]
+        alpha = [0,0.5,1,5,10]
+    else:
+        option_machines = []
+        option_machines.append('linear')
+        option_machines.append('bayes')
         num_ite = 2
         C = [10]
         coef = [0]
@@ -365,21 +370,98 @@ def configurar_modelo(X, y, idioma = 'SPANISH', fitness = accuracy_score):
     print('Best Machine: ' + str(mac))
     print('Score: ' + str(final_scores[mac]))
 
+
     if(mac == 'bayes'):
-        final_machine.fit(X_mnb,y)
-        clasificador = Clasificador(final_machine, count_vectorizer)
-        return(clasificador)
+        final_vectorizer = count_vectorizer
     else:
-        final_machine.fit(X_svm,y)
-        clasificador = Clasificador(final_machine, hash_vectorizer)
-        return(clasificador)
+        final_vectorizer = hash_vectorizer
+
+    clasificador = EncapsularClasificador(final_machine)
+
+    class_results = {}
+    class_results['accuracy'] = []
+
+    unique_classes = np.unique(y).tolist()
+
+    for cla in unique_classes:
+        class_results[cla] = {}
+        class_results[cla]['precision'] = []
+        class_results[cla]['recall'] = []
 
 
+    #Constructs final statistics
+    print('')
+    print('Constructing Final Statistics')
+    print('')
+    for i in range(num_ite):
+
+        print('Iteration ' + str(i+1) + ' of ' + str(num_ite))
+        maquina = EncapsularClasificador.clone(clasificador)
+        X_train, X_test, y_train, y_test = balanced_split(X, y, test_size=0.2)
+
+        maquina.fit(X_train,y_train)
+        y_predicted = maquina.predict(X_test)
+
+        class_results['accuracy'].append(accuracy_score(y_test, y_predicted))
+
+        for cla in unique_classes:
+            #precision
+            sub_test = y_test[y_predicted == cla]
+            precision = np.sum(sub_test == cla)/(max(len(sub_test),1))
+            #print('Precision for class ' + str(cla) + ': '+ str(precision))
+            class_results[cla]['precision'].append(precision)
+
+            #recall
+            sub_test = y_predicted[y_test == cla]
+            recall = np.sum(sub_test == cla)/(max(len(sub_test),1))
+            #print('Recall for class ' + str(cla) + ': '+ str(recall))
+            class_results[cla]['recall'].append(recall)
+
+    class_results_consolidated = {}
+    class_results_consolidated['accuracy'] = np.round(100*np.mean(class_results['accuracy']),3)
+
+    for cla in unique_classes:
+        class_results_consolidated[cla] = {}
+
+        precision = np.round(100*np.mean(class_results[cla]['precision']),3)
+        recall = np.round(100*np.mean(class_results[cla]['recall']),3)
+
+        class_results_consolidated[cla]['precision'] = precision
+        class_results_consolidated[cla]['recall'] = recall
 
 
-data = pd.read_csv('data/dataset_otro.txt', sep='\t', encoding = "ISO-8859-1")
-data = data.loc[data['rating.mode']!=4]
+    pprint.pprint(class_results_consolidated, width=1)
 
-clf = configurar_modelo(data['content'].values.tolist(), data['rating.mode'].values.tolist(), idioma = "ENGLISH")
+    clasificador.fit(X,y)
+    return(clasificador)
 
-print(clf.predict(["I'm sick and tired of the decisions that the president is taking. No more!","cheers for the NYP and their amazing work!"]))
+
+#data_otra = pd.read_csv('data/dataset_otro.txt', sep='\t', encoding = "ISO-8859-1")
+#data_otra = data_otra.loc[data_otra['rating.mode']!=4]
+#clf = configurar_modelo(data_otra['content'].values.tolist(), data_otra['rating.mode'].values.tolist(), idioma = "ENGLISH")
+#print(clf.predict(["I'm sick and tired of the decisions that the president is taking. No more!","cheers for the NYP and their amazing work!"]))
+
+
+categoria = 'MATONEO'
+
+
+data_propia = pd.read_csv('data/datos_polaridad.csv', sep=',', encoding = "ISO-8859-1")
+data_propia = data_propia[['TEXTO',categoria]]
+data_propia.columns = ['TEXTO','CATEGORIA']
+data_propia.dropna(inplace = True)
+
+
+if(categoria == 'MATONEO'):
+    data_propia.loc[data_propia.CATEGORIA == 'n', 'CATEGORIA'] = 0
+    data_propia.loc[data_propia.CATEGORIA == 'm', 'CATEGORIA'] = 1
+    data_propia.loc[data_propia.CATEGORIA == 'a', 'CATEGORIA'] = 2
+    data_propia.loc[data_propia.CATEGORIA == 'c', 'CATEGORIA'] = 3
+
+print('Total Datos: ' + str(data_propia.shape[0]))
+print(data_propia.CATEGORIA.value_counts())
+
+clf = configurar_modelo(data_propia['TEXTO'].values.tolist(), data_propia['CATEGORIA'].values.tolist(), idioma = "SPANISH")
+
+
+with open('clasificadores_entrenados/' + categoria + '_machine.pkl', 'wb') as output:
+    pickle.dump(clf, output)
