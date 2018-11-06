@@ -34,7 +34,7 @@ def historicGrowth(request):
 
 
 def Matoneo(request):
-	return mat.hacer_requerimiento(request, dar_base_de_datos())
+	return mat.hacer_requerimiento(request)
 
 def Clasificar(request):
     return pol.hacer_requerimiento_clasificar(request, dar_base_de_datos())
@@ -55,4 +55,3 @@ def dar_base_de_datos():
         return(mydb)
 
     raise("Hubo un error conectando a la base de datos")
-
