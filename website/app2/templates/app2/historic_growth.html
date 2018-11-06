@@ -50,7 +50,8 @@
             </div>
             <div class="py-2">
                 <p class="lead">
-                   POR IMPLEMENTAR
+                Para visualisar el crecimiento de la red de usuarios pertinentes a la conversación de violencia de género,
+                use el slider para seleccionar un punto en el tiempo a partir de Abril 2007.
                 </p>
             </div>
         </div>
@@ -59,7 +60,45 @@
 
                 <div class="py-5 text-center">
                          <div id="slider">
-                            {% block slider %}{% endblock %}
+                            <FORM method="post" id="form">{% csrf_token %}
+                            <P>
+                            <input type="range" name="date" min="1" max="140" value="1" class="slider" id="myRange">
+
+                            <p>Fecha: <span id="demo"></span></p><br>
+                            <!--<INPUT type="submit" name="Send">-->
+                            </P>
+                            </FORM>
+
+                            <script>
+                                var slider = document.getElementById("myRange");
+                                var output = document.getElementById("demo");
+
+                                output.innerHTML = slider.value;
+
+
+                                slider.oninput = function() {
+                                  output.innerHTML = this.value;
+                                };
+
+                                slider.onmouseup = function () {
+
+                                const months_names = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar'];
+
+                                if(slider.value) {
+                                    console.log(slider.value);
+                                    var year = Math.round(parseInt(slider.value) / 12) + 2007;
+                                    var month = (parseInt(slider.value) - 1) % 12;
+                                    month = months_names[month];
+                                    var date = month.concat(' - ').concat(String(year));
+                                    console.log(date);
+                                } else {
+                                    date = 'Apr - 2007';
+                                    console.log(date);
+                                }
+                                  document.getElementById("form").submit();
+                                }
+                            </script>
+
                          </div>
                 </div>
 
@@ -68,6 +107,8 @@
 
                 <canvas id="network" width="1000" height="500 "></canvas>
                 <script src="https://d3js.org/d3.v4.min.js"></script>
+
+
 
                 <script>
 
@@ -85,11 +126,9 @@
                         x = d3.scaleOrdinal().range([20, width - 20]),
                         ctx = canvas.node().getContext('2d'),
                         simulation = d3.forceSimulation()
-                            .force('x', d3.forceX( function (d) {
-                                return x(position(d));
-                                }))
+                            .force('x', d3.forceX(width/2 ))
                             .force('y', d3.forceY(height/2))
-                            .force('collide', d3.forceCollide(r))
+                            .force('collide', d3.forceCollide(r + 5))
                             .force('link', d3.forceLink()
                                 .id(function (d) { return d.user_id; }));
 
@@ -142,23 +181,25 @@
                     // }
 
                     function selectColor(d) {
-                        if(d.classification === -2){
-                            return '#068587';
-                        } else if(d.classification === -1) {
-                            return '#4FB99F';
-                        } else if(d.classification === 0) {
-                            return '#7B9BA6';
-                        } else if(d.classification === 1) {
-                            return '#F2B134';
-                        } else if(d.classification === 2) {
-                            return '#ED553B'}
+                        var color;
+                        var new_users = '{{ last_added }}';
+                        var new_users_list = new_users.split(',');
+                        for(i = 0; i < new_users_list.length; i++)
+                            console.log(new_users_list[i]);
+                            if(d.user_id === parseInt(new_users_list[i])){
+                                console.log(d.user_id);
+                                color = '#ED553B';
+                            } else {
+                                color = '#7B9BA6';
+                            }
+                        return color
                     }
 
                     <!-- variables x and y are automatically controlled by simulation system -->
                     function drawNode(d) {
 
                         ctx.beginPath();
-                        ctx.fillStyle = selectColor(d) ;
+                        ctx.fillStyle = '#7B9BA6';
                         ctx.globalAlpha = 0.7;
                         ctx.moveTo(d.x, d.y);       <!-- Iterates over the nodes in graph -->
                         ctx.arc(d.x, d.y, r, 0, 2 * Math.PI);   <!-- draws a circle -->

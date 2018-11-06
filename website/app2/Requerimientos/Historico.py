@@ -85,18 +85,6 @@ def historic_growth(request):
 
     return render(request, 'app2/historic_growth.html', None)
 
-def addMissingDates():
-    months_number = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3]
-    for i in range(140):
-        year = math.floor(int(i) / 12) + 2007
-        month = (int(i) - 1) % 12
-        month_num = months_number[month]
-        date_id = int(str(year) + str(month_num))
-        item = {"_id": date_id, "value": ""}
-
-        if myresults.find_one(item["_id"]) == None:
-            myresults.insert(item)
-
 def generate_historic_collectino():
 
 
@@ -150,6 +138,13 @@ def selectDate(month, year):
 
     return date
 
+def lastAdded(month, year):
+    date = selectDate(month, year)
+    print(date)
+    result = db.myresults.find_one({"_id": date})
+    user_list = result["value"]
+
+    return user_list
 
 def getUpUntil(month, year):
 
@@ -217,10 +212,8 @@ def getNodes(month, year):
         json.dump(user_json, outfile)
 
 def getDate(request):
-    generate_historic_collectino()
     time.sleep(2)
-    addMissingDates()
-
+    context = {"last_added": ''}
     response = request.POST.get('date')
     months_names = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar']
     months_number = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3]
@@ -229,13 +222,16 @@ def getDate(request):
         month = (int(response) - 1)%12
         month_num = months_number[month]
         month_nam = months_names[month]
+        last_added = lastAdded(month_num, year)
+        context = {"last_added": str(last_added)}
 
         getNodes(month_num, year)
         time.sleep(2)
     else:
         getNodes(4, 2007)
 
-    context = {}
 
-    return render(request, 'app2/input.html', context)
+
+
+    return render(request, 'app2/historic_growth.html', context)
 
