@@ -165,7 +165,15 @@ def getUpUntil(month, year):
             if i != '':
                 final_list.append(i)
 
-        if id["_id"] == date:
+        current_year = int(id["_id"][:4])
+        current_month = id["_id"][-2:]
+        if current_month[0] != 1:
+            current_month = int(current_month[1])
+        else:
+            current_month= int(current_month)
+
+
+        if ((year == current_year) and (month <= current_month)) or (year < current_year):
             break
 
 
@@ -231,6 +239,3 @@ def getDate(request):
 
     return render(request, 'app2/input.html', context)
 
-
-
-print(getUpUntil(5, 2007))
