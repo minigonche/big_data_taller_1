@@ -12,7 +12,7 @@ import time
 import numpy as np
 
 
-def actualizar_hash_clouds(texto, polaridad_count, sexismo_count):
+def actualizar_hash_clouds(texto, polaridad_count, sexismo_count, cla):
     #Extrae los elementos con #
     hash_tags = re.findall(r"#(\w+)", texto)
     for hash in hash_tags:
@@ -33,7 +33,7 @@ def actualizar_hash_clouds(texto, polaridad_count, sexismo_count):
     return(polaridad_count, sexismo_count)
 
 
-def migrar(collection, numero_de_tuits, path = 'tuits_todos/', guardar_hash_clouds = False):
+def migrar(collection, numero_de_tuits, path = 'tuits_todos/', guardar_hash_clouds = True):
 
 
 
@@ -65,9 +65,10 @@ def migrar(collection, numero_de_tuits, path = 'tuits_todos/', guardar_hash_clou
 
                         item['polaridad'] = cla.dar_polaridad(item['full_text'])
                         item['sexismo'] = cla.dar_sexismo(item['full_text'])
+                        item['matoneo'] = cla.dar_matoneo(item['full_text'])
 
                         if(guardar_hash_clouds):
-                            polaridad_count, sexismo_count = actualizar_hash_clouds(item['full_text'])
+                            polaridad_count, sexismo_count = actualizar_hash_clouds(item['full_text'], polaridad_count, sexismo_count, cla)
 
                         migrados += 1
                         collection.insert_one(item)
@@ -110,6 +111,8 @@ def exportar_hash_clouds(polaridad_count, sexismo_count):
 
 if __name__ == "__main__":
 
+    host = 'bigdata-mongodb-01.virtual.uniandes.edu.co'
+    port = 8083
     #Crear o migrar
     comando = sys.argv[1]
     #Nombre de la colleccion
@@ -118,8 +121,8 @@ if __name__ == "__main__":
     numero_tuits = int(sys.argv[3])
 
 
-    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-    db = myclient["g7_tweets"]
+    myclient = pymongo.MongoClient("mongodb://" + host  + ':'  + str(port) + "/")
+    db = myclient["Grupo07"]
 
     if(comando.upper() == 'CREAR'):
         if(nombre_colleccion in db.collection_names()):

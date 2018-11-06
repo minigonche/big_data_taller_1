@@ -4,6 +4,10 @@ import re
 import time
 import numpy as np
 import random
+from pymongo import MongoClient
+from bson.code import Code
+
+
 
 #base de datos
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -15,8 +19,8 @@ print_every = 10
 
 coleccion = 'polaridad'
 
-tamanhos = ['tiny','micro','small','medium','large']
-tamanhos = ['tiny','micro','small']#,'medium','large']
+tamanhos = ['tiny','micro','small','medium','large','huge']
+#tamanhos = ['tiny','micro','small']#,'medium','large']
 
 pool_palabras = ['IgualdadDeGenero','machismo','feminismo','mujer','hombre','feminista','machista','metoo','genero','sexismo','igualdad']
 words = ['feminismo']
@@ -27,6 +31,36 @@ random.randint(2,10)
 final_times = {}
 
 global_start =  time.time()
+
+
+#MApreduce Scheme
+
+mapper = Code("""
+            function() {
+
+                var date = this.user.created_at;
+                var user = this.user.id_str;
+                date = date.split(" ");
+                var day = String(date[2]);
+                var month = String(date[1]);
+                var year = String(date[5]);
+
+                emit(month.concat(year), user);
+            }
+            """)
+
+reducer = Code("""
+            function(key, values) {
+                var total = 0;
+                var user_list = [];
+                var result = '';
+                for (var i = 0; i < values.length; i++) {
+                    result = result.concat(values[i]).concat(',');
+                }
+
+                return result
+            }
+            """)
 
 for tam in tamanhos:
     print('')
@@ -54,7 +88,11 @@ for tam in tamanhos:
 
         start_time = time.time()
         #Queries
+        #Query con pipeline
         conteo = mongo_db[nombre_col].aggregate([{"$match": {"full_text": regx}},{"$group": {"_id": "$polaridad", "total" : { "$sum": 1 }}} ])
+        #Query con map reduce
+        result = mongo_db[nombre_col].map_reduce(mapper, reducer, "myresults")
+
         final_time = time.time() - start_time
         excecution_times.append(final_time)
         if(print_count == print_every):

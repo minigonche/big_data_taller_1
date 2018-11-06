@@ -51,8 +51,9 @@ with open("../scrapping/polaridad/data/2018-10-22/2018-10-22.txt",'r') as f:
 
         item['polaridad'] = cla.dar_polaridad(item['full_text'])
         item['sexismo'] = cla.dar_sexismo(item['full_text'])
+        item['matoneo'] = cla.dar_sexismo(item['full_text'])
         actualizar_hash_clouds(item['full_text'])
-        
+
         count += 1
         x = mycol.insert_one(item)
         print(x.inserted_id)
