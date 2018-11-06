@@ -79,7 +79,7 @@ def ranked_network(request, db):
     user_json = {"nodes": nodes, "links": links}
 
     with open(
-        "/Users/andreaparra/PycharmProjects/big_data_taller_1/website/app2/static/app2/jsons/Historico/users_test.json",
+        "app2/static/app2/jsons/Historico/users_test.json",
         "w") as outfile:
         json.dump(user_json, outfile)
 
@@ -215,13 +215,13 @@ def getNodes(month, year, db):
     user_json = {"nodes": nodes, "links": links}
 
     with open(
-            "/Users/andreaparra/PycharmProjects/big_data_taller_1/website/app2/static/app2/jsons/Historico/historic_data.json",
+            "app2/static/app2/jsons/Historico/historic_data.json",
             "w") as outfile:
         json.dump(user_json, outfile)
 
 def getDate(request, db):
 
-
+ #hola
     time.sleep(2)
     context = {"last_added": ''}
     response = request.POST.get('date')
