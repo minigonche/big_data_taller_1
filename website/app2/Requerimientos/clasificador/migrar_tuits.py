@@ -12,7 +12,7 @@ import time
 import numpy as np
 
 
-def actualizar_hash_clouds(texto, polaridad_count, sexismo_count, cla):
+def actualizar_hash_clouds(texto, polaridad_count, sexismo_count, matoneo_count, cla):
     #Extrae los elementos con #
     hash_tags = re.findall(r"#(\w+)", texto)
     for hash in hash_tags:
@@ -27,11 +27,17 @@ def actualizar_hash_clouds(texto, polaridad_count, sexismo_count, cla):
             sexismo_count[hash]['polarity'] = cla.dar_sexismo(hash)
             sexismo_count[hash]['count'] = 0
 
+            matoneo_count[hash] = {}
+            matoneo_count[hash]['polarity'] = cla.dar_matoneo(hash)
+            matoneo_count[hash]['count'] = 0
+
+
         #Actualiza los contadores
         polaridad_count[hash]['count'] = polaridad_count[hash]['count'] + 1
         sexismo_count[hash]['count'] = sexismo_count[hash]['count'] + 1
+        matoneo_count[hash]['count'] = matoneo_count[hash]['count'] + 1
 
-    return(polaridad_count, sexismo_count)
+    return(polaridad_count, sexismo_count, matoneo_count)
 
 
 def migrar(collection, numero_de_tuits, path = 'app2/Requerimientos/clasificador/tuits_todos/', guardar_hash_clouds = True):
@@ -42,6 +48,7 @@ def migrar(collection, numero_de_tuits, path = 'app2/Requerimientos/clasificador
 
     polaridad_count = {}
     sexismo_count = {}
+    matoneo_count = {}
 
     cla = Clasificador()
 
@@ -69,7 +76,7 @@ def migrar(collection, numero_de_tuits, path = 'app2/Requerimientos/clasificador
                         item['matoneo'] = cla.dar_matoneo(item['full_text'])
 
                         if(guardar_hash_clouds):
-                            polaridad_count, sexismo_count = actualizar_hash_clouds(item['full_text'], polaridad_count, sexismo_count, cla)
+                            polaridad_count, sexismo_count, matoneo_count = actualizar_hash_clouds(item['full_text'], polaridad_count, sexismo_count, matoneo_count, cla)
 
                         migrados += 1
                         collection.insert_one(item)
@@ -94,19 +101,27 @@ def migrar(collection, numero_de_tuits, path = 'app2/Requerimientos/clasificador
 
                             print('Time per Tweet: ' + str(np.round(delta/numero_de_tuits, 4)) + ' Seconds')
                             print('')
+
+                            if(guardar_hash_clouds):
+                                exportar_hash_clouds(polaridad_count, sexismo_count, matoneo_count)
                             return(polaridad_count, sexismo_count)
 
 
 
 
 
-def exportar_hash_clouds(polaridad_count, sexismo_count):
+
+def exportar_hash_clouds(polaridad_count, sexismo_count, matoneo_count):
     #Guarda los word clouds
     with open("app2/Requerimientos/clasificador/hash_cloud/frequency_polaridad.json",'w') as f:
         json.dump(polaridad_count, f)
 
     with open("app2/Requerimientos/clasificador/hash_cloud/frequency_sexismo.json",'w') as f:
         json.dump(sexismo_count, f)
+
+    with open("app2/Requerimientos/clasificador/hash_cloud/frequency_matoneo.json",'w') as f:
+        json.dump(matoneo_count, f)
+
 
 
 

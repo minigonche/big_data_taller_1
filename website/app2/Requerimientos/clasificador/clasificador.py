@@ -114,6 +114,11 @@ class Clasificador:
             data_propia.columns = ['TEXTO','CATEGORIA']
             data_propia.dropna(inplace = True)
 
+            data_propia.loc[data_propia.CATEGORIA == 'n', 'CATEGORIA'] = 0
+            data_propia.loc[data_propia.CATEGORIA == 'm', 'CATEGORIA'] = 1
+            data_propia.loc[data_propia.CATEGORIA == 'a', 'CATEGORIA'] = 2
+            data_propia.loc[data_propia.CATEGORIA == 'c', 'CATEGORIA'] = 3
+
             self.matoneo = EncapsularClasificador(maquina_matoneo)
             self.matoneo.fit(data_propia['TEXTO'].values.tolist(), data_propia['CATEGORIA'].values.tolist())
 

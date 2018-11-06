@@ -146,7 +146,6 @@ def hacer_requerimiento_buscar_dsitribucion(request, mongo_db):
 
 
 
-
 def dar_polaridad(texto):
 
     cla = ClasificadorSingleton()
