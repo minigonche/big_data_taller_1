@@ -17,17 +17,20 @@ data1 = \
 client = MongoClient('localhost', 27017)
 db = client.twitterdb
 friend_collection = db.friend_collection
+condensed_collection = db.condensed_collection
+
+
 
 def getFriends(id):
 
-    res = friend_collection.find_one({"_id": str(id)})
+    res = condensed_collection.find_one({"_id": str(id)})
     if res != None:
         friends = res["friends"]
         return friends
 
 def getUsers(limit):
     users_list = []
-    for user in friend_collection.find().limit(limit):
+    for user in condensed_collection.find().limit(limit):
         user_id = user["_id"]
         users_list.append(user_id)
 
@@ -41,7 +44,7 @@ def getSampleData(users_list, data):
         friends_list = []
         count = 0
         for friend in friends:
-            if count == 100:
+            if count == 50:
                 break
             count += 1
             if getFriends(friend) != None :
@@ -128,9 +131,10 @@ def getPageRank(adjMatrix, weight_vector, rank_vector):
 
 def main():
 
-    users_list = getUsers(100)
+    users_list = getUsers(50)
     data = []
     getSampleData(users_list, data)
+    print('Done getting data')
 
     with open('real_data.json') as f:
         data = json.load(f)

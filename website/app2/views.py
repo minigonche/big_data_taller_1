@@ -24,8 +24,14 @@ def Historico(request):
 def rankedNetwork(request):
 	return his.ranked_network(request)
 
+def getDate(request):
+    value = request.POST
+    data = value.cleaned_data["data"]
+    return his.getDate(data)
+
 def historicGrowth(request):
-	return his.historic_growth(request)
+	return his.getDate(request)
+
 
 def Matoneo(request):
 	return mat.hacer_requerimiento(request, dar_base_de_datos())
@@ -49,3 +55,4 @@ def dar_base_de_datos():
         return(mydb)
 
     raise("Hubo un error conectando a la base de datos")
+

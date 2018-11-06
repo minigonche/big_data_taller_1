@@ -1,10 +1,11 @@
 #Historico
-
 from django.shortcuts import render
 from pymongo import MongoClient
 import random
 import json
-import os
+from bson.code import Code
+import math
+import time
 
 
 client = MongoClient('localhost', 27017)
@@ -13,6 +14,7 @@ friend_collection = db.friend_collection
 collection = db.testcollection1
 ranked_collection = db.ranked_collection
 condensed_collection = db.condensed_collection
+myresults = db.myresults
 
 def hacer_requerimiento(request):
 
@@ -79,6 +81,156 @@ def ranked_network(request):
 
 def historic_growth(request):
 
-    # TODO
+    getNodes(5, 2007)
 
     return render(request, 'app2/historic_growth.html', None)
+
+def addMissingDates():
+    months_number = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3]
+    for i in range(140):
+        year = math.floor(int(i) / 12) + 2007
+        month = (int(i) - 1) % 12
+        month_num = months_number[month]
+        date_id = int(str(year) + str(month_num))
+        item = {"_id": date_id, "value": ""}
+
+        if myresults.find_one(item["_id"]) == None:
+            myresults.insert(item)
+
+def generate_historic_collectino():
+
+
+    mapper = Code("""
+                function() {
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    var date = this.user.created_at;
+                    var user = this.user.id_str;
+                    date = date.split(" ");
+                    var day = String(date[2]);
+                    var month = String(date[1]);
+                    
+                    var i;
+                    for (i = 0; i < months.length; i++) {
+                        if(months[i] === month){
+                        month = String(i + 1);
+                        }
+                    }
+                    
+                    var year = String(date[5]);
+
+                    emit(year.concat(month), user);
+                }
+                """)
+
+    reducer = Code("""
+                function(key, values) {
+                    var total = 0;
+                    var user_list = [];
+                    var result = '';
+                    for (var i = 0; i < values.length; i++) {
+                        result = result.concat(values[i]).concat(',');
+                    } 
+
+                    return result
+                }
+                """)
+
+    collection.map_reduce(mapper, reducer, "myresults")
+
+
+
+def addNodes(old_user_list, new_user_list):
+    for i in old_user_list:
+        new_user_list.append(i)
+
+    return new_user_list
+
+def selectDate(month, year):
+    date = str(year) + str(month)
+
+    return date
+
+
+def getUpUntil(month, year):
+
+    date = selectDate(month, year)
+    print(date)
+    final_list = []
+
+    for id in myresults.find():
+        users = id["value"]
+        users = users[:-1]
+        users_list = users.split(',')
+        for i in users_list:
+            if i != '':
+                final_list.append(i)
+
+        if id["_id"] == date:
+            break
+
+
+    return final_list
+
+def getNodes(month, year):
+
+    user_list = getUpUntil(month, year)
+
+    sexismo = [-2, -1, 0, 1, 2]
+    nodes = []
+    links = []
+
+    for user in condensed_collection.find().limit(100):
+        if user["_id"] not in user_list:
+            continue
+
+        user_id = user["_id"]
+        friends = user["friends"]
+
+        # add to json
+        user = {"user_id": str(user_id), "classification": sexismo[random.randint(0, 4)]}
+        nodes.append(user)
+
+        count = 0
+        for friend in friends:
+            if count == 50:
+                break
+            # add to json
+
+            nodes.append({"user_id": str(friend), "classification": sexismo[random.randint(0, 4)]})
+            link = {"source": str(user_id), "target": str(friend)}
+            links.append(link)
+            count += 1
+
+    user_json = {"nodes": nodes, "links": links}
+
+    with open(
+            "/Users/andreaparra/PycharmProjects/big_data_taller_1/website/app2/static/app2/jsons/Historico/historic_data.json",
+            "w") as outfile:
+        json.dump(user_json, outfile)
+
+def getDate(request):
+    generate_historic_collectino()
+    time.sleep(2)
+    addMissingDates()
+
+    response = request.POST.get('date')
+    months_names = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar']
+    months_number = [4, 5, 6, 7, 8, 9, 10, 11, 12, 1, 2, 3]
+    if response:
+        year = math.floor(int(response) / 12) + 2007
+        month = (int(response) - 1)%12
+        month_num = months_number[month]
+        month_nam = months_names[month]
+
+        getNodes(month_num, year)
+        time.sleep(2)
+    else:
+        getNodes(4, 2007)
+
+    context = {}
+
+    return render(request, 'app2/input.html', context)
+
+
+
+print(getUpUntil(5, 2007))
