@@ -6,7 +6,11 @@ import numpy as np
 import pandas as pd
 import re
 
+from app2.Requerimientos.clasificador.clasificador import *
+
 def hacer_requerimiento_polaridad(request, mongo_db):
+
+    cla = ClasificadorSingleton()
 
     nombre_col = "polaridad"
     max_display = 200
@@ -81,12 +85,6 @@ def hacer_requerimiento_clasificar(request, mongo_db):
         data['sexismo'] = sexismos[sex]
 
 
-
-
-
-
-
-
     return render(request, 'app2/Clasificador_vivo.html', data)
 
 
@@ -147,14 +145,14 @@ def hacer_requerimiento_buscar_dsitribucion(request, mongo_db):
     return render(request, 'app2/Distribucion.html', data)
 
 
-def dar_polaridad(texto):
-    #TODO
-    #Hacer llamado al clasificador de verdad
 
-    return(int(np.round(np.random.uniform()*2-1)))
+
+def dar_polaridad(texto):
+
+    cla = ClasificadorSingleton()
+    return(cla.dar_polaridad(texto))
 
 def dar_sexismo(texto):
-    #TODO
-    #Hacer llamado al clasificador de verdad
 
-    return(int(np.round(np.random.uniform()*2-1)))
+    cla = ClasificadorSingleton()
+    return(cla.dar_sexismo(texto))
