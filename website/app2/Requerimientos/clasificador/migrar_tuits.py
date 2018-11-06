@@ -112,14 +112,17 @@ def migrar(collection, numero_de_tuits, path = 'app2/Requerimientos/clasificador
 
 
 def exportar_hash_clouds(polaridad_count, sexismo_count, matoneo_count):
+
+
+    ubicacion = 'app2/static/app2/json/hash_cloud/'
     #Guarda los word clouds
-    with open("app2/Requerimientos/clasificador/hash_cloud/frequency_polaridad.json",'w') as f:
+    with open(ubicacion + "frequency_polaridad.json",'w') as f:
         json.dump(polaridad_count, f)
 
-    with open("app2/Requerimientos/clasificador/hash_cloud/frequency_sexismo.json",'w') as f:
+    with open(ubicacion + "frequency_sexismo.json",'w') as f:
         json.dump(sexismo_count, f)
 
-    with open("app2/Requerimientos/clasificador/hash_cloud/frequency_matoneo.json",'w') as f:
+    with open(ubicacion + "frequency_matoneo.json",'w') as f:
         json.dump(matoneo_count, f)
 
 
