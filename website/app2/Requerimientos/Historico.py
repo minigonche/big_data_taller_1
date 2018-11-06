@@ -91,7 +91,7 @@ def historic_growth(request, db):
 
     return render(request, 'app2/historic_growth.html', None)
 
-def generate_historic_collectino():
+def generate_historic_collectino(db):
 
 
     mapper = Code("""
@@ -129,7 +129,7 @@ def generate_historic_collectino():
                 }
                 """)
 
-    collection.map_reduce(mapper, reducer, "myresults")
+    db.testcollection1.map_reduce(mapper, reducer, "myresults")
 
 
 
@@ -185,6 +185,7 @@ def getNodes(month, year, db):
 
     condensed_collection = db.condensed_collection
     user_list = getUpUntil(month, year, db)
+    collection = db.testcollection1
 
     sexismo = [-2, -1, 0, 1, 2]
     nodes = []
@@ -197,8 +198,10 @@ def getNodes(month, year, db):
         user_id = user["_id"]
         friends = user["friends"]
 
+        sexismo = collection.find_one({"_id": user_id})
+
         # add to json
-        user = {"user_id": str(user_id), "classification": sexismo[random.randint(0, 4)]}
+        user = {"user_id": str(user_id), "classification": sexismo["sexismo"]}
         nodes.append(user)
 
         count = 0
@@ -207,7 +210,8 @@ def getNodes(month, year, db):
                 break
             # add to json
 
-            nodes.append({"user_id": str(friend), "classification": sexismo[random.randint(0, 4)]})
+            # nodes.append({"user_id": str(friend), "classification": sexismo[random.randint(0, 4)]})
+            nodes.append({"user_id": str(friend), "classification": 0})
             link = {"source": str(user_id), "target": str(friend)}
             links.append(link)
             count += 1
@@ -221,8 +225,9 @@ def getNodes(month, year, db):
 
 def getDate(request, db):
 
- #hola
-    time.sleep(2)
+    generate_historic_collectino(db)
+    time.sleep(0.5)
+
     context = {"last_added": ''}
     response = request.POST.get('date')
     months_names = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Jan', 'Feb', 'Mar']
