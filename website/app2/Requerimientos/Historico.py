@@ -8,15 +8,17 @@ import math
 import time
 
 
-client = MongoClient('localhost', 27017)
-db = client.twitterdb
-friend_collection = db.friend_collection
-collection = db.testcollection1
-ranked_collection = db.ranked_collection
-condensed_collection = db.condensed_collection
-myresults = db.myresults
+# client = MongoClient('localhost', 27017)
+# db = client.twitterdb
 
-def hacer_requerimiento(request):
+
+# friend_collection = db.friend_collection
+# collection = db.testcollection1
+# ranked_collection = db.ranked_collection
+# condensed_collection = db.condensed_collection
+# myresults = db.myresults
+
+def hacer_requerimiento(request, db):
 
     # TODO
 
@@ -25,11 +27,15 @@ def hacer_requerimiento(request):
 
 
 
-def ranked_network(request):
+def ranked_network(request, db):
     """
     Process the data for the webpage to use
     Export all data to the static/app2/Historico folder for D3.js to consume
     """
+    friend_collection = db.friend_collection
+    ranked_collection = db.ranked_collection
+    condensed_collection = db.condensed_collection
+
 
     #os.remove("/Users/andreaparra/PycharmProjects/big_data_taller_1/website/app2/static/app2/jsons/Historico/users_test.json")
     sexismo = [-2, -1, 0, 1, 2]
@@ -79,9 +85,9 @@ def ranked_network(request):
 
     return render(request, 'app2/ranked_network.html', None)
 
-def historic_growth(request):
+def historic_growth(request, db):
 
-    getNodes(5, 2007)
+    getNodes(5, 2007, db)
 
     return render(request, 'app2/historic_growth.html', None)
 
@@ -138,7 +144,7 @@ def selectDate(month, year):
 
     return date
 
-def lastAdded(month, year):
+def lastAdded(month, year, db):
     date = selectDate(month, year)
     print(date)
     result = db.myresults.find_one({"_id": date})
@@ -146,7 +152,8 @@ def lastAdded(month, year):
 
     return user_list
 
-def getUpUntil(month, year):
+def getUpUntil(month, year, db):
+    myresults = db.myresults
 
     date = selectDate(month, year)
     print(date)
@@ -174,9 +181,10 @@ def getUpUntil(month, year):
 
     return final_list
 
-def getNodes(month, year):
+def getNodes(month, year, db):
 
-    user_list = getUpUntil(month, year)
+    condensed_collection = db.condensed_collection
+    user_list = getUpUntil(month, year, db)
 
     sexismo = [-2, -1, 0, 1, 2]
     nodes = []
@@ -211,7 +219,9 @@ def getNodes(month, year):
             "w") as outfile:
         json.dump(user_json, outfile)
 
-def getDate(request):
+def getDate(request, db):
+
+
     time.sleep(2)
     context = {"last_added": ''}
     response = request.POST.get('date')
@@ -222,13 +232,13 @@ def getDate(request):
         month = (int(response) - 1)%12
         month_num = months_number[month]
         month_nam = months_names[month]
-        last_added = lastAdded(month_num, year)
+        last_added = lastAdded(month_num, year, db)
         context = {"last_added": str(last_added)}
 
-        getNodes(month_num, year)
+        getNodes(month_num, year, db)
         time.sleep(2)
     else:
-        getNodes(4, 2007)
+        getNodes(4, 2007, db)
 
 
 

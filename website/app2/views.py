@@ -19,10 +19,10 @@ def Polaridad(request):
 	return pol.hacer_requerimiento_polaridad(request, dar_base_de_datos())
 
 def Historico(request):
-	return his.hacer_requerimiento(request)
+	return his.hacer_requerimiento(request, dar_base_de_datos())
 
 def rankedNetwork(request):
-	return his.ranked_network(request)
+	return his.ranked_network(request, dar_base_de_datos())
 
 def getDate(request):
     value = request.POST
@@ -30,7 +30,7 @@ def getDate(request):
     return his.getDate(data)
 
 def historicGrowth(request):
-	return his.getDate(request)
+	return his.getDate(request, dar_base_de_datos())
 
 
 def Matoneo(request):
