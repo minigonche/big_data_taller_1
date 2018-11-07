@@ -6,7 +6,6 @@ var dibujar_polaridad = function(path)
     {
       return(0)
     }
-
     dibujo_polaridad = true
 
 
@@ -113,11 +112,11 @@ var dibujar_polaridad = function(path)
 
 var dibujar_sexismo = function(path)
 {
-    if(dibujo_sexismo)
-    {
-      return(0)
-    }
 
+  if(dibujo_sexismo)
+  {
+    return(0)
+  }
     dibujo_sexismo = true
 
 d3.json(path, function(error, data) {
@@ -171,6 +170,9 @@ d3.json(path, function(error, data) {
               var svg = d3.select("#nube_sexismo").append("svg")
                   .attr("width", 960)
                   .attr("height", 500);
+
+
+
 
 
               // append a group for zoomable content
