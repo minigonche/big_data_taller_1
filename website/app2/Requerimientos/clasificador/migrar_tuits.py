@@ -104,7 +104,7 @@ def migrar(collection, numero_de_tuits, path = 'app2/Requerimientos/clasificador
 
                             if(guardar_hash_clouds):
                                 exportar_hash_clouds(polaridad_count, sexismo_count, matoneo_count)
-                            return(polaridad_count, sexismo_count)
+                            return(True)
 
 
 
@@ -113,18 +113,43 @@ def migrar(collection, numero_de_tuits, path = 'app2/Requerimientos/clasificador
 
 def exportar_hash_clouds(polaridad_count, sexismo_count, matoneo_count):
 
+    min_count = 2
 
+    polaridad_count_final = {}
+    for key in polaridad_count.keys():
+        if(polaridad_count[key]['count'] >= min_count):
+            polaridad_count_final[key] = {}
+            polaridad_count_final[key]['count'] = polaridad_count[key]['count']
+            polaridad_count_final[key]['polarity'] = polaridad_count[key]['polarity']
+
+
+    sexismo_count_final = {}
+    for key in sexismo_count.keys():
+        if(sexismo_count[key]['count'] >= min_count):
+            sexismo_count_final[key] = {}
+            sexismo_count_final[key]['count'] = sexismo_count[key]['count']
+            sexismo_count_final[key]['polarity'] = sexismo_count[key]['polarity']
+
+
+    matoneo_count_final = {}
+    for key in matoneo_count.keys():
+        if(matoneo_count[key]['count'] >= min_count):
+            matoneo_count_final[key] = {}
+            matoneo_count_final[key]['count'] = polaridad_count[key]['count']
+            matoneo_count_final[key]['polarity'] = polaridad_count[key]['polarity']
+
+
+    print('Exportando hashs')
     ubicacion = 'app2/static/app2/jsons/hash_cloud/'
     #Guarda los word clouds
     with open(ubicacion + "frequency_polaridad.json",'w') as f:
-        json.dump(polaridad_count, f)
+        json.dump(polaridad_count_final, f)
 
     with open(ubicacion + "frequency_sexismo.json",'w') as f:
-        json.dump(sexismo_count, f)
+        json.dump(sexismo_count_final, f)
 
     with open(ubicacion + "frequency_matoneo.json",'w') as f:
-        json.dump(matoneo_count, f)
-
+        json.dump(matoneo_count_final, f)
 
 
 
