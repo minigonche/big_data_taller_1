@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Taller 3</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="py-5 text-center">
+                {% load static %}
+                <img class="d-block mx-auto mb-4" src="{% static "app2/img/header.png" %}" alt="" width="1000" height="342">
+                <h1>Taller 3</h1>
+                <p class="lead"></p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="text-left">
+                <h2>Análisis de contenido de Preguntas</h2>
+            </div>
+        </div>
+
+        <!-- BOTON VOLVER -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-4"></div>
+                    <div class="col-4 text-center">
+                        <button type="button" class="btn btn-primary" style="margin: 100px 100px 100px 100px" onclick="location.href='{% url 'app3:index' %}'" > Volver</button>
+                    </div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Taller 3</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+
+  </head>
+
+	<body>
+	<div class="container">
+      <div class="py-5 text-center">
+      {% load static %}
+        <img class="d-block mx-auto mb-4" src="{% static "app2/img/header.png" %}" alt="" width="1000" height="342">
+        <h1>Taller 3</h1>
+        <p class="lead">Interfaz Taller 3</p>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+       <div class="text-left">
+        <h2>Descripción</h2>
+     </div>
+
+      <div class="py-5">
+        <p> La siguiente interfaz tiene como proposito mostrar los resultados del Taller 3 para el curso: MINE4102 – Análisis de Información sobre Big Data.</p>
+      </div>
+    </div>
+
+
+
+    <div class="container">
+       <div class="text-left">
+        <h3>Enriquecimiento Semantico</h3>
+     </div>
+
+     <div class="py-5">
+       <p>Para este proyecto se escogio el tema de Cine.</p>
+     </div>
+   </div>
+
+
+	<!-- RA -->
+		 <div class="py-1"><p></p></div>
+	    <div class="container">
+       <div class="text-left">
+        <h3>Visualizaciones</h3>
+     </div>
+
+         <div class="py-1"><p></p></div>
+
+	<!-- Preguntas -->
+  <form action="{% url 'app3:preguntas' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+	{% csrf_token %}
+
+	  <div class="container">
+       <div class="text-left">
+        <h4>Análisis de contenido de Preguntas</h4>
+     </div>
+
+      <div class="py-2">
+        <p>Esta visualizacion nos permite hacer queries sobre el contenido de las preguntas con el propósito de hacer un analisis de contenido de estas</p>
+      </div>
+    </div>
+
+
+	<div class="form-group">
+
+		<div class="container">
+				<div class="row">
+					<div class="col-3"></div>
+	            	<div class="col-6">
+	            		<div class="form-group text-center">
+							<input type="submit"  id='send_form' class="btn btn-primary" value="Ir al Análisis">
+						</div>
+					</div>
+					<div class="col-3"></div>
+				</div>
+			</div>
+	</div>
+	</form>
+
+
+         <div class="py-1"><p></p></div>
+
+
+         <!-- Entidades -->
+                    <form action="{% url 'app3:entidades' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+       	{% csrf_token %}
+
+       	  <div class="container">
+              <div class="text-left">
+               <h4>Análisis de Preguntas por entidades</h4>
+            </div>
+
+             <div class="py-2">
+               <p>Esta visualizacion nos permite obtener informacion de las entidades tratadas en las preguntas</p>
+             </div>
+           </div>
+
+
+       	<div class="form-group">
+
+       		<div class="container">
+       				<div class="row">
+       					<div class="col-3"></div>
+       	            	<div class="col-6">
+       	            		<div class="form-group text-center">
+       							<input type="submit"  id='send_form' class="btn btn-primary" value="Ir al Análisis">
+       						</div>
+       					</div>
+       					<div class="col-3"></div>
+       				</div>
+       			</div>
+       	</div>
+       	</form>
+
+
+      <div class="py-1"><p></p></div>
+
+
+	</body>
+</html>
