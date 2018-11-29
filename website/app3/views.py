@@ -3,6 +3,7 @@ import pymongo
 from django.shortcuts import render
 from app3.Requerimientos import Preguntas as pre
 from app3.Requerimientos import Entidades as ent
+from app3.Requerimientos.VistaEnriquecida import vista_enriquecida as ve
 
 
 # Create your views here.
@@ -14,6 +15,12 @@ def Preguntas(request):
 
 def Entidades(request):
 	return ent.hacer_requerimiento(request, dar_base_de_datos())
+
+
+def VistaEnriquecida(request):
+    return ve.hacer_requerimiento(request, dar_base_de_datos())
+
+
 
 def dar_base_de_datos():
     with open('app3/static/app3/jsons/db_configuration.json','r') as f:

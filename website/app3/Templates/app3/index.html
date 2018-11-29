@@ -124,6 +124,42 @@
        	</form>
 
 
+        <!-- Preguntas enriquecidas -->
+                   <form action="{% url 'app3:pregunta_enriquecida' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+       {% csrf_token %}
+
+         <div class="container">
+
+
+           <div class="text-left">
+            <h4>Vista Enriquecida</h4>
+         </div>
+
+            <div class="py-2">
+              <p>(vista de la pregunta enriquecida. La idea es que se llegue a la siguiente pagina directamente seleccionando la pregunta que se quiere)</p>
+            </div>
+          </div>
+        </div>
+
+       <div class="form-group">
+
+         <div class="container">
+           <p> Question: </p>
+           <p>What is the meaning behind this scene in American Sniper where the nurses ignore Bradley Cooper and his crying baby?</p>
+             <div class="row">
+               <div class="col-3"></div>
+                     <div class="col-6">
+                       <div class="form-group text-center">
+                   <input type="submit"  id='send_form' class="btn btn-primary" value="See Enriched Version">
+                 </div>
+               </div>
+               <div class="col-3"></div>
+             </div>
+           </div>
+       </div>
+       </form>
+
+
       <div class="py-1"><p></p></div>
 
 

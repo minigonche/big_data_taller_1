@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<style>
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext_up {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip .tooltiptext_down {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 50%;
+    margin-left: -60px;
+}
+
+.tooltip:hover .tooltiptext_up {
+    visibility: visible;
+}
+
+.tooltip:hover .tooltiptext_down {
+    visibility: visible;
+}
+
+</style>
+<body style="text-align:center;">
+
+<h2>Top Tooltip</h2>
+<p>Move the mouse over the text below:</p>
+
+<p> el texto de la <span class="tooltip"> pregunta <span class="tooltiptext_up">Tooltip up</span> <span class="tooltiptext_down">Tooltip down</span> </span></p>
+
+<span class="tooltip">Hover over me <span class="tooltiptext_up">Tooltip up</span> <span class="tooltiptext_down">Tooltip down</span> </span>
+
+</body>
+</html>
