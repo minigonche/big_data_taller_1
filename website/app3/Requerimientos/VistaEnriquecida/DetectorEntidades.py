@@ -1,22 +1,17 @@
-
+import spacy
+nlp = spacy.load('en_core_web_sm')
+# Hay 3 modelos en ingles, la diferencia es el tamano con el que se entrena cada uno
+# sm, md, lg
 
 def dar_entidades(texto_pregunta):
-
-
-    #TODO
-    #Mateo
-
     # Puede recibir el texto de la pregunta o el ID de esta
     # Pero debe devolver un arreglo con las entidades
-
+    
     response = []
-
-    #MOCK
-    if 'Bradley Cooper' in texto_pregunta:
-        response.append('Bradley Cooper')
-
-    if 'American Sniper' in texto_pregunta:
-        response.append('American Sniper')
-
-
+    
+    doc = nlp(texto_pregunta)
+    
+    for ent in doc.ents:
+        response.append(ent.text)
+    
     return(response)
