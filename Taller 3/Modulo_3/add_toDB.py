@@ -12,7 +12,6 @@ client = MongoClient('localhost', 27017)
 db = client.TMDB
 movie_IDs = db.movie_IDs
 
-
 def reporthook(count, block_size, total_size):
     global start_time
     if count == 0:
