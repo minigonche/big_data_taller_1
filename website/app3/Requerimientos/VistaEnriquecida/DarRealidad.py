@@ -10,7 +10,7 @@ def dar_realidad(entidad):
 
         html = '''
             <h4> Entity Reality </h4>
-            <h5> Cuenta de twitter de <b>NAME</b>: <i>@SCREEN</i> </h5>
+            <h5> Cuenta de twitter mas relevante relacionadad con <b>NAME</b>: <i>@SCREEN</i> </h5>
             <p> DESCRIPCION </p>
 
             <img class="d-block mx-auto mb-4" src="SRC" width="20%"  alt="" >
@@ -195,3 +195,4 @@ def findTwitterAccount(searchQuery):
         return user
 
 
+print(findTweets("American Sniper"))
