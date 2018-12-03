@@ -122,4 +122,6 @@ def findMovie(title):
         return movie_object
 
 
-
+if __name__ == "__main__":
+    print('Exporting DB')
+    print(addIMDB())
