@@ -1,5 +1,7 @@
 import tweepy
 import time
+import requests
+import json
 
 def dar_realidad(entidad):
 
@@ -27,7 +29,10 @@ def dar_realidad(entidad):
         i = 0
         comentarios = ''
         while i < len(tweets):
-            comentarios = comentarios + "<p>" + tweets[i]["text"] + "</p>"
+            if tweets[i]["polarity"] == 'neg':
+                comentarios = comentarios + "<p><b>" + tweets[i]["text"] + "</b></p>"
+            else:
+                comentarios = comentarios + "<p>" + tweets[i]["text"] + "</p>"
             i += 1
 
         html = html.replace('COM_1', comentarios)
@@ -52,6 +57,16 @@ def limit_handled(cursor):
             print('sleeping')
             time.sleep(15 * 60)
             continue
+
+def darPolaridad(text):
+    #returns 'pos', 'neg' or 'neutral'
+
+    data = {'text': text}
+    r = requests.post("http://text-processing.com/api/sentiment/", data=data)
+    if r.ok:
+        res_obj = json.loads(r.text)
+        return(res_obj["label"])
+    else: return None
 
 
 def findTweets(searchQuery):
@@ -117,11 +132,13 @@ def findTweets(searchQuery):
             break
 
     tweets =[]
+
     for i in new_tweets:
         tweet= {}
         object = i._json
         tweet["user"] = object["user"]["screen_name"]
         tweet["text"] = object["text"]
+        tweet["polarity"] = darPolaridad(tweet["text"])
 
         tweets.append(tweet)
 
@@ -220,4 +237,4 @@ def findTwitterAccount(searchQuery):
         return user
 
 
-print(findTweets("American Sniper"))
+#print(darPolaridad("The puppy sat on the floor"))
