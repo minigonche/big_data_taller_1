@@ -600,7 +600,7 @@ def get_location_info(location_name):
 
     #iframe
 
-    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCOcJKzm4KihxoOoa-jIj3Nuh__hCj-ais&q=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
+    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=GOOGLE_KEY&q=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
     location_search = location_name
     location_search = location_search.replace('  ',' ')
     location_search = location_search.replace(' ','+')
