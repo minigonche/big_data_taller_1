@@ -502,11 +502,11 @@ def get_person_info(person_name):
     text_interface = StringIO(results.decode())
     pd_result = pd.read_csv(text_interface)
 
-    print(pd_result.sample(3))
-
     if(pd_result.shape[0] == 0 ):
         dic['message'] = 'No person under the name: ' + person_name + ' was found.'
         return(dic)
+
+    print(pd_result.sample(3))
 
     dic['message'] = 'ok'
     person = pd_result.iloc[0].copy()
@@ -596,8 +596,10 @@ def get_location_info(location_name):
     city = results["results"]["bindings"][0]
 
     for field in fields:
-        dic[field] = str(city[field]['value'])
-
+        if(field in city):
+            dic[field] = str(city[field]['value'])
+        else:
+            dic[field] = 'Nothing Found'
     #iframe
 
     template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=GOOGLE_KEY&q=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
