@@ -16,9 +16,6 @@ def dar_realidad(entidad):
             <img class="d-block mx-auto mb-4" src="SRC" width="20%"  alt="" >
 
             <p> COM_1 </p>
-            <p> COM_2 </p>
-            <p> COM_3 </p>
-            <p> COM_4 </p>
             
 
                   '''
@@ -26,11 +23,15 @@ def dar_realidad(entidad):
         html = html.replace('NAME', twitterAccount["name"])
         html = html.replace('DESCRIPCION', twitterAccount["description"])
         html = html.replace('SCREEN', twitterAccount["screen_name"])
-        html = html.replace('COM_1', tweets[0]["text"])
-        html = html.replace('COM_2', tweets[1]["text"])
-        html = html.replace('COM_3', tweets[2]["text"])
-        html = html.replace('COM_4', tweets[3]["text"])
-        html = html.replace('COM_5', tweets[4]["text"])
+
+        i = 0
+        comentarios = ''
+        while i < len(tweets):
+            comentarios = comentarios + "<p>" + tweets[i]["text"] + "</p>"
+            i += 1
+
+        html = html.replace('COM_1', comentarios)
+
 
 
     else:
@@ -185,12 +186,36 @@ def findTwitterAccount(searchQuery):
     for i in new_users:
         user = {}
         object = i._json
-        user["name"] = object["name"]
-        user["screen_name"] = object["screen_name"]
-        user["description"] = object["description"]
-        user["followers"] = object["followers_count"]
-        user["img"] = object["profile_image_url"]
-        user["banner"] = object["profile_banner_url"]
+        try:
+            user["name"] = object["name"]
+        except KeyError:
+            user["name"] = ''
+            print("no item found")
+        try:
+            user["screen_name"] = object["screen_name"]
+        except KeyError:
+            user["screen_name"] = ''
+            print("no item found")
+        try:
+            user["description"] = object["description"]
+        except KeyError:
+            user["description"] = ''
+            print("no item found")
+        try:
+            user["followers"] = object["followers_count"]
+        except KeyError:
+            user["followers"] = ''
+            print("no item found")
+        try:
+            user["img"] = object["profile_image_url"]
+        except KeyError:
+            user["img"] = ''
+            print("no item found")
+        try:
+            user["banner"] = object["profile_banner_url"]
+        except KeyError:
+            user["banner"] = ''
+            print("no item found")
 
         return user
 

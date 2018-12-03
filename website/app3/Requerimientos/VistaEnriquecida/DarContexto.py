@@ -600,7 +600,7 @@ def get_location_info(location_name):
 
     #iframe
 
-    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=GOOGLE_KEY&q=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
+    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAQPHZ6Yi3lsJG22D1V9CWwQlzHi7dhDoA&q=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
     location_search = location_name
     location_search = location_search.replace('  ',' ')
     location_search = location_search.replace(' ','+')
@@ -651,24 +651,33 @@ def findInTMDB(external_ids):
     for ID in external_ids:
         external_id = ID["_id"]
         url = 'https://api.themoviedb.org/3/find/{}?api_key={}&external_source=imdb_id'.format(external_id, api_key)
-        r = requests.get(url)
-        if r.ok:
-            r = json.loads(r.text)
-            if r["movie_results"]:
-                r = r["movie_results"][0]
-                movie_object = {}
-                movie_object['imdb_id'] = external_id
-                movie_object["original_title"] = r['original_title']
-                movie_object["genre_ids"] = ID["genres"]
-                movie_object["runtime"] = ID["runtimeMinutes"]
-                img = r["poster_path"]
-                movie_object["img"] = 'https://image.tmdb.org/t/p/w500' + img
-                movie_object["release_date"] = r["release_date"]
-                movie_object["language"] = r["original_language"]
-                movie_object["overview"] = r["overview"]
-                movie_object["popularity"] = r["popularity"]
+        movie_object = {}
 
-                return movie_object
+        try:
+            r = requests.get(url, verify=False)
+
+            if r.ok:
+                r = json.loads(r.text)
+                if r["movie_results"]:
+                    r = r["movie_results"][0]
+
+                    movie_object['imdb_id'] = external_id
+                    movie_object["original_title"] = r['original_title']
+                    movie_object["genre_ids"] = ID["genres"]
+                    movie_object["runtime"] = ID["runtimeMinutes"]
+                    img = r["poster_path"]
+                    movie_object["img"] = 'https://image.tmdb.org/t/p/w500' + img
+                    movie_object["release_date"] = r["release_date"]
+                    movie_object["language"] = r["original_language"]
+                    movie_object["overview"] = r["overview"]
+                    movie_object["popularity"] = r["popularity"]
+
+                    return movie_object
+            else: return None
+
+        except requests.exceptions.SSLError as e:
+            return None
+
     return None
 
 def findExternalID(title):
