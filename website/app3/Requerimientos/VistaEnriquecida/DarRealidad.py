@@ -22,7 +22,7 @@ def dar_realidad(entidad):
 
                   '''
         html = html.replace('SRC', twitterAccount["img"])
-        html = html.replace('NAME', twitterAccount["name"])
+        html = html.replace('NAME', entidad)
         html = html.replace('DESCRIPCION', twitterAccount["description"])
         html = html.replace('SCREEN', twitterAccount["screen_name"])
 
@@ -30,9 +30,11 @@ def dar_realidad(entidad):
         comentarios = ''
         while i < len(tweets):
             if tweets[i]["polarity"] == 'neg':
-                comentarios = comentarios + "<p><b>" + tweets[i]["text"] + "</b></p>"
+                comentarios = comentarios + "<p><b>NEGATIVE: </b>" + tweets[i]["text"] + "</p>"
+            elif tweets[i]["polarity"] == 'pos':
+                comentarios = comentarios + "<p><b>POSITIVE: </b>" + tweets[i]["text"] + "</p>"
             else:
-                comentarios = comentarios + "<p>" + tweets[i]["text"] + "</p>"
+                comentarios = comentarios + "<p><b>NEUTRAL: </b>" + tweets[i]["text"] + "</p>"
             i += 1
 
         html = html.replace('COM_1', comentarios)
