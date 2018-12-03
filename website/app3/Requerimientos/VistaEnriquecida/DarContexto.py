@@ -419,8 +419,8 @@ def get_type_of_entity(search_word):
 
 
 def get_movie_info(movie_name):
-
-    movie = findInTMDB(findExternalID(movie_name))
+    movie = findMovie(movie_name)
+    #movie = findInTMDB(findExternalID(movie_name))
     if(movie is not None):
         movie['trailer_frame'] = get_trailer_link_frame(movie['imdb_id'])
         movie['message'] = 'ok'

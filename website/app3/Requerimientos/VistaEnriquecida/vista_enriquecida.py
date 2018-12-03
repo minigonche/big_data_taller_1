@@ -73,8 +73,8 @@ def dar_texto_pregunta(id):
 
     #TODO
     #MOCK
-    #text = 'What is the meaning behind this scene in American Sniper where the nurses ignore Bradley Cooper and his crying baby in New York City?'
-    text = 'A question about Christian Bale in Batman. The premier will be in Houston'
+    text = 'What is the meaning behind this scene in American Sniper where the nurses ignore Bradley Cooper and his crying baby in New York City?'
+    #text = 'A question about Christian Bale in Batman. The premier will be in Houston'
 
     return(text)
 
