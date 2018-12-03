@@ -600,7 +600,7 @@ def get_location_info(location_name):
 
     #iframe
 
-    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=GOOGLE_KEY=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
+    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=GOOGLE_KEY&q=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
     location_search = location_name
     location_search = location_search.replace('  ',' ')
     location_search = location_search.replace(' ','+')
@@ -738,18 +738,24 @@ def get_trailer_link_frame(imdb_id = 'tt2179136'):
     string_start = '<div class="slate">'
     string_end = "<div"
 
-    result = page_content.split(string_start)[1].split(string_end)[0]
+    if(string_start in page_content and string_end in page_content):
 
-    string_start = "data-video='"
-    string_end = "'"
+        result = page_content.split(string_start)[1]
+        result = result.split(string_end)[0]
 
-    result = result.split(string_start)[1].split(string_end)[0]
+        string_start = "data-video='"
+        string_end = "'"
 
-    template = '<iframe src="https://www.imdb.com/videoembed/MOVIE_ID" allowfullscreen width="80%" height="400"></iframe>'
+        if(string_start in page_content and string_end in page_content):
 
-    template = template.replace('MOVIE_ID',result)
+            result = result.split(string_start)[1].split(string_end)[0]
 
-    return(template)
+            template = '<iframe src="https://www.imdb.com/videoembed/MOVIE_ID" allowfullscreen width="80%" height="400"></iframe>'
+            template = template.replace('MOVIE_ID',result)
+            return(template)
+
+
+    return('No Trailer Found')
 
 
 
