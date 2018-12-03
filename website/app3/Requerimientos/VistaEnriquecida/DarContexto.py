@@ -450,7 +450,8 @@ def get_person_info(person_name):
               ?person dbo:birthName ?birth_name.
               ?person foaf:name ?name.
 
-              { select ?birth_place_struct ?population { ?person dbo:birthPlace ?birth_place_struct.
+              { select ?birth_place_struct ?population { ?person_born dbo:birthPlace ?birth_place_struct.
+                                                         ?person_born foaf:name "PERSON_NAME"@en.
                                                          ?birth_place_struct dbo:areaTotal ?population
                                                         } ORDER BY ?population limit 1 }
 
