@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Taller 3</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="py-5 text-center">
+                {% load static %}
+                <img class="d-block mx-auto mb-4" src="{% static "app3/img/header.png" %}" alt="" width="1000" height="342">
+                <h1>Taller 3</h1>
+                <p class="lead"></p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="text-venter">
+                <h2>Navegar Preguntas</h2>
+            </div>
+        </div>
+
+
+         <div class="py-1"><p></p></div>
+         <div class="py-1"><p></p></div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-2"></div>
+                    <div class="col-8 text-center">
+                      {% for question in questions %}
+                          <a class="lead" href="{% url 'app3:pregunta_enriquecida'%}/{{question.question_id}}" >{{question.title}} </a>
+                              {{question.body|safe|escape }}
+                              <hr>
+                          {% endfor %}
+                    </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+
+        <div class="py-1"><p></p></div>
+
+        <!-- BOTON VOLVER -->
+        <div class="container">
+            <div class="row">
+                <div class="col-4"></div>
+                    <div class="col-4 text-center">
+                        <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app3:navegar' %}'" > Refrescar</button>
+                    </div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+
+    <div class="py-1"><p></p></div>
+
+        <!-- BOTON VOLVER -->
+        <div class="container">
+            <div class="row">
+                <div class="col-4"></div>
+                    <div class="col-4 text-center">
+                        <button type="button" class="btn btn-primary"  onclick="location.href='{% url 'app3:index' %}'" > Volver</button>
+                    </div>
+                <div class="col-4"></div>
+            </div>
+        </div>
+
+    </body>
+
+    <style>
+          img {
+          width:  80%;
+      }
+
+    </style>
+
+</html>

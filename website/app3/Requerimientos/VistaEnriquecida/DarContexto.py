@@ -82,9 +82,12 @@ def dar_contexto(entidad):
 
         #EDAD
         if('birth_date' in context):
-            birth = datetime.strptime( context['birth_date'], "%Y-%m-%d")
 
-            age = str( int(np.floor((datetime.now() - birth).days/365) ))
+            try:
+                birth = datetime.strptime( context['birth_date'], "%Y-%m-%d")
+                age = str( int(np.floor((datetime.now() - birth).days/365) ))
+            except:
+                age = ' No Age Found'
 
             html = html.replace('PERSON_AGE', age)
         else:
@@ -305,12 +308,12 @@ def dar_contexto(entidad):
     #----------------------- MOVIE -----------------------------
     #---------------------------------------------------------------
     #---------------------------------------------------------------
-    elif(tipo == 'movie'):
+    elif(tipo == 'movie' or tipo == 'otra'):
 
 
         movie = get_movie_info(entidad)
 
-        if(movie['message'] != 'ok'):
+        if(movie['message'] != 'ok' or len(movie)  <= 1):
             html = '''<h4> No Info Found </h4>
 
                         <p> No context information was found for ENTIDAD </p>
@@ -319,6 +322,7 @@ def dar_contexto(entidad):
             html = html.replace('ENTIDAD', entidad)
 
             return(html)
+
 
 
 
@@ -348,14 +352,49 @@ def dar_contexto(entidad):
 
         #replaces
         html = html.replace('MOVIE_TITLE', movie['original_title'])
-        html = html.replace('IMAGE_SOURCE', movie['img'])
-        html = html.replace('MOVIE_GENRE', movie['genre_ids'].replace(',',', '))
-        html = html.replace('MOVIE_RUNTIME', movie['runtime'])
-        html = html.replace('MOVIE_RELEASE_DATE', movie['release_date'])
-        html = html.replace('MOVIE_LANGUAGE', movie['language'])
-        html = html.replace('MOVIE_POPULARITY', str(movie['popularity']))
-        html = html.replace('MOVIE_PLOT', movie['overview'])
-        html = html.replace('MOVIE_TRAILER', movie['trailer_frame'])
+        if('img' in movie):
+            html = html.replace('IMAGE_SOURCE', movie['img'])
+        else:
+            html = html.replace('IMAGE_SOURCE', '')
+
+        if('genre_ids' in movie):
+            html = html.replace('MOVIE_GENRE', movie['genre_ids'].replace(',',', '))
+        else:
+            html = html.replace('MOVIE_GENRE', 'No genre found')
+
+        if('runtime' in movie):
+            html = html.replace('MOVIE_RUNTIME', movie['runtime'])
+        else:
+            html = html.replace('MOVIE_RUNTIME', 'No runtime found')
+
+        if('release_date' in movie):
+            html = html.replace('MOVIE_RELEASE_DATE', movie['release_date'])
+        else:
+            html = html.replace('MOVIE_RELEASE_DATE', 'No release date found')
+
+        if('language' in movie):
+            html = html.replace('MOVIE_LANGUAGE', movie['language'])
+        else:
+            html = html.replace('MOVIE_LANGUAGE', 'No language found')
+
+        if('popularity' in movie):
+            html = html.replace('MOVIE_POPULARITY', str(movie['popularity']))
+        else:
+            html = html.replace('MOVIE_POPULARITY', 'No Popularity Found')
+
+        if('overview' in movie):
+            html = html.replace('MOVIE_PLOT', movie['overview'])
+        else:
+            html = html.replace('MOVIE_PLOT', 'No Overview Found')
+
+        if('trailer_frame' in movie):
+            html = html.replace('MOVIE_TRAILER', movie['trailer_frame'])
+        else:
+            html = html.replace('MOVIE_TRAILER', 'No trailer Found')
+
+
+
+
 
     else:
         html = '''<h4> No Info Found </h4>
@@ -403,7 +442,7 @@ def get_type_of_entity(search_word):
     LIMIT 1
     '''
 
-    #print(query)
+    print(query)
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
@@ -421,8 +460,12 @@ def get_type_of_entity(search_word):
 def get_movie_info(movie_name):
     movie = findMovie(movie_name)
     #movie = findInTMDB(findExternalID(movie_name))
-    if(movie is not None):
-        movie['trailer_frame'] = get_trailer_link_frame(movie['imdb_id'])
+    if(movie is not None and len(movie)>0):
+        if('imdb_id' in movie):
+            movie['trailer_frame'] = get_trailer_link_frame(movie['imdb_id'])
+        else:
+            movie['trailer_frame'] = 'No Trailer Found'
+
         movie['message'] = 'ok'
     else:
         movie = {}
@@ -447,18 +490,17 @@ def get_person_info(person_name):
                       ?born dbo:birthDate ?birth_date.
                      } limit 1 }
 
-              ?person dbo:birthName ?birth_name.
+              OPTIONAL{?person dbo:birthName ?birth_name}.
+
               ?person foaf:name ?name.
 
-              { select ?birth_place_struct ?population { ?person_born dbo:birthPlace ?birth_place_struct.
+              OPTIONAL{ select ?birth_place { ?person_born dbo:birthPlace ?birth_place_struct.
                                                          ?person_born foaf:name "PERSON_NAME"@en.
-                                                         ?birth_place_struct dbo:areaTotal ?population
-                                                        } ORDER BY ?population limit 1 }
+                                                         ?birth_place_struct foaf:name ?birth_place.
+                                                        } limit 1 }
 
-              ?birth_place_struct foaf:name ?birth_place.
-
-              ?person dct:description ?description.
-              ?person foaf:gender ?gender.
+              OPTIONAL{?person dct:description ?description}.
+              OPTIONAL{?person foaf:gender ?gender}.
 
               OPTIONAL{?person dbo:thumbnail ?img}.
 
@@ -507,7 +549,7 @@ def get_person_info(person_name):
         dic['message'] = 'No person under the name: ' + person_name + ' was found.'
         return(dic)
 
-    print(pd_result.sample(3))
+    print(pd_result.sample(1))
 
     dic['message'] = 'ok'
     person = pd_result.iloc[0].copy()
@@ -712,6 +754,9 @@ def findMovie(title):
     most_likely_match = findInTMDB(possible_ids)
     if most_likely_match:
         return most_likely_match
+
+    if(len(possible_ids) == 0):
+        return None
     else:
         most_likely_match = possible_ids[0]
         i = 0
@@ -721,10 +766,10 @@ def findMovie(title):
                 most_likely_match = current_match
             i += 1
         movie_object = {}
-        movie_object["original_title"] = most_likely_match["original_title"]
-        movie_object["genre_ids"] = most_likely_match["genres"]
-        movie_object["runtime"] = most_likely_match["runtimeMinutes"]
-        movie_object["release_date"] = most_likely_match["year"]
+        fields = ['original_title', 'genre_ids','runtime','release_date']
+        for field in fields:
+            if(field in most_likely_match):
+                movie_object[field] = most_likely_match[field]
 
         return movie_object
 

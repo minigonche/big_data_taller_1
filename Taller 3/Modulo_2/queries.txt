@@ -1,0 +1,142 @@
+select ?person
+where {
+  ?person foaf:name "Albert Einstein"@en.
+  ?person a foaf:Person.
+}
+LIMIT 100
+
+
+select ?name ?birth_name ?birth_date ?birth_place ?description ?gender
+where {
+  ?person foaf:name "PERSON_NAME"@en.
+  ?person a foaf:Person.
+  ?person dbo:birthDate ?birth_date.
+  ?person dbo:birthName ?birth_name.
+  ?person foaf:name ?name.
+  ?person dbo:birthPlace ?birth_place_struct.
+  ?birth_place_struct foaf:name ?birth_place.
+  ?person dct:description ?description.
+  ?person foaf:gender ?gender.
+
+
+
+}
+LIMIT 10
+
+select ?name ?birth_name ?birth_date ?birth_place ?description ?gender ?directs
+where {
+  ?person foaf:name ""@en.
+  ?person a foaf:Person.
+  { select ?birth_date { ?person dbo:birthDate ?birth_date } limit 1 }
+  ?person dbo:birthName ?birth_name.
+  ?person foaf:name ?name.
+
+  { select ?birth_place_struct ?population { ?person dbo:birthPlace ?birth_place_struct.
+                                             ?birth_place_struct dbo:areaTotal ?population
+                                            } ORDER BY ?population limit 1 }
+  ?birth_place_struct foaf:name ?birth_place.
+
+  ?person dct:description ?description.
+  ?person foaf:gender ?gender.
+
+  OPTIONAL { { select ?directs { ?directs dbo:director ?person  } limit 3 } }.
+
+
+
+
+}
+
+select ?name ?birth_name ?birth_date ?birth_place ?description ?gender ?directs_movie_struc ?starring_movie_struc
+where {
+  ?person foaf:name ""@en.
+  ?person a foaf:Person.
+  { select ?birth_date { ?person dbo:birthDate ?birth_date } limit 1 }
+  ?person dbo:birthName ?birth_name.
+  ?person foaf:name ?name.
+
+  { select ?birth_place_struct ?population { ?person dbo:birthPlace ?birth_place_struct.
+                                             ?birth_place_struct dbo:areaTotal ?population
+                                            } ORDER BY ?population limit 1 }
+  ?birth_place_struct foaf:name ?birth_place.
+
+  ?person dct:description ?description.
+  ?person foaf:gender ?gender.
+
+
+  OPTIONAL{ select ?directs_movie_struc ?gross  { ?directs_movie_struc dbo:director ?person.
+                                   ?person foaf:name ""@en.
+                                   ?directs_movie_struc dbo:gross ?gross.
+                                   ?directs_movie_struc foaf:name ?directs_movie.
+                                  } ORDER BY DESC(xsd:integer(?gross)) limit 3 }
+
+  OPTIONAL{ select ?starring_movie_struc ?gross  { ?starring_movie_struc dbo:starring ?person.
+                                   ?person foaf:name ""@en.
+                                   ?starring_movie_struc dbo:gross ?gross.
+                                   ?starring_movie_struc foaf:name ?starring_movie.
+                                  } ORDER BY DESC(xsd:integer(?gross)) limit 3 }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+select ?name ?birth_name ?birth_date ?birth_place ?description ?gender ?img ?spouse ?directs_movie ?directed_for ?gross_dir ?stars_movie  ?worked_with ?gross_star
+where {
+  ?person foaf:name "PERSON_NAME"@en.
+  ?person a foaf:Person.
+ { select ?birth_date {  ?born foaf:name "PERSON_NAME"@en.
+          ?born dbo:birthDate ?birth_date.
+         } limit 1 }
+
+  ?person dbo:birthName ?birth_name.
+  ?person foaf:name ?name.
+
+  { select ?birth_place_struct ?population { ?person dbo:birthPlace ?birth_place_struct.
+                                             ?birth_place_struct dbo:areaTotal ?population
+                                            } ORDER BY ?population limit 1 }
+
+  ?birth_place_struct foaf:name ?birth_place.
+
+  ?person dct:description ?description.
+  ?person foaf:gender ?gender.
+
+  OPTIONAL{?person dbo:thumbnail ?img}.
+
+
+ OPTIONAL{ select ?spouse {  ?par foaf:name "PERSON_NAME"@en.
+                             ?par dbo:spouse ?spouse_struc.
+                             ?spouse_struc foaf:name ?spouse.
+          } limit 1 }
+
+OPTIONAL{ select ?directs_movie ?directed_for ?gross_dir  { ?directs_movie_struc dbo:director ?dir.
+                                 ?dir foaf:name "PERSON_NAME"@en.
+                                 ?directs_movie_struc dbo:gross ?gross_dir.
+                                 ?directs_movie_struc foaf:name ?directs_movie.
+
+                                 ?directs_movie_struc dbo:starring ?directed_for_struc.
+                                 ?directed_for_struc foaf:name ?directed_for
+
+                                } ORDER BY DESC(xsd:integer(?gross_dir)) }.
+
+  OPTIONAL{ select ?stars_movie ?worked_with ?gross_star  { ?starring_movie_struc dbo:starring ?star.
+                                   ?star foaf:name "PERSON_NAME"@en.
+                                   ?starring_movie_struc dbo:gross ?gross_star.
+                                   ?starring_movie_struc foaf:name ?stars_movie.
+                                   ?starring_movie_struc dbo:starring ?worked_with_struc.
+                                   ?worked_with_struc foaf:name ?worked_with
+                                  } ORDER BY DESC(xsd:integer(?gross_star))  }.
+
+
+}
+
+
+{'message': 'ok', 'name': 'Tom Cruise', 'birth_name': 'Thomas Cruise Mapother IV', 'birth_date': '1962-07-03', 'birth_place': 'Poplar Hills, Kentucky', 'description': 'actor from the United States', 'gender': 'male', 'img': 'http://commons.wikimedia.org/wiki/Special:FilePath/Tom_Cruise_avp_2014_4.jpg?width=300', 'spouse': 'Nicole Kidman', 'directs_movie': {'movies': [], 'actors': []}, 'stars_movie': {'movies': ['Mission: Impossible', 'Mission: Impossible', 'The Last Samurai', 'Minority Report', 'Top Gun', 'Rain Man', 'Jerry Maguire', 'The Firm', 'Knight and Day', 'A Few Good Men', 'Interview with a Vampire', 'Collateral', 'Vanilla Sky', 'Valkyrie', 'Cocktail', 'Born on the Fourth of July', 'Far and Away', 'Risky Business', 'Lions for Lambs', 'The Color of Money', 'Magnolia', 'The Outsiders', 'All the Right Moves', 'Legend', "Losin' It"], 'actors': ['Ving Rhames', 'Emmanuelle Béart', 'Henry Czerny', 'Jon Voight', 'Vanessa Redgrave', 'Ving Rhames', 'Kristin Scott Thomas', 'Dame Kristin Scott Thomas', 'Jean Reno', 'CBE', 'Hiroyuki Sanada', 'Ken Watanabe', 'Tony Goldwyn', 'Billy Connolly', 'Koyuki', 'Timothy Spall', 'Samantha Morton', 'Max von Sydow', 'Colin Farrell', 'Val Kilmer', 'Tom Skerritt', 'Anthony Edwards', 'Kelly McGillis', 'Dustin Hoffman', 'Valeria Golino', 'Kelly Preston', "Jerry O'Connell", 'Jonathan Lipnicki', 'Jay Mohr', 'Bonnie Hunt', 'Regina King', 'Renée Zellweger', 'Ed Harris', 'David Strathairn', 'Holly Hunter', 'Hal Holbrook', 'Jeanne Tripplehorn', 'Maggie Grace', 'Viola Davis', 'Jordi Mollà', 'Peter Sarsgaard', 'Paul Dano', 'Marc Blucas', 'Cameron Diaz', 'James Marshall', 'Kevin Bacon', 'Kiefer Sutherland', 'J. T. Walsh', 'Demi Moore', 'Kevin Pollak', 'Jack Nicholson', 'Antonio Banderas', 'Brad Pitt', 'Kirsten Dunst', 'Stephen Rea', 'Christian Slater', 'Jada Pinkett Smith', 'Jamie Foxx', 'Peter Berg', 'Mark Ruffalo', 'Bruce McGill', 'Cameron Diaz', 'Timothy Spall', 'Penélope Cruz', 'Jason Lee', 'Noah Taylor', 'Kurt Russell', 'Tilda Swinton', 'Carice van Houten', 'Bill Nighy', 'Thomas Kretschmann', 'Terence Stamp', 'Sir Kenneth Branagh', 'Kenneth Branagh', 'Tom Wilkinson', 'OBE', 'Elisabeth Shue', 'Bryan Brown', 'Jerry Levine', 'Willem Dafoe', 'Kyra Sedgwick', 'Frank Whaley', 'Raymond J. Barry', 'Nicole Kidman', 'Rebecca De Mornay', 'Robert Redford', 'Derek Luke', 'Michael Peña', 'Meryl Streep', 'Andrew Garfield', 'Paul Newman', 'Mary Elizabeth Mastrantonio', 'Philip Seymour Hoffman', 'Philip Baker Hall', 'Jeremy Blackman', 'Jason Robards', 'Ricky Jay', 'Julianne Moore', 'Melinda Dillon', 'Michael Murphy', 'William H. Macy', 'Melora Walters', 'John C. Reilly', 'Alfred Molina', 'Luis Guzmán', 'Ralph Macchio', 'Patrick Swayze', 'Emilio Estevez', 'Rob Lowe', 'Diane Lane', 'Leif Garrett', 'C. Thomas Howell', 'Matt Dillon', 'Craig T. Nelson', 'Lea Thompson', 'Tim Curry', 'Mia Sara', 'Shelley Long', 'Jackie Earle Haley', 'John Stockwell']}}

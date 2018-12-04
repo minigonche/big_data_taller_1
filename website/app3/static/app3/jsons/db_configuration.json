@@ -1,4 +1,4 @@
 {
-  "client_location":"bigdata-mongodb-01.virtual.uniandes.edu.co:8083",
+  "client_location":"localhost",
   "db_name":"Grupo07"
 }

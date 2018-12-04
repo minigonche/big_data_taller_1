@@ -3,6 +3,7 @@ import pymongo
 from django.shortcuts import render
 from app3.Requerimientos import Preguntas as pre
 from app3.Requerimientos import Entidades as ent
+from app3.Requerimientos import Navegar as nav
 from app3.Requerimientos.VistaEnriquecida import vista_enriquecida as ve
 
 
@@ -19,6 +20,13 @@ def Entidades(request):
 
 def VistaEnriquecida(request):
     return ve.hacer_requerimiento(request, dar_base_de_datos())
+
+def VistaEnriquecidaPorId(request, question_id):
+    print(question_id)
+    return ve.hacer_requerimiento_por_id(request, dar_base_de_datos(), question_id)
+
+def NavegarPreguntas(request):
+    return nav.hacer_requerimiento(request, dar_base_de_datos())
 
 
 

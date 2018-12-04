@@ -124,6 +124,39 @@
        	</form>
 
 
+        <!-- Navegar preguntas -->
+
+        <form action="{% url 'app3:navegar' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
+          {% csrf_token %}
+
+          <div class="container">
+            <div class="text-left">
+             <h4>Navegar las Preguntas</h4>
+          </div>
+
+           <div class="py-2">
+             <p>Esta visualizacion nos permite navegar las distintas preguntas en la base de datos. </p>
+           </div>
+          </div>
+
+
+          <div class="form-group">
+
+          <div class="container">
+            <div class="row">
+              <div class="col-3"></div>
+                    <div class="col-6">
+                      <div class="form-group text-center">
+                  <input type="submit"  id='send_form' class="btn btn-primary" value="Ver Preguntas">
+                </div>
+              </div>
+              <div class="col-3"></div>
+            </div>
+          </div>
+          </div>
+          </form>
+
+
         <!-- Preguntas enriquecidas -->
                    <form action="{% url 'app3:pregunta_enriquecida' %}" method="POST" enctype="multipart/form-data" class="form-horizontal" id = 'central_form'>
        {% csrf_token %}

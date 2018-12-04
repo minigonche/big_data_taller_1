@@ -6,6 +6,8 @@ from app3.Requerimientos.VistaEnriquecida import DarRealidad as DR
 from app3.Requerimientos.VistaEnriquecida import DetectorEntidades as DE
 import re
 
+import numpy as np
+
 id_contexto = 'context_ENTIDAD'
 id_realidad = 'reality_ENTIDAD'
 
@@ -21,12 +23,10 @@ def hacer_requerimiento(request, db):
 
     # PREGUNTA
 
-    #Extrae el id de la pregunta (ya sea porque le entra por parametro o lo
-    # extrae del request)
-    id = '12344' #MOCK
 
-    #Extrae el texto de la pregunta
-    question_text = dar_texto_pregunta(id)
+
+    #Se inventa el texto (para pruebas)
+    question_text = 'What is the meaning behind this scene in American Sniper where the nurses ignore Bradley Cooper and his crying baby in New York City?'
 
     #Extrae las entidades
     entidades = DE.dar_entidades(question_text)
@@ -69,14 +69,95 @@ def hacer_requerimiento(request, db):
     return HttpResponse(Template(t).render(Context({})))
 
 
-def dar_texto_pregunta(id):
+def hacer_requerimiento_por_id(request, db, question_id):
 
-    #TODO
-    #MOCK
-    text = 'What is the meaning behind this scene in American Sniper where the nurses ignore Bradley Cooper and his crying baby in New York City?'
-    #text = 'A question about Christian Bale in Batman. The premier will be in Houston'
 
-    return(text)
+        #Extrae la pregunta
+        list = db['Questions'].aggregate([{"$match": {"question_id": question_id}},{"$sample": {"size": 1}} ])
+
+        question = None
+        for q in list:
+            question = clean_question(q)
+            break
+
+        if question is None:
+            raise ValueError('No puede ser none la pregunta. No encontro el ID: ' + str(question_id))
+
+
+        #Extrae el template
+        fp = open('app3/Templates/app3/VistaEnriquecida.html')
+        t = fp.read()
+        fp.close()
+
+        # PREGUNTA
+
+        show_question_template = '''
+                <p class="lead"> TITULO </p>
+
+                        CUERPO
+
+        '''
+
+        show_question_template = show_question_template.replace('TITULO', q['title'])
+        show_question_template = show_question_template.replace('CUERPO', q['body'])
+
+        #Extrae el texto de la pregunta
+        question_text = show_question_template
+
+        #Extrae las entidades
+        entidades = DE.dar_entidades(question_text)
+
+
+        print('ENTIDADDES')
+        print(entidades)
+
+        entidades = clean_entidades(entidades)
+
+        print('ENTIDADDES')
+        print(entidades)
+
+
+
+
+        #Rendeiza la pregunta
+        question_text = renderizar_texto(question_text,entidades)
+
+        t = t.replace('TEXTO_DE_LA_PREGUNTA', question_text)
+
+        realidad_html = ''
+        contexto_html = ''
+        mostrar_js = ''
+        #quitar_js = ''
+
+        for entidad in entidades:
+
+            realidad = DR.dar_realidad(entidad)
+            realidad_html += encapsular_realidad( realidad , entidad ) +'\n'
+
+            contexto = DC.dar_contexto(entidad)
+            contexto_html += encapsular_contexto(contexto, entidad) + '\n'
+
+            mostrar_js += dar_js_mostrar(entidad) + '\n'
+
+            #quitar_js += dar_js_quitar(entidad) + '\n'
+
+
+        #REALIDAD
+        t = t.replace('REALIDAD_ENTIDADES', realidad_html)
+
+        #CONTEXTO
+        t = t.replace('CONTEXTO_ENTIDADES', contexto_html)
+
+        #JS
+        t = t.replace('MOSTRAR_ENTIDADES', mostrar_js)
+        #t = t.replace('QUITAR_ENTIDADES', quitar_js)
+
+
+
+        return HttpResponse(Template(t).render(Context({})))
+
+
+
 
 
 def renderizar_texto(texto, entidades):
@@ -184,3 +265,43 @@ def dar_js_quitar(entidad):
     template = template.replace('CONTEXT_ID',context_id )
 
     return(template)
+
+
+def clean_question(q):
+    q['title'] = q['title'].replace('&#39;',"'")
+    q['title'] = q['title'].replace('&quot;','"')
+
+    q['title'] = clean_string(q['title'])
+    q['body'] = clean_string(q['body'])
+
+    return(q)
+
+def clean_string(s):
+    s = re.sub("<a [^']+>", '', s)
+    s = s.replace('</a>','')
+    s = s.replace('<em>','')
+    s = s.replace('</em>','')
+    s = s.replace('<mark>','')
+    s = s.replace('</mark>','')
+    s = s.replace('<strong>','')
+    s = s.replace('</strong>','')
+    s = s.replace('<p>','<p> ')
+    s = s.replace('</p>',' <p>')
+    s = s.replace('"','')
+    s = s.replace("'",'')
+
+    return(s)
+
+
+
+def clean_entidades(entidades):
+    entidades_finales = []
+    for ent in entidades:
+        ent = ent.strip()
+        ent = ent.replace('\n','')
+        ent = ent.replace('"','')
+        ent = ent.replace("'",'')
+        if(ent != ''):
+            entidades_finales.append(ent)
+
+    return np.unique(entidades_finales).tolist()

@@ -6,12 +6,22 @@ BASEURL = "https://api.stackexchange.com/2.2/questions?"
 
 seguir = True #Para iterar por todas las páginas traer todos los resultados
 pagina = 1
-while seguir == True:
+
+database = 'Grupo07'
+MONGO_HOST= 'mongodb://localhost/'
+
+client = MongoClient(MONGO_HOST)
+
+colection = client.Grupo07.Questions
+colection.drop()
+
+inserted = 0
+while seguir:
     params = {
     "site" : "movies",
     "key" : "QNg2TllXOOz9hRH9q8tj6w((",
     "pagesize" : 100,
-    "filter" : "!b1MMEbcfF_H4P9",
+    "filter" : "withbody",
     "page" : pagina
     }
 
@@ -20,15 +30,16 @@ while seguir == True:
 
     for post in posts['items']:
         #insertar en MongoDB
-        database = 'Stack'
-        coleccion = "Prueba1"
-        MONGO_HOST= 'mongodb://localhost/' + database
-        client = MongoClient(MONGO_HOST) 
-        db = client.Stack
-        db.Questions.insert(post)
-    
+        colection.insert_one(post)
+        inserted+=1
+        if(inserted % 100 == 0):
+            print(inserted)
+            print(post)
+
+
     pagina = pagina + 1
     seguir = posts['has_more']
 
+print(inserted)
 print ("Lecturas realizadas: " + str(pagina - 1))
 print ("Lecturas restantes: " + str(posts['quota_remaining']))
