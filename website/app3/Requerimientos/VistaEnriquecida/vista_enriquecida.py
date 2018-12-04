@@ -301,7 +301,7 @@ def clean_entidades(entidades):
         ent = ent.replace('\n','')
         ent = ent.replace('"','')
         ent = ent.replace("'",'')
-        if(ent != ''):
+        if(ent != '' and ent[0].isupper() and not ent[0].isdigit()):
             entidades_finales.append(ent)
 
     return np.unique(entidades_finales).tolist()

@@ -20,8 +20,6 @@ import urllib.request
 import re
 
 
-
-
 def dar_base_de_datos():
     with open('app3/static/app3/jsons/db_configuration.json','r') as f:
         data = json.load(f)
@@ -657,7 +655,7 @@ def get_location_info(location_name):
             dic[field] = 'Nothing Found'
     #iframe
 
-    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=GOOGLE_KEY&q=LOCATION_SEARCH" allowfullscreen width="80%" height="400"></iframe>'
+    template = '<iframe src="https://www.google.com/maps/embed/v1/place?key=GOOGLE_KEY&q=LOCATION_SEARCH" allowfullscreen width="80%" ></iframe>'
     location_search = location_name
     location_search = location_search.replace('  ',' ')
     location_search = location_search.replace(' ','+')
@@ -723,6 +721,8 @@ def findInTMDB(external_ids):
                     movie_object["genre_ids"] = ID["genres"]
                     movie_object["runtime"] = ID["runtimeMinutes"]
                     img = r["poster_path"]
+                    if(img is None):
+                        img = ''
                     movie_object["img"] = 'https://image.tmdb.org/t/p/w500' + img
                     movie_object["release_date"] = r["release_date"]
                     movie_object["language"] = r["original_language"]
@@ -810,7 +810,7 @@ def get_trailer_link_frame(imdb_id = 'tt2179136'):
 
             result = result.split(string_start)[1].split(string_end)[0]
 
-            template = '<iframe src="https://www.imdb.com/videoembed/MOVIE_ID" allowfullscreen width="80%" height="400"></iframe>'
+            template = '<iframe src="https://www.imdb.com/videoembed/MOVIE_ID" allowfullscreen width="80%" ></iframe>'
             template = template.replace('MOVIE_ID',result)
             return(template)
 
