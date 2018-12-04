@@ -20,9 +20,21 @@ import urllib.request
 import re
 
 
-client = MongoClient('localhost', 27017)
 
-db = client.TMDB
+
+def dar_base_de_datos():
+    with open('app3/static/app3/jsons/db_configuration.json','r') as f:
+        data = json.load(f)
+
+        print("mongodb://" + data['client_location'] + "/")
+        client = pymongo.MongoClient("mongodb://" + data['client_location'] + "/")
+        mydb = client[data["db_name"]]
+
+        return(mydb)
+
+    raise("Hubo un error conectando a la base de datos")
+
+db = dar_base_de_datos()
 external_movie_IDs = db.external_movie_IDs
 
 
