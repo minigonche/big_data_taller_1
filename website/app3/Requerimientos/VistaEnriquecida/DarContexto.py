@@ -27,7 +27,7 @@ def dar_base_de_datos():
         data = json.load(f)
 
         print("mongodb://" + data['client_location'] + "/")
-        client = pymongo.MongoClient("mongodb://" + data['client_location'] + "/")
+        client = MongoClient("mongodb://" + data['client_location'] + "/")
         mydb = client[data["db_name"]]
 
         return(mydb)
