@@ -8,12 +8,12 @@ seguir = True #Para iterar por todas las páginas traer todos los resultados
 pagina = 1
 
 database = 'Grupo07'
-MONGO_HOST= 'mongodb://localhost/'
+MONGO_HOST= 'mongodb://bigdata-mongodb-01.virtual.uniandes.edu.co:8083/'
 
 client = MongoClient(MONGO_HOST)
 
 colection = client.Grupo07.Questions
-colection.drop()
+#colection.drop()
 
 inserted = 0
 while seguir:
