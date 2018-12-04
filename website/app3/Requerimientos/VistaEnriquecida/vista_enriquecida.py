@@ -85,7 +85,7 @@ def hacer_requerimiento_por_id(request, db, question_id):
 
 
         #Extrae el template
-        fp = open('app3/Templates/app3/VistaEnriquecida.html')
+        fp = open('app3/templates/app3/VistaEnriquecida.html')
         t = fp.read()
         fp.close()
 
