@@ -12,10 +12,29 @@ def index(request):
     return render(request, 'app3/index.html', None)
 
 def Preguntas(request):
-	return pre.hacer_requerimiento(request, dar_base_de_datos())
+
+    return render(request, 'app3/Preguntas.html', None)
+
+def search(request):
+    search_query = {}
+    if request.GET.get('entity_box'):  # If the form is submitted
+        print("SUBMITED!")
+        search_query["entidad"] = request.GET.get('entity_box', None)
+        search_query["popularidad"] = request.GET.get('pop_box', None)
+        search_query["user"] = request.GET.get('user_box', None)
+        search_query["reputacion"] = request.GET.get('reputacion_box', None)
+        print(search_query)
+
+    return pre.hacer_requerimiento(request, search_query)
 
 def Entidades(request):
-	return ent.hacer_requerimiento(request, dar_base_de_datos())
+
+    if (request.GET.get('search_box')):
+        print('request made')
+        entidad = request.GET.get('search_box', None)
+        return ve.hacer_requerimiento_por_entidad(request, entidad)
+
+
 
 
 def VistaEnriquecida(request):
@@ -28,7 +47,19 @@ def VistaEnriquecidaPorId(request, question_id):
 def NavegarPreguntas(request):
     return nav.hacer_requerimiento(request, dar_base_de_datos())
 
+def getEntity(request):
 
+    if request.method == 'GET': # If the form is submitted
+
+        search_query = request.GET.get('search_box', None)
+        print(search_query)
+        url = "app3/pregunta_enriquecida/" + search_query + ".html"
+        return render(request, url, search_query)
+
+def VistaEnriquecidaPorEntidad(request, entidad):
+    print(entidad)
+
+    return ve.hacer_requerimiento_por_entidad(request, entidad)
 
 def dar_base_de_datos():
     with open('app3/static/app3/jsons/db_configuration.json','r') as f:

@@ -13,13 +13,28 @@
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
         {% load static %}
-          <link rel="stylesheet" href="{% static "app3/css/enriquecida.css" %}">
-
+        <link rel="stylesheet" href="{% static "app3/css/enriquecida.css" %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
     </head>
 
     <body>
+        <div class="container">
+            <div class="topnav">
+              <a class="active" href="{% url 'app3:index' %}">Home</a>
+              <a href="{% url 'app3:preguntas' %}">Buscar preguntas</a>
+              <a href="{% url 'app3:navegar' %}">Lista de preguntas</a>
+              <div class="search-container">
+                <form type="get" action="{% url 'app3:entidades' %}">
+                    <input id="search_box" type="text" placeholder="Buscar entidad..." name="search_box">
+                    <button id="search_submit" type="submit" name="search_submit"><i class="fa fa-search"></i></button>
+                </form>
+              </div>
+            </div>
+        </div>
+
+
         <div class="container">
             <div class="py-5 text-center">
                 {% load static %}

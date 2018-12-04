@@ -8,12 +8,20 @@
 
         <title>Taller 3</title>
 
+
+
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static "app3/css/enriquecida.css" %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
     </head>
 
     <body>
+
+
         <div class="container">
             <div class="py-5 text-center">
                 {% load static %}
@@ -25,20 +33,111 @@
 
         <div class="container">
             <div class="text-left">
-                <h2>Análisis de preguntas y respuestas por entidades</h2>
+                <h2>Vista Enriquecida</h2>
+            </div>
+            <p> Para ver la informacion de entidad pase el cursor por la palabra. Si quiere que se quede la información, cliquee la palabra. </p>
+            <div>
+                <button type="button" class="btn btn-primary" onclick="location.href='{% url 'app3:navegar' %}'" > Volver</button>
             </div>
         </div>
 
-        <!-- BOTON VOLVER -->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-4"></div>
-                    <div class="col-4 text-center">
-                        <button type="button" class="btn btn-primary" style="margin: 100px 100px 100px 100px" onclick="location.href='{% url 'app3:index' %}'" > Volver</button>
-                    </div>
-                <div class="col-4"></div>
-            </div>
+
+          REALIDAD_ENTIDADES
+
+
+        <div  class="center">
+        <h4> Question </h4>
+
+
+          TEXTO_DE_LA_PREGUNTA
+
+          <p> </p>
+
         </div>
+
+
+          CONTEXTO_ENTIDADES
+
 
     </body>
+
+    <script>
+
+    var clicked = 0
+    var last_entity = ''
+
+    function hide_all()
+    {
+
+          var divsToHide = document.getElementsByClassName("left"); //divsToHide is an array
+          for(var i = 0; i < divsToHide.length; i++){
+            divsToHide[i].style.display = "none"; // depending on what you're doing
+            }
+
+          var divsToHide = document.getElementsByClassName("right"); //divsToHide is an array
+          for(var i = 0; i < divsToHide.length; i++){
+            divsToHide[i].style.display = "none"; // depending on what you're doing
+            }
+
+    }
+
+    function  hover_in(entity)
+    {
+      hide_all()
+
+      clicked = 0
+
+      MOSTRAR_ENTIDADES
+
+    }
+
+    function hover_out(entity)
+    {
+      if(clicked == 0)
+      {
+        hide_all()
+      }
+    }
+
+
+
+      function show_info(entity)
+      {
+        hide_all()
+
+        MOSTRAR_ENTIDADES
+
+      }
+
+
+      function toggle(entity)
+      {
+        if(clicked == 0)
+        {
+          clicked = 1
+          last_entity = entity
+
+          MOSTRAR_ENTIDADES
+
+        }
+        else if(clicked == 1 &&  entity != last_entity)
+        {
+          last_entity = entity
+
+          hide_all()
+
+          MOSTRAR_ENTIDADES
+
+        }
+        else {
+
+          clicked = 0
+          hide_all()
+        }
+
+
+      }
+
+    </script>
+
 </html>

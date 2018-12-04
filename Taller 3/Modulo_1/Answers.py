@@ -7,11 +7,12 @@ seguir = True                           #Para iterar por todas las páginas trae
 pagina = 1
 
 database = 'Grupo07'
-MONGO_HOST= 'mongodb://bigdata-mongodb-01.virtual.uniandes.edu.co:8083/'
-
+#MONGO_HOST= 'mongodb://bigdata-mongodb-01.virtual.uniandes.edu.co:8083/'
+MONGO_HOST= 'localhost:27017'
 client = MongoClient(MONGO_HOST)
+db = client.Grupo07
 
-colection = client.Grupo07.Answers
+colection = db.Answers
 
 inserted = 0
 while seguir:

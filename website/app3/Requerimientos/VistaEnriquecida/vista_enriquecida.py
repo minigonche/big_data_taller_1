@@ -68,6 +68,55 @@ def hacer_requerimiento(request, db):
 
     return HttpResponse(Template(t).render(Context({})))
 
+def hacer_requerimiento_por_entidad(request, entidad):
+    # TODO
+
+    # Extrae el template
+    fp = open('app3/templates/app3/Entidades.html')
+    t = fp.read()
+    fp.close()
+
+    # PREGUNTA
+
+
+    # Se inventa el texto (para pruebas)
+    question_text = 'Vista enriquecida para: ' + entidad
+
+    entidades = []
+    entidades.append(entidad)
+
+    # Rendeiza la pregunta
+    question_text = renderizar_texto(question_text, entidades)
+
+    t = t.replace('TEXTO_DE_LA_PREGUNTA', question_text)
+
+    realidad_html = ''
+    contexto_html = ''
+    mostrar_js = ''
+    # quitar_js = ''
+
+
+    realidad = DR.dar_realidad(entidad)
+    realidad_html += encapsular_realidad(realidad, entidad) + '\n'
+
+    contexto = DC.dar_contexto(entidad)
+    contexto_html += encapsular_contexto(contexto, entidad) + '\n'
+
+    mostrar_js += dar_js_mostrar(entidad) + '\n'
+
+
+    # REALIDAD
+    t = t.replace('REALIDAD_ENTIDADES', realidad_html)
+
+    # CONTEXTO
+    t = t.replace('CONTEXTO_ENTIDADES', contexto_html)
+
+    # JS
+    t = t.replace('MOSTRAR_ENTIDADES', mostrar_js)
+    # t = t.replace('QUITAR_ENTIDADES', quitar_js)
+
+    return HttpResponse(Template(t).render(Context({})))
+
 
 def hacer_requerimiento_por_id(request, db, question_id):
 
